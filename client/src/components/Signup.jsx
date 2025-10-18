@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../context/AuthContext";
 
 const Signup = () => {
   const navigate = useNavigate();
-  const { isAuth, login } = useContext(AuthContext);
+  const { isAuth } = useContext(AuthContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,16 +18,42 @@ const Signup = () => {
 
   // ✅ Redirect if already logged in
   useEffect(() => {
-    if (isAuth) navigate("/signup");
+    if (isAuth) navigate("/");
   }, [isAuth, navigate]);
 
   const handleSignup = async () => {
     if (loading) return;
     setLoading(true);
-    setAttempts(attempts + 1);
+    setAttempts((prev) => prev + 1);
 
     if (!backendUrl) {
       setMessage("❌ Backend URL not configured!");
+      toast.error("⚠️ Backend URL not configured!");
+      setLoading(false);
+      return;
+    }
+
+    // ✅ Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setMessage("❌ Please enter a valid email address.");
+      toast.warning("⚠️ Please enter a valid email address.");
+      setLoading(false);
+      return;
+    }
+
+    // ✅ Password validation
+    if (password.length < 6) {
+      setMessage("❌ Password must be at least 6 characters long.");
+      toast.warning("⚠️ Password must be at least 6 characters long.");
+      setLoading(false);
+      return;
+    }
+
+    // ✅ Name validation
+    if (name.trim().length < 2) {
+      setMessage("❌ Please enter your full name.");
+      toast.warning("⚠️ Please enter your full name.");
       setLoading(false);
       return;
     }
@@ -43,11 +70,15 @@ const Signup = () => {
         toast.success("✅ Account created successfully!");
         setTimeout(() => navigate("/login"), 1500);
       } else {
-        setMessage(`❌ ${res.data.message || "Signup failed!"}`);
+        const msg = res.data.message || "Signup failed!";
+        setMessage(`❌ ${msg}`);
+        toast.error(`❌ ${msg}`);
       }
     } catch (err) {
       console.error(err);
-      setMessage(`❌ ${err.response?.data?.message || "Error signing up."}`);
+      const msg = err.response?.data?.message || "Error signing up.";
+      setMessage(`❌ ${msg}`);
+      toast.error(`❌ ${msg}`);
     } finally {
       setLoading(false);
     }
@@ -59,14 +90,29 @@ const Signup = () => {
     setPassword("");
     setMessage("Create your account below!");
     setAttempts(0);
+    toast.info("🔄 Form reset!");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-4">
-      <div className="bg-white/20 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/30 w-full max-w-md text-center">
-        <h2 className="text-4xl font-extrabold text-white mb-6">Sign Up</h2>
-        <p className="text-white mb-4">{message}</p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 p-4 relative overflow-hidden">
 
+      {/* ✅ Toastify Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        theme="colored"
+      />
+
+      {/* Signup Card */}
+      <div className="bg-white/20 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/30 w-full max-w-md text-center relative z-10">
+        <h2 className="text-4xl font-extrabold text-white mb-6">Sign Up</h2>
+        <p className="text-white mb-4 transition-all duration-300">{message}</p>
+
+        {/* Input Fields */}
         <input
           type="text"
           placeholder="Full Name"
@@ -83,12 +129,13 @@ const Signup = () => {
         />
         <input
           type="password"
-          placeholder="Password (min 8 chars)"
+          placeholder="Password (min 6 chars)"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-3 mb-4 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400"
+          className="w-full p-3 mb-6 rounded-xl text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400"
         />
 
+        {/* Buttons */}
         <div className="flex justify-between gap-4">
           <button
             onClick={handleSignup}
@@ -101,6 +148,7 @@ const Signup = () => {
           >
             {loading ? "Signing up..." : "Sign Up"}
           </button>
+
           <button
             onClick={handleReset}
             className="flex-1 py-3 rounded-xl font-semibold text-gray-800 bg-gray-300 hover:bg-gray-400"

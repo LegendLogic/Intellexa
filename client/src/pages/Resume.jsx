@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Download, User, Briefcase, GraduationCap, Code, Award } from "lucide-react";
+import { FaExternalLinkAlt, FaRegFileAlt } from "react-icons/fa";
 
 const Resume = () => {
   const [resumeData, setResumeData] = useState({
@@ -47,6 +48,20 @@ const Resume = () => {
       frameworks: "Linux, Jenkins, GitHub, JUnit, WordPress",
     },
   });
+
+
+   const websites = [
+    { name: "Canva", url: "https://www.canva.com/resumes/templates/" },
+    { name: "Zety", url: "https://zety.com/resume-builder" },
+    { name: "Novoresume", url: "https://novoresume.com/" },
+    { name: "Kickresume", url: "https://kickresume.com/" },
+    { name: "Resume.io", url: "https://resume.io/" },
+    { name: "VisualCV", url: "https://www.visualcv.com/" },
+    { name: "Enhancv", url: "https://enhancv.com/" },
+    { name: "Indeed", url: "https://www.indeed.com/create-resume" },
+    { name: "CakeResume", url: "https://www.cakeresume.com/" },
+    { name: "Standard Resume", url: "https://standardresume.co/" },
+  ];
 
   const resumeRef = useRef();
   const [loading, setLoading] = useState(false);
@@ -97,7 +112,7 @@ const Resume = () => {
   };
 
   return (
-    <div className="min-h-screen mt-10 bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
+    <div className="min-h-screen mt-20 bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8 print:hidden">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Resume Builder</h1>
@@ -380,6 +395,35 @@ const Resume = () => {
           </div>
         </div>
       </div>
+     <div className="max-w-4xl mx-auto p-6 bg-gray-900 text-white rounded-2xl shadow-2xl mt-6 border border-gray-700">
+      <h2 className="text-3xl font-bold text-indigo-400 mb-6 text-center">
+        🚀 Top Resume-Building Websites
+      </h2>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {websites.map((site, index) => (
+          <li
+            key={index}
+            className="flex items-center justify-between bg-gray-800 hover:bg-gray-700 transition-colors rounded-lg p-4 shadow-md"
+          >
+            <div className="flex items-center space-x-3">
+              <FaRegFileAlt className="text-indigo-400 text-xl" />
+              <span className="font-medium text-gray-100">{site.name}</span>
+            </div>
+            <a
+              href={site.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-indigo-300 hover:text-indigo-500 transition-colors text-lg"
+            >
+              <FaExternalLinkAlt />
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p className="text-gray-400 text-sm mt-4 text-center">
+        Click the icon to visit the website.
+      </p>
+    </div>
 
       <style>{`
         @media print {

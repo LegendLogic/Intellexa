@@ -6,6 +6,7 @@ import connectCloudinary from './config/cloudinary.js'
 import userRouter from './routes/userRoutes.js';
 
 
+
 // app config
 const app = express()
 const port = process.env.PORT || 4000
@@ -18,7 +19,7 @@ app.use(cors())
 
 //API Routes
 app.use('/api/user', userRouter);
-app.use("/api/chat", chatRoute);
+
 
 
 app.get('/',(req,res)=>{

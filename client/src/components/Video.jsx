@@ -110,26 +110,27 @@ const Video = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   // Get unique categories
-  const categories = ["All", ...new Set(videos.map(v => v.category))];
+  const categories = ["All", ...new Set(videos.map((v) => v.category))];
 
   // Toggle video completion
   const toggleCompletion = (videoId) => {
-    setCompletedVideos(prev => ({
+    setCompletedVideos((prev) => ({
       ...prev,
-      [videoId]: !prev[videoId]
+      [videoId]: !prev[videoId],
     }));
   };
 
   // Filter videos by category
-  const filteredVideos = selectedCategory === "All" 
-    ? videos 
-    : videos.filter(v => v.category === selectedCategory);
+  const filteredVideos =
+    selectedCategory === "All"
+      ? videos
+      : videos.filter((v) => v.category === selectedCategory);
 
   // Get recommended videos based on current video
   const getRecommendations = (currentVideoId) => {
-    const current = videos.find(v => v.id === currentVideoId);
+    const current = videos.find((v) => v.id === currentVideoId);
     return videos
-      .filter(v => v.id !== currentVideoId && v.category === current.category)
+      .filter((v) => v.id !== currentVideoId && v.category === current.category)
       .slice(0, 3);
   };
 
@@ -144,13 +145,13 @@ const Video = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">
             🎓 Video Learning Hub
           </h1>
-          <div className="flex items-center gap-4 text-sm text-gray-600">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 text-sm text-gray-600">
             <span>Progress: {completedCount}/{videos.length} videos completed</span>
             <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-xs">
-              <div 
+              <div
                 className="bg-blue-500 h-2 rounded-full transition-all duration-300"
                 style={{ width: `${progressPercentage}%` }}
               />
@@ -161,7 +162,7 @@ const Video = () => {
 
         {/* Category Filter */}
         <div className="mb-6 flex flex-wrap gap-2">
-          {categories.map(category => (
+          {categories.map((category) => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
@@ -190,51 +191,49 @@ const Video = () => {
                   allowFullScreen
                 />
               </div>
-              
+
               {/* Video Info */}
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <h2 className="text-2xl font-bold text-gray-800 mb-2">
-                      {currentVideo.title}
-                    </h2>
-                    <p className="text-gray-600 mb-3">{currentVideo.description}</p>
-                    <div className="flex flex-wrap gap-3 text-sm">
-                      <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full">
-                        {currentVideo.category}
-                      </span>
-                      <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full">
-                        {currentVideo.level}
-                      </span>
-                      <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full">
-                        ⏱️ {currentVideo.duration}
-                      </span>
-                      <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full">
-                        👨‍🏫 {currentVideo.instructor}
-                      </span>
-                    </div>
+              <div className="p-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div className="flex-1">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-2">
+                    {currentVideo.title}
+                  </h2>
+                  <p className="text-gray-600 mb-3">{currentVideo.description}</p>
+                  <div className="flex flex-wrap gap-3 text-sm">
+                    <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full">
+                      {currentVideo.category}
+                    </span>
+                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full">
+                      {currentVideo.level}
+                    </span>
+                    <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full">
+                      ⏱️ {currentVideo.duration}
+                    </span>
+                    <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full">
+                      👨‍🏫 {currentVideo.instructor}
+                    </span>
                   </div>
-                  <button
-                    onClick={() => toggleCompletion(currentVideo.id)}
-                    className="ml-4 flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all hover:scale-105"
-                    style={{
-                      backgroundColor: completedVideos[currentVideo.id] ? '#10b981' : '#e5e7eb',
-                      color: completedVideos[currentVideo.id] ? 'white' : '#374151'
-                    }}
-                  >
-                    {completedVideos[currentVideo.id] ? (
-                      <>
-                        <CheckCircle size={20} />
-                        Completed
-                      </>
-                    ) : (
-                      <>
-                        <Circle size={20} />
-                        Mark Complete
-                      </>
-                    )}
-                  </button>
                 </div>
+                <button
+                  onClick={() => toggleCompletion(currentVideo.id)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all hover:scale-105"
+                  style={{
+                    backgroundColor: completedVideos[currentVideo.id] ? "#10b981" : "#e5e7eb",
+                    color: completedVideos[currentVideo.id] ? "white" : "#374151",
+                  }}
+                >
+                  {completedVideos[currentVideo.id] ? (
+                    <>
+                      <CheckCircle size={20} />
+                      Completed
+                    </>
+                  ) : (
+                    <>
+                      <Circle size={20} />
+                      Mark Complete
+                    </>
+                  )}
+                </button>
               </div>
             </div>
 
@@ -245,20 +244,24 @@ const Video = () => {
                   📚 Recommended for You
                 </h3>
                 <div className="space-y-3">
-                  {recommendations.map(video => (
+                  {recommendations.map((video) => (
                     <div
                       key={video.id}
                       onClick={() => setCurrentVideo(video)}
                       className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 cursor-pointer transition-all border border-gray-100"
                     >
-                      <div className={`w-16 h-16 ${video.color} rounded-lg flex items-center justify-center text-2xl flex-shrink-0`}>
+                      <div
+                        className={`w-16 h-16 ${video.color} rounded-lg flex items-center justify-center text-2xl flex-shrink-0`}
+                      >
                         <Play size={24} className="text-white" fill="white" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h4 className="font-semibold text-gray-800 truncate">
                           {video.title}
                         </h4>
-                        <p className="text-sm text-gray-600">{video.instructor} · {video.duration}</p>
+                        <p className="text-sm text-gray-600">
+                          {video.instructor} · {video.duration}
+                        </p>
                       </div>
                       {completedVideos[video.id] && (
                         <CheckCircle size={20} className="text-green-500 flex-shrink-0" />
@@ -272,19 +275,19 @@ const Video = () => {
 
           {/* Sidebar - Video List */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-6">
+            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-6 max-h-[calc(100vh-2rem)] overflow-y-auto">
               <h3 className="text-xl font-bold text-gray-800 mb-4">
                 📋 Course Playlist
               </h3>
-              <div className="space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto">
+              <div className="space-y-2">
                 {filteredVideos.map((video) => (
                   <div
                     key={video.id}
                     onClick={() => setCurrentVideo(video)}
                     className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all ${
                       currentVideo.id === video.id
-                        ? 'bg-blue-50 border-2 border-blue-500'
-                        : 'hover:bg-gray-50 border-2 border-transparent'
+                        ? "bg-blue-50 border-2 border-blue-500"
+                        : "hover:bg-gray-50 border-2 border-transparent"
                     }`}
                   >
                     <button
@@ -301,9 +304,11 @@ const Video = () => {
                       )}
                     </button>
                     <div className="flex-1 min-w-0">
-                      <h4 className={`font-semibold text-sm mb-1 ${
-                        currentVideo.id === video.id ? 'text-blue-700' : 'text-gray-800'
-                      }`}>
+                      <h4
+                        className={`font-semibold text-sm mb-1 ${
+                          currentVideo.id === video.id ? "text-blue-700" : "text-gray-800"
+                        }`}
+                      >
                         {video.title}
                       </h4>
                       <p className="text-xs text-gray-600">{video.duration}</p>

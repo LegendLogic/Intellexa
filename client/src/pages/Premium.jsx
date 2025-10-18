@@ -1,126 +1,289 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { Check, X, Zap, Shield, Sparkles, TrendingUp, Users, Headphones } from "lucide-react";
 
 const plans = [
   {
     title: "Free Plan",
+    price: "$0",
+    period: "forever",
     desc: "Perfect for beginners exploring our platform.",
-    features: ["Basic Access", "Limited API Usage", "Community Support", "No Customization"],
+    features: [
+      { text: "Basic Access", included: true },
+      { text: "Limited API Usage", included: true },
+      { text: "Community Support", included: true },
+      { text: "No Customization", included: false },
+      { text: "Basic Analytics", included: false },
+    ],
     btnText: "Current Plan",
     btnDisabled: true,
-    border: "border-gray-400",
-    btnClass: "bg-gray-300 text-gray-700 cursor-not-allowed",
-    color: "gray",
+    gradient: "from-gray-400 to-gray-500",
+    glowColor: "rgba(156, 163, 175, 0.3)",
+    popular: false,
   },
   {
     title: "Pro Plan",
+    price: "$29",
+    period: "per month",
     desc: "For professionals who need more power and control.",
-    features: ["Unlimited Projects", "Advanced Analytics", "AI-Powered Recommendations", "Email Support"],
+    features: [
+      { text: "Unlimited Projects", included: true },
+      { text: "Advanced Analytics", included: true },
+      { text: "AI-Powered Recommendations", included: true },
+      { text: "Priority Email Support", included: true },
+      { text: "Custom Integrations", included: true },
+    ],
     btnText: "Upgrade Now",
     btnLink: "/subscribe",
-    border: "border-indigo-600",
-    btnClass: "bg-indigo-600 text-white hover:bg-indigo-700",
-    color: "indigo",
+    gradient: "from-indigo-600 to-purple-600",
+    glowColor: "rgba(99, 102, 241, 0.4)",
+    popular: true,
   },
   {
     title: "Enterprise",
+    price: "Custom",
+    period: "contact us",
     desc: "Tailored solutions for organizations and teams.",
-    features: ["Dedicated AI Tools", "API Integration", "24/7 Premium Support", "Custom Dashboards"],
+    features: [
+      { text: "Dedicated AI Tools", included: true },
+      { text: "Full API Integration", included: true },
+      { text: "24/7 Premium Support", included: true },
+      { text: "Custom Dashboards", included: true },
+      { text: "White-label Solutions", included: true },
+    ],
     btnText: "Contact Sales",
     btnLink: "/contact",
-    border: "border-yellow-500",
-    btnClass: "bg-yellow-500 text-white hover:bg-yellow-600",
-    color: "yellow",
+    gradient: "from-yellow-500 to-orange-500",
+    glowColor: "rgba(245, 158, 11, 0.4)",
+    popular: false,
   },
 ];
 
-const cardVariants = {
-  hidden: { opacity: 0, y: 50 },
-  visible: (i) => ({
-    opacity: 1,
-    y: 0,
-    transition: { delay: i * 0.2, type: "spring", stiffness: 80 },
-  }),
-  hover: { scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.2)" },
-};
+const benefits = [
+  {
+    icon: Zap,
+    title: "Lightning Fast Performance",
+    desc: "Experience blazing-fast load times and real-time updates.",
+  },
+  {
+    icon: Shield,
+    title: "Enterprise-Grade Security",
+    desc: "Your data is protected with military-grade encryption.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Actionable Insights",
+    desc: "Make data-driven decisions with advanced analytics.",
+  },
+  {
+    icon: Headphones,
+    title: "Premium Support",
+    desc: "Get help when you need it from our expert team.",
+  },
+];
 
 const Premium = () => {
+  const [hoveredCard, setHoveredCard] = useState(null);
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center px-6 py-12">
-      <motion.div
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="max-w-6xl w-full text-center"
-      >
-        {/* Header Section */}
-        <h1 className="text-5xl font-bold text-gray-800 mb-4">
-          Upgrade to <span className="text-indigo-600">Premium</span>
-        </h1>
-        <p className="text-lg text-gray-600 mb-12">
-          Unlock exclusive tools and features that help you grow faster and smarter.  
-          Experience performance, customization, and insights like never before.
-        </p>
+    <div className="min-h-screen mt-16 bg-gradient-to-br from-slate-50 via-white to-indigo-50 relative overflow-hidden">
+      {/* Background Elements */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-200 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-200 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
+      
+      <div className="relative z-10 flex flex-col items-center px-6 py-16">
+        <div className="max-w-7xl w-full">
+          {/* Header Section */}
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in">
+              <Sparkles className="w-4 h-4" />
+              <span>Unlock Your Full Potential</span>
+            </div>
+            
+            <h1 className="text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+              Upgrade to{" "}
+              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Premium
+              </span>
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              Unlock exclusive tools and features that help you grow faster and smarter.
+              Experience performance, customization, and insights like never before.
+            </p>
+          </div>
 
-        {/* Plans Section */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {plans.map((plan, idx) => (
-            <motion.div
-              key={plan.title}
-              custom={idx}
-              initial="hidden"
-              animate="visible"
-              whileHover="hover"
-              variants={cardVariants}
-              className={`bg-white rounded-2xl shadow-md transition duration-300 p-8 border-t-4 ${plan.border}`}
-            >
-              <h2 className="text-2xl font-bold text-gray-700 mb-4">{plan.title}</h2>
-              <p className="text-gray-600 mb-6">{plan.desc}</p>
-              <ul className="text-gray-600 text-left mb-8 space-y-2">
-                {plan.features.map((feat, i) => (
-                  <li key={i}>{feat.includes("No") ? "❌ " : "✅ "}{feat}</li>
-                ))}
-              </ul>
+          {/* Plans Section */}
+          <div className="grid lg:grid-cols-3 gap-8 mb-24">
+            {plans.map((plan, idx) => (
+              <div
+                key={plan.title}
+                className="relative"
+                style={{ animation: `slideUp 0.6s ease-out ${idx * 0.15}s both` }}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-10">
+                    <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-semibold shadow-lg">
+                      Most Popular
+                    </div>
+                  </div>
+                )}
 
-              {plan.btnDisabled ? (
-                <button className={`w-full py-3 rounded-lg font-medium ${plan.btnClass}`}>
-                  {plan.btnText}
-                </button>
-              ) : (
-                <Link
-                  to={plan.btnLink}
-                  className={`w-full inline-block py-3 rounded-lg font-medium text-center ${plan.btnClass} transition duration-200`}
+                <div
+                  onMouseEnter={() => setHoveredCard(idx)}
+                  onMouseLeave={() => setHoveredCard(null)}
+                  className={`relative bg-white rounded-3xl shadow-xl overflow-hidden h-full transition-all duration-300 ${
+                    plan.popular ? "ring-2 ring-indigo-600" : ""
+                  } ${hoveredCard === idx ? "transform -translate-y-2" : ""}`}
+                  style={{
+                    boxShadow: hoveredCard === idx ? `0 20px 60px ${plan.glowColor}` : undefined,
+                  }}
                 >
-                  {plan.btnText}
-                </Link>
-              )}
-            </motion.div>
-          ))}
+                  {/* Gradient Top Bar */}
+                  <div className={`h-2 bg-gradient-to-r ${plan.gradient}`}></div>
+
+                  <div className="p-8">
+                    {/* Plan Header */}
+                    <div className="mb-6">
+                      <h2 className="text-2xl font-bold text-gray-900 mb-2">{plan.title}</h2>
+                      <div className="flex items-baseline gap-2 mb-3">
+                        <span className="text-5xl font-extrabold text-gray-900">{plan.price}</span>
+                        <span className="text-gray-500">/ {plan.period}</span>
+                      </div>
+                      <p className="text-gray-600">{plan.desc}</p>
+                    </div>
+
+                    {/* Features List */}
+                    <ul className="space-y-4 mb-8">
+                      {plan.features.map((feat, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-3"
+                          style={{ animation: `fadeIn 0.4s ease-out ${0.5 + i * 0.1}s both` }}
+                        >
+                          <div className={`rounded-full p-1 ${
+                            feat.included 
+                              ? "bg-green-100 text-green-600" 
+                              : "bg-gray-100 text-gray-400"
+                          }`}>
+                            {feat.included ? (
+                              <Check className="w-4 h-4" />
+                            ) : (
+                              <X className="w-4 h-4" />
+                            )}
+                          </div>
+                          <span className={feat.included ? "text-gray-700" : "text-gray-400"}>
+                            {feat.text}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* CTA Button */}
+                    {plan.btnDisabled ? (
+                      <button className="w-full py-4 rounded-xl font-semibold bg-gray-200 text-gray-500 cursor-not-allowed">
+                        {plan.btnText}
+                      </button>
+                    ) : (
+                      <a href={plan.btnLink}>
+                        <button
+                          className={`w-full py-4 rounded-xl font-semibold bg-gradient-to-r ${plan.gradient} text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105`}
+                        >
+                          {plan.btnText}
+                        </button>
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Benefits Section */}
+          <div className="mb-24">
+            <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
+              Why Go Premium?
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {benefits.map((benefit, idx) => {
+                const Icon = benefit.icon;
+                return (
+                  <div
+                    key={benefit.title}
+                    className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                    style={{ animation: `fadeIn 0.6s ease-out ${idx * 0.1}s both` }}
+                  >
+                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{benefit.title}</h3>
+                    <p className="text-gray-600 text-sm">{benefit.desc}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Final CTA Section */}
+          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 rounded-3xl p-12 text-center shadow-2xl relative overflow-hidden">
+            {/* Animated Background */}
+            <div className="absolute inset-0 opacity-20">
+              <div className="absolute top-0 left-1/4 w-64 h-64 bg-white rounded-full blur-3xl animate-pulse"></div>
+              <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-white rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+            </div>
+
+            <div className="relative z-10">
+              <Users className="w-16 h-16 text-white mx-auto mb-6" />
+              <h2 className="text-4xl font-bold text-white mb-4">
+                Join 10,000+ Premium Members
+              </h2>
+              <p className="text-indigo-100 text-lg mb-8 max-w-2xl mx-auto">
+                Premium members enjoy priority access, deeper insights, and faster growth.
+                Whether you're building your brand or scaling your business — our tools give you the edge you need.
+              </p>
+              <a href="/subscribe">
+                <button className="bg-white text-indigo-600 px-10 py-4 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 inline-flex items-center gap-2 hover:scale-105">
+                  <span>Get Started with Premium</span>
+                  <Zap className="w-5 h-5" />
+                </button>
+              </a>
+            </div>
+          </div>
         </div>
+      </div>
 
-        {/* Why Upgrade Section */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="mt-20 max-w-4xl mx-auto text-center"
-        >
-          <h2 className="text-3xl font-semibold text-gray-800 mb-4">Why Go Premium?</h2>
-          <p className="text-gray-600 mb-8">
-            Premium members enjoy priority access, deeper insights, and faster growth.  
-            Whether you're building your brand or scaling your business — our tools give you the edge you need.
-          </p>
+      <style>{`
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
 
-          <Link
-            to="/subscribe"
-            className="bg-gradient-to-r from-indigo-500 to-indigo-700 text-white px-8 py-4 rounded-lg font-medium hover:scale-105 hover:shadow-lg transition transform duration-300"
-          >
-            Get Started with Premium
-          </Link>
-        </motion.div>
-      </motion.div>
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 0.2;
+          }
+          50% {
+            opacity: 0.4;
+          }
+        }
+
+        .animate-pulse {
+          animation: pulse 3s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 };

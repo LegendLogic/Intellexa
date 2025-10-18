@@ -90,4 +90,70 @@ const loginUser = async (req, res) => {
 };
 
 
-export { registerUser, loginUser };
+// Get user profile and credit balance
+const getUserProfile = async (req, res) => {
+  try {
+    const userId = req.user._id; // assuming you have authentication middleware that sets req.user
+
+    // Find user by ID
+    const user = await userModel.findById(userId).select("name email creditBalance");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Return user info including credit balance
+    return res.status(200).json({
+      name: user.name,
+      creditBalance: user.creditBalance,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await userModel.find(); // Fetch all user documents
+    return res.status(200).json({
+      success: true,
+      users,
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+
+const addUserPoints = async (req, res) => {
+  try {
+    const userId = req.user._id; // authenticated user
+
+    // Find user by ID
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Increment creditBalance by 40
+    user.creditBalance += 40;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Points updated successfully",
+      creditBalance: user.creditBalance,
+    });
+  } catch (error) {
+    console.error("Error updating points:", error);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+}
+
+
+
+
+
+export { registerUser, loginUser ,getUserProfile , getAllUsers , addUserPoints  };

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaArrowRight, FaSearch } from "react-icons/fa";
 import { motion } from "framer-motion";
 import Chatbot from '../components/Chatbot';
@@ -10,7 +10,7 @@ const resources = [
   { title: "Machine Learning Projects", description: "Hands-on ML projects to apply your knowledge", color: "bg-gradient-to-br from-teal-400 to-teal-600", icon: "📊", link: "/ml-projects" },
   { title: "Data Science", description: "Analyze data and gain insights using Python & tools", color: "bg-gradient-to-br from-purple-400 to-purple-600", icon: "📈", link: "/data-science" },
   { title: "Interview Prep", description: "Prepare for coding & technical interviews", color: "bg-gradient-to-br from-yellow-400 to-yellow-600", icon: "🗣️", link: "/interview-prep" },
-  { title: "Projects & Practice", description: "Work on real-world projects to strengthen your skills", color: "bg-gradient-to-br from-red-400 to-red-600", icon: "⚙️", link: "/projects-practice" },
+  { title: "Projects & Practice", description: "Work on real-world projects to strengthen your skills", color: "bg-gradient-to-br from-red-400 to-red-600", icon: "⚙️", link: "/projects-practices" },
 ];
 
 const container = {
@@ -25,11 +25,41 @@ const item = {
 };
 
 const Home = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const navigate = useNavigate();
+
+  // 🔍 Handle search & redirect logic
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const term = searchTerm.trim().toLowerCase();
+
+    if (!term) return;
+
+    // Find a matching resource by title or keyword
+    const found = resources.find((res) =>
+      res.title.toLowerCase().includes(term) ||
+      term.includes(res.title.toLowerCase().split(" ")[0])
+    );
+
+    if (found) {
+      navigate(found.link);
+    } else {
+      alert("No matching course found 😢");
+    }
+
+    setSearchTerm("");
+  };
+
   return (
     <section className="relative bg-gradient-to-br from-[#0b0b1d] via-[#141428] to-[#1a1a35] text-white overflow-hidden">
 
       {/* Hero Section */}
-      <motion.div initial={{ opacity: 0, y: -40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="max-w-7xl mx-auto px-6 lg:px-12 py-24 flex flex-col items-center text-center">
+      <motion.div
+        initial={{ opacity: 0, y: -40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        className="max-w-7xl mx-auto px-6 lg:px-12 py-24 flex flex-col items-center text-center"
+      >
         <p className="text-sm text-pink-400 font-semibold mb-2 tracking-widest"># Online Courses 2025</p>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight bg-gradient-to-r from-pink-500 to-indigo-500 bg-clip-text text-transparent">
@@ -41,10 +71,21 @@ const Home = () => {
         </p>
 
         {/* CTA Buttons */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.6 }} className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-10">
-          <motion.button whileHover={{ scale: 1.05 }} className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-purple-600 hover:to-indigo-500 text-white px-8 py-4 rounded-full font-semibold flex items-center space-x-3 shadow-2xl transition-all duration-300">
-            <span>Browse Courses</span> <FaArrowRight />
-          </motion.button>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-10"
+        >
+          <Link to="/roadmap">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-purple-600 hover:to-indigo-500 text-white px-8 py-4 rounded-full font-semibold flex items-center space-x-3 shadow-2xl transition-all duration-300"
+            >
+              <span>Browse Courses</span>
+              <FaArrowRight />
+            </motion.button>
+          </Link>
 
           <div className="flex items-center space-x-2 text-gray-300">
             <div className="flex -space-x-3">
@@ -57,14 +98,38 @@ const Home = () => {
           </div>
         </motion.div>
 
-        {/* Search Bar */}
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.6 }} className="bg-white/20 backdrop-blur-lg rounded-full flex items-center mt-12 w-full max-w-2xl p-3 shadow-lg focus-within:scale-105 focus-within:shadow-2xl transition transform duration-300">
-          <div className="bg-gray-100/80 text-gray-600 px-4 py-2 rounded-full font-medium flex items-center space-x-2">
-            <span>🔍 Explore</span>
-          </div>
-          <input type="text" placeholder="Find & choose your perfect course" className="flex-grow px-4 py-2 text-gray-800 rounded-full focus:outline-none bg-white/70" />
-          <button className="bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-md transition-all duration-300"><FaSearch /></button>
-        </motion.div>
+        {/* 🔍 Search Bar */}
+        <motion.form
+  onSubmit={handleSearch}
+  initial={{ opacity: 0, y: 30 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.6, duration: 0.6 }}
+  className="w-full mt-10 max-w-3xl mx-auto flex flex-col sm:flex-row items-center p-3 sm:p-4 rounded-full bg-gradient-to-r from-white/30 to-white/10 backdrop-blur-lg shadow-xl focus-within:shadow-2xl focus-within:scale-105 transition-all duration-300"
+>
+  {/* Explore label */}
+  <div className="flex items-center space-x-2 bg-gray-100/50 backdrop-blur-sm px-4 py-2 rounded-full text-gray-700 font-medium select-none cursor-default shadow-inner mb-3 sm:mb-0">
+    <span>🔍 Explore</span>
+  </div>
+
+  {/* Search input */}
+  <input
+    type="text"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    placeholder="Find & choose your perfect course"
+    className="flex-grow px-4 py-2 sm:ml-3 rounded-full bg-white/70 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1 transition-all duration-300 w-full sm:w-auto"
+  />
+
+  {/* Submit button */}
+  <button
+    type="submit"
+    className="mt-3 sm:mt-0 sm:ml-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white p-3 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+    aria-label="Search Courses"
+  >
+    <FaSearch size={18} />
+  </button>
+</motion.form>
+
 
         {/* Stats */}
         <motion.div variants={container} initial="hidden" animate="visible" className="flex flex-wrap justify-center gap-8 text-gray-300 mt-12">
@@ -76,7 +141,7 @@ const Home = () => {
         </motion.div>
       </motion.div>
 
-      {/* Floating Decorative Shapes */}
+      {/* Floating Shapes */}
       <motion.div animate={{ y: [0, 12, 0], rotate: [0, 15, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }} className="absolute top-12 left-10 w-12 h-12 bg-pink-500 opacity-25 rounded-lg rotate-45"></motion.div>
       <motion.div animate={{ y: [0, -12, 0], rotate: [0, -15, 0] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }} className="absolute bottom-16 right-16 w-10 h-10 bg-indigo-400 opacity-30 rounded-full"></motion.div>
 
@@ -90,28 +155,28 @@ const Home = () => {
           <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
             {resources.map((resource, index) => (
               <motion.div key={index} variants={item} whileHover="hover">
-                <Link to={resource.link}>
-                  <div className="rounded-3xl shadow-2xl hover:shadow-3xl transition duration-300 overflow-hidden border border-gray-700 bg-white/10 backdrop-blur-lg hover:scale-105">
-                    <div className={`${resource.color} h-40 flex items-center justify-center text-6xl transition-all duration-300`}>
-                      {resource.icon}
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-xl font-semibold text-white mb-2">{resource.title}</h3>
-                      <p className="text-gray-300 text-sm">{resource.description}</p>
-                      <div className="mt-4 flex items-center text-indigo-400 font-semibold space-x-2">
+                <div className="rounded-3xl shadow-2xl hover:shadow-3xl transition duration-300 overflow-hidden border border-gray-700 bg-white/10 backdrop-blur-lg hover:scale-105">
+                  <div className={`${resource.color} h-40 flex items-center justify-center text-6xl transition-all duration-300`}>
+                    {resource.icon}
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-semibold text-white mb-2">{resource.title}</h3>
+                    <p className="text-gray-300 text-sm">{resource.description}</p>
+                    <div className="mt-4 flex items-center space-x-2">
+                      <Link to={resource.link} className="text-indigo-400 font-semibold flex items-center space-x-2 hover:underline">
                         <span>Explore</span>
                         <FaArrowRight />
-                      </div>
+                      </Link>
                     </div>
                   </div>
-                </Link>
+                </div>
               </motion.div>
             ))}
           </div>
         </div>
       </motion.div>
-      <Chatbot/>
 
+      <Chatbot />
     </section>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 
@@ -8,8 +8,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-
-  const { isAuth, logout } = useContext(AuthContext); // Using context for auth state
+  const { isAuth, logout } = useContext(AuthContext);
 
   // Disable scroll when mobile menu is open
   useEffect(() => {
@@ -41,6 +40,17 @@ const Navbar = () => {
     { name: "Game", path: "/game" },
   ];
 
+  const protectedPaths = ["/reading", "/resume", "/game" ];
+
+  const handleNavClick = (path) => {
+    if (protectedPaths.includes(path) && !isAuth) {
+      navigate("/login");
+    } else {
+      navigate(path);
+    }
+    closeMenu();
+  };
+
   return (
     <>
       <header
@@ -50,24 +60,26 @@ const Navbar = () => {
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-3 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="text-xl sm:text-2xl font-bold text-indigo-600 z-50" onClick={closeMenu}>
+          <Link
+            to="/"
+            className="text-xl sm:text-2xl font-bold text-indigo-600 z-50"
+            onClick={closeMenu}
+          >
             Intellexa..,
           </Link>
 
           {/* Desktop Links */}
           <div className="hidden md:flex items-center space-x-6 font-medium text-gray-700">
             {navLinks.map((link, i) => (
-              <NavLink
+              <button
                 key={i}
-                to={link.path}
-                className={({ isActive }) =>
-                  `px-3 py-2 rounded hover:text-indigo-600 transition ${
-                    isActive ? "text-indigo-600 font-semibold" : ""
-                  }`
-                }
+                onClick={() => handleNavClick(link.path)}
+                className={`px-3 py-2 rounded hover:text-indigo-600 transition ${
+                  location.pathname === link.path ? "text-indigo-600 font-semibold" : ""
+                }`}
               >
                 {link.name}
-              </NavLink>
+              </button>
             ))}
 
             {isAuth ? (
@@ -78,12 +90,12 @@ const Navbar = () => {
                 Logout
               </button>
             ) : (
-              <NavLink
-                to="/login"
+              <button
+                onClick={() => handleNavClick("/login")}
                 className="px-3 py-2 text-indigo-600 rounded hover:bg-indigo-50 transition"
               >
                 Login
-              </NavLink>
+              </button>
             )}
           </div>
 
@@ -120,18 +132,15 @@ const Navbar = () => {
 
         <div className="flex flex-col mt-4 space-y-2 px-4 font-medium text-gray-700">
           {navLinks.map((link, i) => (
-            <NavLink
+            <button
               key={i}
-              to={link.path}
-              onClick={closeMenu}
-              className={({ isActive }) =>
-                `px-3 py-2 rounded hover:bg-gray-100 transition ${
-                  isActive ? "text-indigo-600 font-semibold bg-gray-100" : ""
-                }`
-              }
+              onClick={() => handleNavClick(link.path)}
+              className={`px-3 py-2 rounded hover:bg-gray-100 transition ${
+                location.pathname === link.path ? "text-indigo-600 font-semibold bg-gray-100" : ""
+              }`}
             >
               {link.name}
-            </NavLink>
+            </button>
           ))}
 
           {isAuth ? (
@@ -142,13 +151,12 @@ const Navbar = () => {
               Logout
             </button>
           ) : (
-            <NavLink
-              to="/login"
-              onClick={closeMenu}
+            <button
+              onClick={() => handleNavClick("/login")}
               className="px-3 py-2 text-indigo-600 rounded hover:bg-indigo-50 transition mt-2"
             >
               Login
-            </NavLink>
+            </button>
           )}
         </div>
       </div>

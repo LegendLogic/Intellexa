@@ -24,6 +24,8 @@ import MachineLearning from "./docs/MachineLearning";
 import Datascience from "./docs/Datascience";
 import Interview from "./docs/Interview";
 import Project from "./docs/Project";
+import RoadMap from "./collection/RoadMap";
+import Basic from "./collection/Basic";
 
 const App = () => {
   // ✅ Manage login state globally
@@ -51,6 +53,8 @@ const App = () => {
           <Route path="/data-science" element={<Datascience />} />
           <Route path="/interview-prep" element={<Interview/>} />
           <Route path="/projects-practices" element={<Project/>} />
+          <Route path="/roadmap" element={<RoadMap/>} />
+          <Route path="/basic" element={<Basic/>} />
 
           {/* ✅ Pass setAuth here */}
           <Route path="/login" element={<Login setAuth={setAuth} />} />
