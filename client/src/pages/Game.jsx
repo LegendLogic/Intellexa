@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Reward from "../components/Reward";
 import Notes from "../components/Notes";
+import Prize from "../components/Prize";
 
 const Game = () => {
   const [randomNumber, setRandomNumber] = useState(
@@ -41,6 +42,7 @@ const Game = () => {
       <Reward/>
       
       <Notes/>
+      <Prize/>
       
     </div>
   );

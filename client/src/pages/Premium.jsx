@@ -4,7 +4,7 @@ import { Check, X, Zap, Shield, Sparkles, TrendingUp, Users, Headphones } from "
 const plans = [
   {
     title: "Free Plan",
-    price: "$0",
+    price: "0",
     period: "forever",
     desc: "Perfect for beginners exploring our platform.",
     features: [
@@ -22,7 +22,7 @@ const plans = [
   },
   {
     title: "Pro Plan",
-    price: "$29",
+    price: "150",
     period: "per month",
     desc: "For professionals who need more power and control.",
     features: [
