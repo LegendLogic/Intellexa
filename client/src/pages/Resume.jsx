@@ -1,245 +1,406 @@
 import React, { useState, useRef } from "react";
-import { jsPDF } from "jspdf";
+import { Download, User, Briefcase, GraduationCap, Code, Award } from "lucide-react";
 
 const Resume = () => {
-  const [personal, setPersonal] = useState({
-    name: "",
-    title: "",
-    location: "",
-    email: "",
-    phone: "",
-    linkedin: "",
-    github: "",
-  });
-
-  const [education, setEducation] = useState([]);
-  const [currentEducation, setCurrentEducation] = useState({
-    degree: "",
-    college: "",
-    year: "",
-    cgpa: "",
-  });
-
-  const [skills, setSkills] = useState([]);
-  const [projects, setProjects] = useState([]);
-  const [currentProject, setCurrentProject] = useState({
-    title: "",
-    tech: "",
-    description: "",
-    link: "",
+  const [resumeData, setResumeData] = useState({
+    name: "First Last",
+    address: "123 Street Name, Town, State 12345",
+    phone: "123-456-7890",
+    email: "email@gmail.com",
+    linkedin: "linkedin.com/in/username",
+    github: "github.com/username",
+    education: [
+      {
+        university: "State University",
+        degree: "B.Sc. in Computer Science",
+        duration: "Sep 2017 – May 2021",
+        location: "City, State",
+      },
+    ],
+    experience: [
+      {
+        company: "Electronics Company",
+        role: "Software Engineer Intern",
+        duration: "May 2020 – Aug 2020",
+        details: [
+          "Developed automated testing services for daily unit tests.",
+          "Used Python and PowerShell to aggregate XML reports.",
+          "Integrated Jenkins for continuous integration.",
+          "Generated HTML-based result dashboards.",
+        ],
+      },
+    ],
+    projects: [
+      {
+        title: "Gym Reservation Bot",
+        stack: "Python, Selenium, Google Cloud",
+        date: "Jan 2021",
+        points: [
+          "Automated gym slot booking with Selenium.",
+          "Deployed on Google Cloud VM with daily cron jobs.",
+        ],
+      },
+    ],
+    skills: {
+      languages: "Python, Java, C, HTML/CSS, JavaScript, SQL",
+      tools: "VS Code, Eclipse, Google Cloud Platform, Android Studio",
+      frameworks: "Linux, Jenkins, GitHub, JUnit, WordPress",
+    },
   });
 
   const resumeRef = useRef();
+  const [loading, setLoading] = useState(false);
 
-  const handleAddEducation = () => {
-    if (currentEducation.degree && currentEducation.college) {
-      setEducation([...education, currentEducation]);
-      setCurrentEducation({ degree: "", college: "", year: "", cgpa: "" });
-    }
+  const handleInputChange = (field, value) => {
+    setResumeData((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleAddProject = () => {
-    if (currentProject.title && currentProject.tech) {
-      setProjects([...projects, currentProject]);
-      setCurrentProject({ title: "", tech: "", description: "", link: "" });
-    }
+  const handleArrayChange = (section, index, field, value) => {
+    setResumeData((prev) => ({
+      ...prev,
+      [section]: prev[section].map((item, i) =>
+        i === index ? { ...item, [field]: value } : item
+      ),
+    }));
+  };
+
+  const handleDetailsChange = (section, index, detailIndex, value) => {
+    setResumeData((prev) => ({
+      ...prev,
+      [section]: prev[section].map((item, i) =>
+        i === index
+          ? {
+              ...item,
+              [section === "experience" ? "details" : "points"]: item[
+                section === "experience" ? "details" : "points"
+              ].map((d, j) => (j === detailIndex ? value : d)),
+            }
+          : item
+      ),
+    }));
+  };
+
+  const handleSkillChange = (field, value) => {
+    setResumeData((prev) => ({
+      ...prev,
+      skills: { ...prev.skills, [field]: value },
+    }));
   };
 
   const handleDownloadPDF = () => {
-    const doc = new jsPDF("p", "pt", "a4");
-    doc.html(resumeRef.current, {
-      callback: function (doc) {
-        doc.save("resume.pdf");
-      },
-      x: 10,
-      y: 10,
-      width: 580,
-      windowWidth: 800,
-    });
+    setLoading(true);
+    // Simulate PDF generation
+    setTimeout(() => {
+      window.print();
+      setLoading(false);
+    }, 500);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 px-6 py-12 flex flex-col items-center space-y-12">
-      {/* Input Form */}
-      <div className="max-w-3xl w-full bg-white shadow-lg rounded-2xl p-6 space-y-6">
-        <h2 className="text-2xl font-bold text-gray-800 text-center">Resume Builder</h2>
-
-        {/* Personal Info */}
-        <div className="space-y-3">
-          <h3 className="font-semibold text-gray-700">Personal Info</h3>
-          {["name", "title", "location", "email", "phone", "linkedin", "github"].map((field) => (
-            <input
-              key={field}
-              type={field === "email" ? "email" : "text"}
-              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-              value={personal[field]}
-              onChange={(e) => setPersonal({ ...personal, [field]: e.target.value })}
-              className="w-full border px-3 py-2 rounded-lg"
-            />
-          ))}
+    <div className="min-h-screen mt-10 bg-gradient-to-br from-blue-50 to-indigo-100 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-8 print:hidden">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">Resume Builder</h1>
+          <p className="text-gray-600">Create your professional resume in minutes</p>
         </div>
 
-        {/* Education Section */}
-        <div className="space-y-3">
-          <h3 className="font-semibold text-gray-700">Education</h3>
-          {["degree", "college", "year", "cgpa"].map((field) => (
-            <input
-              key={field}
-              type="text"
-              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-              value={currentEducation[field]}
-              onChange={(e) =>
-                setCurrentEducation({ ...currentEducation, [field]: e.target.value })
-              }
-              className="w-full border px-3 py-2 rounded-lg"
-            />
-          ))}
-          <button
-            onClick={handleAddEducation}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-          >
-            Add Education
-          </button>
-        </div>
+        <div className="flex flex-col lg:flex-row gap-6">
+          {/* Left Panel - Edit Section */}
+          <div className="lg:w-2/5 print:hidden">
+            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-4">
+              <div className="flex items-center gap-2 mb-6">
+                <User className="w-6 h-6 text-blue-600" />
+                <h2 className="text-2xl font-bold text-gray-800">Edit Details</h2>
+              </div>
 
-        {/* Skills Section */}
-        <div className="space-y-3">
-          <h3 className="font-semibold text-gray-700">Skills</h3>
-          <input
-            type="text"
-            placeholder="Add skill and press Enter"
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                e.preventDefault();
-                if (e.target.value.trim() !== "") {
-                  setSkills([...skills, e.target.value.trim()]);
-                  e.target.value = "";
-                }
-              }
-            }}
-            className="w-full border px-3 py-2 rounded-lg"
-          />
-          <div className="flex flex-wrap gap-2">
-            {skills.map((skill, i) => (
-              <span key={i} className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm">
-                {skill}
-              </span>
-            ))}
+              <div className="space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
+                {/* Personal Info */}
+                <div className="space-y-3">
+                  <h3 className="font-semibold text-gray-700 flex items-center gap-2">
+                    <Award className="w-4 h-4" />
+                    Personal Information
+                  </h3>
+                  {[
+                    ["Full Name", "name"],
+                    ["Address", "address"],
+                    ["Phone", "phone"],
+                    ["Email", "email"],
+                    ["LinkedIn", "linkedin"],
+                    ["GitHub", "github"],
+                  ].map(([label, key]) => (
+                    <div key={key}>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        {label}
+                      </label>
+                      <input
+                        type="text"
+                        value={resumeData[key]}
+                        onChange={(e) => handleInputChange(key, e.target.value)}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Education */}
+                <div className="space-y-3 pt-4 border-t">
+                  <h3 className="font-semibold text-gray-700 flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4" />
+                    Education
+                  </h3>
+                  {resumeData.education.map((edu, i) => (
+                    <div key={i} className="space-y-2 p-3 bg-gray-50 rounded-lg">
+                      <input
+                        type="text"
+                        value={edu.university}
+                        onChange={(e) =>
+                          handleArrayChange("education", i, "university", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        placeholder="University"
+                      />
+                      <input
+                        type="text"
+                        value={edu.degree}
+                        onChange={(e) =>
+                          handleArrayChange("education", i, "degree", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        placeholder="Degree"
+                      />
+                      <input
+                        type="text"
+                        value={edu.duration}
+                        onChange={(e) =>
+                          handleArrayChange("education", i, "duration", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        placeholder="Duration"
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Experience */}
+                <div className="space-y-3 pt-4 border-t">
+                  <h3 className="font-semibold text-gray-700 flex items-center gap-2">
+                    <Briefcase className="w-4 h-4" />
+                    Experience
+                  </h3>
+                  {resumeData.experience.map((exp, i) => (
+                    <div key={i} className="space-y-2 p-3 bg-gray-50 rounded-lg">
+                      <input
+                        type="text"
+                        value={exp.company}
+                        onChange={(e) =>
+                          handleArrayChange("experience", i, "company", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        placeholder="Company"
+                      />
+                      <input
+                        type="text"
+                        value={exp.role}
+                        onChange={(e) =>
+                          handleArrayChange("experience", i, "role", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        placeholder="Role"
+                      />
+                      <input
+                        type="text"
+                        value={exp.duration}
+                        onChange={(e) =>
+                          handleArrayChange("experience", i, "duration", e.target.value)
+                        }
+                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        placeholder="Duration"
+                      />
+                      {exp.details.map((detail, j) => (
+                        <textarea
+                          key={j}
+                          value={detail}
+                          onChange={(e) =>
+                            handleDetailsChange("experience", i, j, e.target.value)
+                          }
+                          className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                          rows="2"
+                        />
+                      ))}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Skills */}
+                <div className="space-y-3 pt-4 border-t">
+                  <h3 className="font-semibold text-gray-700 flex items-center gap-2">
+                    <Code className="w-4 h-4" />
+                    Technical Skills
+                  </h3>
+                  {[
+                    ["Languages", "languages"],
+                    ["Tools", "tools"],
+                    ["Frameworks", "frameworks"],
+                  ].map(([label, key]) => (
+                    <div key={key}>
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        {label}
+                      </label>
+                      <input
+                        type="text"
+                        value={resumeData.skills[key]}
+                        onChange={(e) => handleSkillChange(key, e.target.value)}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button
+                onClick={handleDownloadPDF}
+                disabled={loading}
+                className={`w-full mt-6 py-3 rounded-lg font-semibold text-white transition-all flex items-center justify-center gap-2 ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl"
+                }`}
+              >
+                <Download className="w-5 h-5" />
+                {loading ? "Preparing..." : "Download PDF"}
+              </button>
+            </div>
+          </div>
+
+          {/* Right Panel - Resume Preview */}
+          <div className="lg:w-3/5">
+            <div className="bg-white rounded-xl shadow-2xl overflow-hidden print:shadow-none print:rounded-none">
+              <div
+                ref={resumeRef}
+                className="bg-white text-gray-900 p-12 max-w-[210mm] mx-auto print:p-16"
+                style={{ fontFamily: "Georgia, serif" }}
+              >
+                {/* Header */}
+                <div className="text-center mb-6 pb-4 border-b-2 border-gray-300">
+                  <h1 className="text-4xl font-bold uppercase tracking-wider mb-2">
+                    {resumeData.name}
+                  </h1>
+                  <p className="text-sm text-gray-700 mb-1">{resumeData.address}</p>
+                  <p className="text-sm text-gray-700">
+                    {resumeData.phone} | {resumeData.email}
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    {resumeData.linkedin} | {resumeData.github}
+                  </p>
+                </div>
+
+                {/* Education */}
+                <section className="mb-6">
+                  <h2 className="uppercase font-bold text-lg mb-3 pb-1 border-b-2 border-gray-400">
+                    Education
+                  </h2>
+                  {resumeData.education.map((edu, i) => (
+                    <div key={i} className="mb-2">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="font-bold">{edu.university}</p>
+                          <p className="text-sm italic">{edu.degree}</p>
+                        </div>
+                        <p className="text-sm text-gray-700">{edu.duration}</p>
+                      </div>
+                    </div>
+                  ))}
+                </section>
+
+                {/* Experience */}
+                <section className="mb-6">
+                  <h2 className="uppercase font-bold text-lg mb-3 pb-1 border-b-2 border-gray-400">
+                    Experience
+                  </h2>
+                  {resumeData.experience.map((exp, i) => (
+                    <div key={i} className="mb-4">
+                      <div className="flex justify-between items-start mb-1">
+                        <div>
+                          <p className="font-bold">{exp.role}</p>
+                          <p className="text-sm italic">{exp.company}</p>
+                        </div>
+                        <p className="text-sm text-gray-700">{exp.duration}</p>
+                      </div>
+                      <ul className="list-disc list-outside ml-5 text-sm space-y-1">
+                        {exp.details.map((d, j) => (
+                          <li key={j}>{d}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </section>
+
+                {/* Projects */}
+                <section className="mb-6">
+                  <h2 className="uppercase font-bold text-lg mb-3 pb-1 border-b-2 border-gray-400">
+                    Projects
+                  </h2>
+                  {resumeData.projects.map((proj, i) => (
+                    <div key={i} className="mb-4">
+                      <div className="flex justify-between items-start mb-1">
+                        <div>
+                          <p className="font-bold">{proj.title}</p>
+                          <p className="text-sm italic">{proj.stack}</p>
+                        </div>
+                        <p className="text-sm text-gray-700">{proj.date}</p>
+                      </div>
+                      <ul className="list-disc list-outside ml-5 text-sm space-y-1">
+                        {proj.points.map((p, j) => (
+                          <li key={j}>{p}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </section>
+
+                {/* Skills */}
+                <section>
+                  <h2 className="uppercase font-bold text-lg mb-3 pb-1 border-b-2 border-gray-400">
+                    Technical Skills
+                  </h2>
+                  <div className="space-y-1 text-sm">
+                    <p>
+                      <strong>Languages:</strong> {resumeData.skills.languages}
+                    </p>
+                    <p>
+                      <strong>Tools:</strong> {resumeData.skills.tools}
+                    </p>
+                    <p>
+                      <strong>Frameworks:</strong> {resumeData.skills.frameworks}
+                    </p>
+                  </div>
+                </section>
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Projects Section */}
-        <div className="space-y-3">
-          <h3 className="font-semibold text-gray-700">Projects</h3>
-          {["title", "tech", "description", "link"].map((field) => (
-            field === "description" ? (
-              <textarea
-                key={field}
-                placeholder="Project Description"
-                value={currentProject.description}
-                onChange={(e) =>
-                  setCurrentProject({ ...currentProject, description: e.target.value })
-                }
-                className="w-full border px-3 py-2 rounded-lg"
-              />
-            ) : (
-              <input
-                key={field}
-                type="text"
-                placeholder={field === "link" ? "Project Link (optional)" : field.charAt(0).toUpperCase() + field.slice(1)}
-                value={currentProject[field]}
-                onChange={(e) =>
-                  setCurrentProject({ ...currentProject, [field]: e.target.value })
-                }
-                className="w-full border px-3 py-2 rounded-lg"
-              />
-            )
-          ))}
-          <button
-            onClick={handleAddProject}
-            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition"
-          >
-            Add Project
-          </button>
-        </div>
-
-        {/* Download Button */}
-        <div className="text-center mt-4">
-          <button
-            onClick={handleDownloadPDF}
-            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
-          >
-            Download PDF
-          </button>
-        </div>
       </div>
 
-      {/* Resume Preview */}
-      <div
-        ref={resumeRef}
-        className="max-w-4xl w-full bg-white shadow-lg rounded-2xl p-8 space-y-4"
-      >
-        <h1 className="text-4xl font-bold text-gray-800">{personal.name || "Your Name"}</h1>
-        <p className="text-indigo-600 font-medium">{personal.title || "Title"}</p>
-        <p className="text-gray-600">
-          📍 {personal.location || "Location"} | 📧 {personal.email || "Email"} | ☎️ {personal.phone || "Phone"}
-        </p>
-
-        {education.length > 0 && (
-          <section>
-            <h2 className="text-2xl font-semibold text-gray-800 border-b-2 border-indigo-500 inline-block mb-2">
-              Education
-            </h2>
-            {education.map((edu, i) => (
-              <div key={i} className="text-gray-700 mb-2">
-                <h3 className="font-semibold">{edu.degree}</h3>
-                <p>{edu.college} ({edu.year})</p>
-                <p className="text-sm">CGPA: {edu.cgpa}</p>
-              </div>
-            ))}
-          </section>
-        )}
-
-        {skills.length > 0 && (
-          <section>
-            <h2 className="text-2xl font-semibold text-gray-800 border-b-2 border-indigo-500 inline-block mb-2">
-              Skills
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {skills.map((skill, i) => (
-                <span key={i} className="px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full text-sm">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {projects.length > 0 && (
-          <section>
-            <h2 className="text-2xl font-semibold text-gray-800 border-b-2 border-indigo-500 inline-block mb-2">
-              Projects
-            </h2>
-            {projects.map((project, i) => (
-              <div key={i} className="mb-2 text-gray-700">
-                <h3 className="font-semibold">{project.title}</h3>
-                <p className="text-sm text-gray-600">{project.tech}</p>
-                <p className="text-sm">{project.description}</p>
-                {project.link && (
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-indigo-600 hover:underline text-sm"
-                  >
-                    View Project
-                  </a>
-                )}
-              </div>
-            ))}
-          </section>
-        )}
-      </div>
+      <style>{`
+        @media print {
+          body {
+            margin: 0;
+            padding: 0;
+          }
+          .print\\:hidden {
+            display: none !important;
+          }
+          .print\\:shadow-none {
+            box-shadow: none !important;
+          }
+          .print\\:rounded-none {
+            border-radius: 0 !important;
+          }
+          .print\\:p-16 {
+            padding: 4rem !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

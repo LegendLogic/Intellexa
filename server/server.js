@@ -18,6 +18,7 @@ app.use(cors())
 
 //API Routes
 app.use('/api/user', userRouter);
+app.use("/api/chat", chatRoute);
 
 
 app.get('/',(req,res)=>{

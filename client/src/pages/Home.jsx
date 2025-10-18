@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaArrowRight, FaSearch } from "react-icons/fa";
 import { motion } from "framer-motion";
+import Chatbot from '../components/Chatbot';
 
 const resources = [
   { title: "Web Development", description: "Learn HTML, CSS, JavaScript and build modern websites", color: "bg-gradient-to-br from-orange-400 to-orange-600", icon: "💻", link: "/webdev" },
@@ -109,6 +110,7 @@ const Home = () => {
           </div>
         </div>
       </motion.div>
+      <Chatbot/>
 
     </section>
   );
