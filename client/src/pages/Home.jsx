@@ -51,7 +51,14 @@ const Home = () => {
   };
 
   return (
-    <section className="relative bg-gradient-to-br from-[#0b0b1d] via-[#141428] to-[#1a1a35] text-white overflow-hidden">
+ <section
+  className="relative min-h-screen text-white  items-center overflow-hidden"
+  style={{
+    background:
+      "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+  }}
+>
+
 
       {/* Hero Section */}
       <motion.div
@@ -100,35 +107,35 @@ const Home = () => {
 
         {/* 🔍 Search Bar */}
         <motion.form
-  onSubmit={handleSearch}
-  initial={{ opacity: 0, y: 30 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ delay: 0.6, duration: 0.6 }}
-  className="w-full mt-10 max-w-3xl mx-auto flex flex-col sm:flex-row items-center p-3 sm:p-4 rounded-full bg-gradient-to-r from-white/30 to-white/10 backdrop-blur-lg shadow-xl focus-within:shadow-2xl focus-within:scale-105 transition-all duration-300"
->
-  {/* Explore label */}
-  <div className="flex items-center space-x-2 bg-gray-100/50 backdrop-blur-sm px-4 py-2 rounded-full text-gray-700 font-medium select-none cursor-default shadow-inner mb-3 sm:mb-0">
-    <span>🔍 Explore</span>
-  </div>
+          onSubmit={handleSearch}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.6 }}
+          className="w-full mt-10 max-w-3xl mx-auto flex flex-col sm:flex-row items-center p-3 sm:p-4 rounded-full bg-gradient-to-r from-white/30 to-white/10 backdrop-blur-lg shadow-xl focus-within:shadow-2xl focus-within:scale-105 transition-all duration-300"
+        >
+          {/* Explore label */}
+          <div className="flex items-center space-x-2 bg-gray-100/50 backdrop-blur-sm px-4 py-2 rounded-full text-gray-700 font-medium select-none cursor-default shadow-inner mb-3 sm:mb-0">
+            <span>🔍 Explore</span>
+          </div>
 
-  {/* Search input */}
-  <input
-    type="text"
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    placeholder="Find & choose your perfect course"
-    className="flex-grow px-4 py-2 sm:ml-3 rounded-full bg-white/70 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1 transition-all duration-300 w-full sm:w-auto"
-  />
+          {/* Search input */}
+          <input
+            type="text"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Find & choose your perfect course"
+            className="flex-grow px-4 py-2 sm:ml-3 rounded-full bg-white/70 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:ring-offset-1 transition-all duration-300 w-full sm:w-auto"
+          />
 
-  {/* Submit button */}
-  <button
-    type="submit"
-    className="mt-3 sm:mt-0 sm:ml-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white p-3 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
-    aria-label="Search Courses"
-  >
-    <FaSearch size={18} />
-  </button>
-</motion.form>
+          {/* Submit button */}
+          <button
+            type="submit"
+            className="mt-3 sm:mt-0 sm:ml-3 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white p-3 rounded-full shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+            aria-label="Search Courses"
+          >
+            <FaSearch size={18} />
+          </button>
+        </motion.form>
 
 
         {/* Stats */}

@@ -6,7 +6,6 @@ import connectCloudinary from './config/cloudinary.js'
 import userRouter from './routes/userRoutes.js';
 
 
-
 // app config
 const app = express()
 const port = process.env.PORT || 4000

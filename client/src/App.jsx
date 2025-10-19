@@ -7,6 +7,7 @@ import Navbar from "./components/Navbar";
 
 // Pages
 import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Profile from "./pages/MyProfile";
@@ -17,7 +18,6 @@ import Notes from "./components/Notes";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Leaderboard from "./pages/Leaderboard";
-import Game from "./pages/Game";
 import Webdev from "./docs/Webdev";
 import AIML from "./docs/AIML";
 import MachineLearning from "./docs/MachineLearning";
@@ -26,6 +26,12 @@ import Interview from "./docs/Interview";
 import Project from "./docs/Project";
 import RoadMap from "./collection/RoadMap";
 import Basic from "./collection/Basic";
+import GameHub from "./game/GameHub";
+import CodeQuiz from "./game/CodeQuiz";
+import DebugTheCode from "./game/DebugTheCode";
+import GuessOutput from "./game/GuessOutput";
+import AlgorithmChallenge from "./game/AlgorithmChallenge";
+import TechTrivia from "./game/TechTrivia";
 
 const App = () => {
   // ✅ Manage login state globally
@@ -46,15 +52,21 @@ const App = () => {
           <Route path="/resume" element={<Resume />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/game" element={<Game />} />
           <Route path="/webdev" element={<Webdev />} />
           <Route path="/ai-ml" element={<AIML />} />
           <Route path="/ml-projects" element={<MachineLearning />} />
           <Route path="/data-science" element={<Datascience />} />
-          <Route path="/interview-prep" element={<Interview/>} />
-          <Route path="/projects-practices" element={<Project/>} />
-          <Route path="/roadmap" element={<RoadMap/>} />
-          <Route path="/basic" element={<Basic/>} />
+          <Route path="/interview-prep" element={<Interview />} />
+          <Route path="/projects-practices" element={<Project />} />
+          <Route path="/roadmap" element={<RoadMap />} />
+          <Route path="/basic" element={<Basic />} />
+          <Route path="/game" element={<GameHub />} />
+          <Route path="/game/code-quiz" element={<CodeQuiz />} />
+          <Route path="/game/debug" element={<DebugTheCode />} />
+          <Route path="/game/guess-output" element={<GuessOutput />} />
+          <Route path="/game/algo-challenge" element={<AlgorithmChallenge />} />
+          <Route path="/game/tech-wheel" element={<TechTrivia />} />
+          <Route path="*" element={<NotFound />} />
 
           {/* ✅ Pass setAuth here */}
           <Route path="/login" element={<Login setAuth={setAuth} />} />
@@ -62,6 +74,7 @@ const App = () => {
 
           {/* Redirect unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
+          
         </Routes>
       </main>
 
@@ -74,7 +87,7 @@ const App = () => {
         pauseOnHover
       />
 
-      <footer className="bg-gray-900 text-white text-center py-4 mt-8">
+      <footer className="bg-gray-900 text-white text-center py-4">
         <p className="text-sm">
           © {new Date().getFullYear()}{" "}
           <span className="text-indigo-400 font-medium">Sangram Das</span> — All Rights Reserved.

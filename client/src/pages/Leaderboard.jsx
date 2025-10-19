@@ -64,7 +64,12 @@ const Leaderboard = () => {
   const sortedUsers = [...users].sort((a, b) => b.creditBalance - a.creditBalance);
 
   return (
-    <div className="min-h-screen mt-20 bg-gray-50 flex flex-col items-center px-6 py-12">
+    <div className="min-h-screen mt-20  flex flex-col items-center px-6 py-12"
+    style={{
+    background:
+      "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+  }}
+    >
       <div className="max-w-4xl w-full bg-white shadow-lg rounded-2xl p-8">
         <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Leaderboard</h1>
 
@@ -110,9 +115,9 @@ const Leaderboard = () => {
                         : ""
                     }`}
                   >
-                    <td className="px-4 py-3">{index + 1}</td>
-                    <td className="px-4 py-3">{user.name}</td>
-                    <td className="px-4 py-3">{user.creditBalance}</td>
+                    <td className="px-4 text-red-600 py-3">{index + 1}</td>
+                    <td className="px-4 text-green-400 py-3">{user.name}</td>
+                    <td className="px-4 text-black py-3">{user.creditBalance}</td>
                   </tr>
                 ))}
               </tbody>
@@ -120,8 +125,8 @@ const Leaderboard = () => {
           </div>
         )}
 
-        <p className="text-gray-500 text-sm mt-6 text-center">
-          © {new Date().getFullYear()} MyLeaderboard App
+        <p className="text-pink-500 text-3xl mt-6 text-center">
+          © {new Date().getFullYear()} Intellexa Leaderboard App
         </p>
       </div>
     </div>

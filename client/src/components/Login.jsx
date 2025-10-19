@@ -89,7 +89,12 @@ const Login = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div className="relative   min-h-screen flex items-center justify-center overflow-hidden"
+      style={{
+    background:
+      "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+  }}
+    >
       {/* ✅ Toast Container */}
       <ToastContainer
         position="top-right"
@@ -100,24 +105,7 @@ const Login = () => {
         theme="colored"
       />
 
-      {/* Animated Gradient Background */}
-      <motion.div
-        animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-[length:200%_200%]"
-      ></motion.div>
-
-      {/* Floating Blobs */}
-      <motion.div
-        animate={{ y: [0, 20, 0], x: [0, 15, 0] }}
-        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-20 left-10 w-36 h-36 bg-pink-400 opacity-20 rounded-full blur-3xl"
-      ></motion.div>
-      <motion.div
-        animate={{ y: [0, -15, 0], x: [0, -20, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-16 right-16 w-48 h-48 bg-purple-500 opacity-25 rounded-full blur-3xl"
-      ></motion.div>
+    
 
       {/* Glass Login Card */}
       <motion.div

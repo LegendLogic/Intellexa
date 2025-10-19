@@ -85,7 +85,12 @@ const Premium = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
 
   return (
-    <div className="min-h-screen mt-16 bg-gradient-to-br from-slate-50 via-white to-indigo-50 relative overflow-hidden">
+    <div className="min-h-screen mt-16  relative overflow-hidden"
+    style={{
+    background:
+      "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+  }}
+    >
       {/* Background Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-200 rounded-full blur-3xl opacity-20 animate-pulse"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-200 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
@@ -99,7 +104,7 @@ const Premium = () => {
               <span>Unlock Your Full Potential</span>
             </div>
             
-            <h1 className="text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-6xl font-extrabold text-white mb-6 leading-tight">
               Upgrade to{" "}
               <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                 Premium
@@ -199,7 +204,7 @@ const Premium = () => {
 
           {/* Benefits Section */}
           <div className="mb-24">
-            <h2 className="text-4xl font-bold text-center text-gray-900 mb-12">
+            <h2 className="text-4xl font-bold text-center text-white mb-12">
               Why Go Premium?
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">

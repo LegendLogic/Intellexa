@@ -75,6 +75,7 @@ const Notes = () => {
       const data = await res.json();
       if (res.ok) setUserCredit(data.creditBalance);
       else toast.error("⚠️ " + data.message);
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       toast.error("⚠️ Could not update points on server");
     }
