@@ -55,7 +55,7 @@ const RoadMap = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="text-4xl font-bold text-indigo-700 mb-12 text-center"
+        className="text-4xl font-bold text-indigo-700 mt-9 mb-12 text-center"
       >
         🚀 Developer Roadmap 2025
       </motion.h1>

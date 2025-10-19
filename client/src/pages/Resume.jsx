@@ -112,12 +112,12 @@ const Resume = () => {
   };
 
   return (
-    <div className="min-h-screen mt-20  p-4 md:p-8"
+    <div className="min-h-screen  p-4 md:p-8"
     style={{
     background:
       "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
   }}>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mt-16 mx-auto">
         <div className="text-center mb-8 print:hidden">
           <h1 className="text-4xl font-bold text-white mb-2">Resume Builder</h1>
           <p className="text-gray-300">Create your professional resume in minutes</p>

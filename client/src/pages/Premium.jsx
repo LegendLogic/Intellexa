@@ -85,20 +85,20 @@ const Premium = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
 
   return (
-    <div className="min-h-screen mt-16  relative overflow-hidden"
+    <div className="min-h-screen  relative overflow-hidden"
     style={{
     background:
       "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
   }}
     >
       {/* Background Elements */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-200 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+      <div className="absolute  top-0 right-0 w-96 h-96 bg-indigo-500 rounded-full blur-3xl opacity-20 animate-pulse"></div>
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-200 rounded-full blur-3xl opacity-20 animate-pulse" style={{ animationDelay: '1s' }}></div>
       
       <div className="relative z-10 flex flex-col items-center px-6 py-16">
         <div className="max-w-7xl w-full">
           {/* Header Section */}
-          <div className="text-center mb-16">
+          <div className="text-center mt-10 mb-16">
             <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in">
               <Sparkles className="w-4 h-4" />
               <span>Unlock Your Full Potential</span>
@@ -110,7 +110,7 @@ const Premium = () => {
                 Premium
               </span>
             </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto leading-relaxed">
               Unlock exclusive tools and features that help you grow faster and smarter.
               Experience performance, customization, and insights like never before.
             </p>

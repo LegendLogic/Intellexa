@@ -64,14 +64,14 @@ const Leaderboard = () => {
   const sortedUsers = [...users].sort((a, b) => b.creditBalance - a.creditBalance);
 
   return (
-    <div className="min-h-screen mt-20  flex flex-col items-center px-6 py-12"
+    <div className="min-h-screen  flex flex-col items-center px-6 py-12"
     style={{
     background:
       "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
   }}
     >
-      <div className="max-w-4xl w-full bg-white shadow-lg rounded-2xl p-8">
-        <h1 className="text-4xl font-bold text-gray-800 mb-6 text-center">Leaderboard</h1>
+      <div className="max-w-4xl w-full mt-20 bg-transparent border-2 shadow-lg rounded-2xl p-8">
+        <h1 className="text-4xl font-bold text-white mb-6 text-center">Leaderboard</h1>
 
         {/* Logged-in User Info */}
         {userLoading ? (

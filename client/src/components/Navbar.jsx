@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
+import * as Images from "../assets";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -75,33 +76,41 @@ const Navbar = () => {
   return (
     <>
       <header
-        className={`fixed top-0 z-50 w-full transition-all duration-500 ${
-          isScrolled
-            ? "bg-amber-950/95 shadow-md backdrop-blur-md"
+        className={`fixed top-0 z-50 w-full transition-all duration-500 ${isScrolled
+            ? "bg-transparent shadow-md backdrop-blur-md"
             : "bg-transparent"
-        }`}
+          }`}
       >
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-3 flex items-center justify-between">
           {/* Logo */}
           <Link
             to="/"
-            className="text-xl sm:text-2xl font-bold text-indigo-600 z-50"
-            onClick={closeMenu}
+            className="flex items-center gap-2 text-xl sm:text-2xl font-bold text-indigo-600 z-50"
+            onClick={() => {
+              if (location.pathname !== "/") navigate("/");
+              else window.scrollTo({ top: 0, behavior: "smooth" });
+              setIsOpen(false);
+            }}
           >
-            Intellexa..,
+            <img
+              src={Images.backImage}
+              alt="Intellexa Logo"
+              className="h-10 w-auto object-cover transition-transform duration-300 hover:scale-110"
+            />
+            Intellexa
           </Link>
 
+
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center space-x-6 font-medium text-gray-200">
+          <div className="hidden md:flex items-center space-x-6 font-medium text-amber-700">
             {navLinks.map((link, i) => (
               <button
                 key={i}
                 onClick={() => handleNavClick(link.path)}
-                className={`px-3 py-2 rounded-md transition ${
-                  location.pathname === link.path
+                className={`px-3 py-2 rounded-md transition ${location.pathname === link.path
                     ? "text-orange-400 font-semibold"
                     : "hover:text-orange-400"
-                }`}
+                  }`}
               >
                 {link.name}
               </button>
@@ -110,10 +119,10 @@ const Navbar = () => {
             {/* User Info */}
             {isAuth && userInfo && (
               <div className="flex items-center gap-3 px-4 py-2 bg-orange-500/20 rounded-full border border-orange-400/30">
-                <span className="text-sm font-semibold text-white">
+                <span className="text-sm font-semibold text-red-400">
                   {userInfo.name}
                 </span>
-                <span className="text-sm bg-orange-500 text-white px-3 py-1 rounded-full">
+                <span className="text-sm bg-orange-500 text-amber-400 px-3 py-1 rounded-full">
                   🏆 {userInfo.creditBalance || 0} pts
                 </span>
               </div>
@@ -139,7 +148,7 @@ const Navbar = () => {
 
           {/* Mobile Hamburger */}
           <button
-            className="md:hidden text-gray-200 text-2xl focus:outline-none z-50 relative"
+            className="md:hidden text-amber-600 text-2xl focus:outline-none z-50 relative"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
@@ -158,14 +167,13 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed top-0 left-0 h-full w-72 bg-gradient-to-b from-amber-950 via-neutral-900 to-black text-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        className={`fixed top-0 left-0 h-full w-72 bg-gradient-to-b from-amber-950 via-neutral-900 to-black text-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${isOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
           <h2 className="text-lg font-semibold text-orange-400">Menu</h2>
           <button
-            className="text-gray-300 hover:text-white transition"
+            className="text-amber-400 hover:text-black transition"
             onClick={closeMenu}
             aria-label="Close menu"
           >
@@ -178,11 +186,10 @@ const Navbar = () => {
             <button
               key={i}
               onClick={() => handleNavClick(link.path)}
-              className={`px-4 py-2 rounded-md text-left transition ${
-                location.pathname === link.path
+              className={`px-4 py-2 rounded-md text-left transition ${location.pathname === link.path
                   ? "bg-orange-500/30 text-orange-400"
                   : "hover:bg-orange-500/10 hover:text-orange-300"
-              }`}
+                }`}
             >
               {link.name}
             </button>
@@ -191,7 +198,7 @@ const Navbar = () => {
           {isAuth && userInfo && (
             <div className="mt-4 border-t border-white/10 pt-3">
               <p className="font-semibold text-orange-400">{userInfo.name}</p>
-              <p className="text-sm text-gray-300 mt-1">
+              <p className="text-sm text-amber-300 mt-1">
                 🏆 {userInfo.creditBalance || 0} pts
               </p>
             </div>

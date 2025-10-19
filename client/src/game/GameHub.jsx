@@ -4,7 +4,7 @@ import { Code2, Bug, Brain, Cpu, Globe } from "lucide-react";
 
 const games = [
   {
-    title: "Code Quiz 🧠",
+    title: "Code Quiz",
     path: "/game/code-quiz",
     icon: <Brain className="w-8 h-8" />,
     desc: "Test your coding basics with short quizzes!",
@@ -12,7 +12,7 @@ const games = [
     shadow: "shadow-blue-500/50",
   },
   {
-    title: "Debug the Code 🐞",
+    title: "Debug the Code",
     path: "/game/debug",
     icon: <Bug className="w-8 h-8" />,
     desc: "Find and fix the errors in given code snippets.",
@@ -20,7 +20,7 @@ const games = [
     shadow: "shadow-rose-500/50",
   },
   {
-    title: "Guess the Output 💡",
+    title: "Guess the Output",
     path: "/game/guess-output",
     icon: <Code2 className="w-8 h-8" />,
     desc: "Predict the result of tricky JavaScript code.",
@@ -28,7 +28,7 @@ const games = [
     shadow: "shadow-emerald-500/50",
   },
   {
-    title: "Algorithm Challenge 🔢",
+    title: "Algorithm Challenge",
     path: "/game/algo-challenge",
     icon: <Cpu className="w-8 h-8" />,
     desc: "Solve small algorithmic puzzles & earn points.",
@@ -36,7 +36,7 @@ const games = [
     shadow: "shadow-purple-500/50",
   },
   {
-    title: "Tech Trivia Wheel 🌐",
+    title: "Tech Trivia Wheel",
     path: "/game/tech-wheel",
     icon: <Globe className="w-8 h-8" />,
     desc: "Spin the wheel to answer random tech trivia!",
@@ -47,13 +47,13 @@ const games = [
 
 const Game = () => {
   return (
-    <div className="min-h-screen  mt-10 flex flex-col items-center py-12 px-6"
+    <div className="min-h-screen flex flex-col items-center py-12 px-6"
     style={{
     background:
       "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
   }}
     >
-      <div className="text-center mt-12 mb-12">
+      <div className="text-center mt-10 mb-12">
         <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
           💻 Tech Skill Games
         </h1>
