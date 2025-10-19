@@ -4,6 +4,7 @@ import 'dotenv/config'
 import connetDB  from './config/mongodb.js'
 import connectCloudinary from './config/cloudinary.js'
 import userRouter from './routes/userRoutes.js';
+import chatRoute from "./routes/chatbotRoutes.js";
 
 
 
@@ -19,6 +20,7 @@ app.use(cors())
 
 //API Routes
 app.use('/api/user', userRouter);
+app.use("/api/chat", chatRoute);
 
 
 
