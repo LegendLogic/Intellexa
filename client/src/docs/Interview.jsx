@@ -119,24 +119,28 @@ const Interview = () => {
   };
 
   return (
-    <div className="min-h-screen mt-30 bg-gradient-to-br from-indigo-50 via-white to-purple-50 p-6">
+    <div className="min-h-screen   p-6"
+    style={{
+        background:
+          "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+      }}>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-3">
-            <Award className="text-indigo-600" size={40} />
+          <h1 className="text-4xl mt-20 font-bold text-orange-800 mb-2 flex items-center justify-center gap-3">
+            <Award className="text-orange-600" size={40} />
             Interview Practice Platform
           </h1>
-          <p className="text-gray-600">Practice, Get Feedback, Excel in Your Interviews</p>
+          <p className="text-white">Practice, Get Feedback, Excel in Your Interviews</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Main Practice Area */}
           <div className="lg:col-span-2 space-y-6">
             {/* Category Selection */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
-              <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <BookOpen className="text-indigo-600" />
+            <div className="border rounded-xl shadow-lg p-6">
+              <h2 className="text-xl text-white font-semibold mb-4 flex items-center gap-2">
+                <BookOpen className="text-orange-600" />
                 Select Category
               </h2>
               <div className="flex gap-3">
@@ -151,7 +155,7 @@ const Interview = () => {
                     }}
                     className={`flex-1 py-3 px-4 rounded-lg font-medium transition-all ${
                       selectedCategory === cat
-                        ? 'bg-indigo-600 text-white shadow-md'
+                        ? 'bg-orange-400 text-white shadow-md'
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -162,9 +166,9 @@ const Interview = () => {
             </div>
 
             {/* Question Display */}
-            <div className="bg-white rounded-xl shadow-lg p-6">
+            <div className="border rounded-xl shadow-lg p-6">
               <div className="flex justify-between items-start mb-4">
-                <h3 className="text-lg font-semibold text-gray-800">
+                <h3 className="text-lg text-white font-semibold text-gray-800">
                   Question {currentQuestion + 1} of {questions[selectedCategory].length}
                 </h3>
                 <div className="flex items-center gap-2 text-indigo-600 font-mono font-bold">
@@ -209,7 +213,7 @@ const Interview = () => {
                 value={answer}
                 onChange={(e) => setAnswer(e.target.value)}
                 placeholder="Type your answer here as you practice speaking..."
-                className="w-full h-40 p-4 border-2 border-gray-200 rounded-lg focus:border-indigo-500 focus:outline-none resize-none"
+                className="w-full h-40 p-4 border-2 text-white border-gray-200 rounded-lg focus:border-indigo-500 focus:outline-none resize-none"
                 disabled={!isRecording}
               />
             </div>
@@ -272,9 +276,9 @@ const Interview = () => {
 
           {/* Resources Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-6">
-              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-                <ExternalLink className="text-indigo-600" />
+            <div className=" rounded-xl shadow-lg p-6 sticky top-6">
+              <h3 className="text-xl text-orange-400 font-semibold mb-4 flex items-center gap-2">
+                <ExternalLink className="text-orange-600" />
                 Recommended Resources
               </h3>
               <div className="space-y-3">
@@ -284,16 +288,16 @@ const Interview = () => {
                     href={resource.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block p-4 bg-gradient-to-r from-gray-50 to-indigo-50 rounded-lg hover:shadow-md transition-all border border-gray-200 hover:border-indigo-300"
+                    className="block p-4  rounded-lg hover:shadow-md transition-all border border-gray-200 hover:border-indigo-300"
                   >
                     <div className="flex items-start gap-3">
                       <span className="text-2xl">{resource.icon}</span>
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-800 flex items-center gap-2">
+                        <h4 className="font-semibold text-orange-500 flex items-center gap-2">
                           {resource.name}
-                          <ExternalLink size={14} className="text-gray-400" />
+                          <ExternalLink size={14} className="text-white" />
                         </h4>
-                        <p className="text-sm text-gray-600">{resource.description}</p>
+                        <p className="text-sm text-white">{resource.description}</p>
                       </div>
                     </div>
                   </a>
@@ -301,13 +305,13 @@ const Interview = () => {
               </div>
 
               {/* Quick Tips */}
-              <div className="mt-6 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
-                <h4 className="font-semibold text-indigo-900 mb-2">💡 Quick Tips</h4>
+              <div className="mt-6 p-4 rounded-lg border border-indigo-200">
+                <h4 className="font-semibold text-orange-500 mb-2"> Quick Tips</h4>
                 <ul className="text-sm text-indigo-800 space-y-1">
-                  <li>• Use the STAR method for behavioral questions</li>
-                  <li>• Practice out loud, not just in your head</li>
-                  <li>• Record yourself to identify filler words</li>
-                  <li>• Take a pause before answering</li>
+                  <li className='text-white'>• Use the STAR method for behavioral questions</li>
+                  <li className='text-white'>• Practice out loud, not just in your head</li>
+                  <li className='text-white'>• Record yourself to identify filler words</li>
+                  <li className='text-white'>• Take a pause before answering</li>
                 </ul>
               </div>
             </div>

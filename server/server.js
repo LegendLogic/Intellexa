@@ -5,6 +5,7 @@ import connectDB from "./config/mongodb.js";
 import connectCloudinary from "./config/cloudinary.js";
 import userRouter from "./routes/userRoutes.js";
 import quizRouter from "./routes/quizRoute.js";
+import chatRoutes from "./routes/chatRoutes.js";
 
 // App config
 const app = express();
@@ -40,6 +41,7 @@ app.use(express.json());
 // API Routes
 app.use("/api/user", userRouter);
 app.use("/api/quiz", quizRouter);
+app.use("/api", chatRoutes);
 
 // Default route
 app.get("/", (req, res) => {

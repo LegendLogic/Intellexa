@@ -228,7 +228,7 @@ const Premium = () => {
           </div>
 
           {/* Final CTA Section */}
-          <div className=" rounded-3xl p-12 text-center shadow-2xl relative overflow-hidden">
+          <div className=" rounded-3xl p-12 text-center border border-white shadow-2xl relative overflow-hidden">
             {/* Animated Background */}
             <div className="absolute inset-0 opacity-20">
               <div className="absolute top-0 left-1/4 w-64 h-64 bg-white rounded-full blur-3xl animate-pulse"></div>

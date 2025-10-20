@@ -67,18 +67,23 @@ const Datascience = () => {
   const [selectedVideo, setSelectedVideo] = useState(videos[0]);
 
   return (
-    <div className="min-h-screen mt-20 bg-gray-50 py-10 px-4">
+    <div className="min-h-screen  py-10 px-4"
+    style={{
+        background:
+          "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+      }}
+    >
       <div className="max-w-6xl mx-auto space-y-10">
 
         {/* Header */}
-        <h1 className="text-4xl font-bold text-gray-800 text-center">
-          📊 Data Science Learning Hub
+        <h1 className="text-4xl mt-16 font-bold text-orange-700 text-center">
+           Data Science Learning Hub
         </h1>
 
         {/* Roadmap Section */}
-        <section className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">🚀 Suggested Roadmap</h2>
-          <ol className="list-decimal list-inside space-y-2 text-gray-700">
+        <section className=" rounded-2xl shadow-lg p-6">
+          <h2 className="text-2xl text-orange-400 font-bold mb-4"> Suggested Roadmap</h2>
+          <ol className="list-decimal list-inside space-y-2 text-white">
             {roadmap.map(step => (
               <li key={step.id}>{step.step}</li>
             ))}
@@ -87,7 +92,7 @@ const Datascience = () => {
 
         {/* Video Section */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div className=" rounded-2xl shadow-lg overflow-hidden">
             <div className="relative w-full aspect-video bg-black">
               <iframe
                 src={selectedVideo.url}
@@ -97,21 +102,21 @@ const Datascience = () => {
               />
             </div>
             <div className="p-6">
-              <h3 className="text-xl font-bold mb-2">{selectedVideo.title}</h3>
-              <p className="text-gray-600 mb-1">Instructor: {selectedVideo.instructor}</p>
-              <p className="text-gray-600 mb-1">Level: {selectedVideo.level}</p>
-              <p className="text-gray-600 mb-1">Duration: {selectedVideo.duration}</p>
+              <h3 className="text-white font-bold mb-2">{selectedVideo.title}</h3>
+              <p className="text-white mb-1">Instructor: {selectedVideo.instructor}</p>
+              <p className="text-white mb-1">Level: {selectedVideo.level}</p>
+              <p className="text-white mb-1">Duration: {selectedVideo.duration}</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg p-6 space-y-3">
-            <h3 className="text-xl font-bold mb-4">🎬 Recommended Videos</h3>
+          <div className=" rounded-2xl border shadow-lg p-6 space-y-3">
+            <h3 className="text-xl text-white font-bold mb-4"> Recommended Videos</h3>
             {videos.map(video => (
               <button
                 key={video.id}
                 onClick={() => setSelectedVideo(video)}
-                className={`block w-full text-left p-3 rounded-lg transition-all hover:bg-gray-100 ${
-                  selectedVideo.id === video.id ? "bg-blue-50 border border-blue-500" : ""
+                className={`block w-full text-left text-white p-3 rounded-lg transition-all hover:bg-orange-400 ${
+                  selectedVideo.id === video.id ? "bg-white/30 border border-white" : ""
                 }`}
               >
                 {video.title} - {video.instructor}
@@ -121,8 +126,8 @@ const Datascience = () => {
         </section>
 
         {/* Articles Section */}
-        <section className="bg-white rounded-2xl shadow-lg p-6">
-          <h2 className="text-2xl font-bold mb-4">📝 Recommended Articles</h2>
+        <section className=" rounded-2xl shadow-lg p-6">
+          <h2 className="text-2xl text-orange-400 font-bold mb-4"> Recommended Articles</h2>
           <ul className="space-y-3">
             {articles.map(article => (
               <li key={article.id} className="flex justify-between items-center">
@@ -130,7 +135,7 @@ const Datascience = () => {
                   href={article.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
+                  className="text-white hover:underline"
                 >
                   {article.title} - {article.author}
                 </a>

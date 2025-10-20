@@ -63,46 +63,32 @@ const Webdev = () => {
   const overallProgress = stats.totalVideos > 0 ? (stats.completed / stats.totalVideos) * 100 : 0;
 
   return (
-    <div className="min-h-screen  bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+    <div className="min-h-screen   relative overflow-hidden"
+    style={{
+    background:
+      "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+  }}
+    >
       {/* Animated Background Elements */}
-      <div className="absolute  inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse"></div>
-        <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-cyan-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: '2s'}}></div>
-        <div className="absolute bottom-0 left-1/2 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-pulse" style={{animationDelay: '4s'}}></div>
-      </div>
+    
 
       {/* Confetti Effect */}
-      {showConfetti && (
-        <div className="fixed inset-0 pointer-events-none z-50">
-          {[...Array(50)].map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 bg-gradient-to-r from-yellow-400 to-pink-500 rounded-full animate-pulse"
-              style={{
-                left: `${Math.random() * 100}%`,
-                top: `-10px`,
-                animation: `fall ${2 + Math.random() * 2}s linear`,
-                animationDelay: `${Math.random() * 2}s`
-              }}
-            />
-          ))}
-        </div>
-      )}
+      
 
       <div className="relative max-w-7xl mt-20 mx-auto p-4 md:p-8 space-y-8">
         {/* Header Section */}
         <div className="text-center space-y-4 animate-fade-in">
           <div className="inline-block">
             <div className="flex items-center gap-3 bg-white/10 backdrop-blur-lg px-6 py-3 rounded-full border border-white/20">
-              <Code className="w-6 h-6 text-cyan-400" />
+              <Code className="w-6 h-6 text-orange-400" />
               <span className="text-white font-semibold">Web Development Mastery Path</span>
-              <Zap className="w-5 h-5 text-yellow-400" />
+              <Zap className="w-5 h-5 text-orange-400" />
             </div>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">
+          <h1 className="text-5xl md:text-6xl text-orange-400 font-bold  bg-clip-text ">
             Your Learning Journey
           </h1>
-          <p className="text-gray-300 text-lg max-w-2xl mx-auto">
+          <p className="text-white text-lg max-w-2xl mx-auto">
             Master web development with curated video tutorials and track your progress in real-time
           </p>
         </div>

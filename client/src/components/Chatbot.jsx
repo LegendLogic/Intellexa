@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "👋 Hi there! I’m your AI Assistant. Ask me for the best YouTube courses or guidance!",
+      text: "👋 Hi there! I'm your AI Assistant. Ask me for the best YouTube courses or guidance on any topic!",
       time: new Date(),
     },
   ]);
@@ -14,32 +14,40 @@ const Chatbot = () => {
   const [isTyping, setIsTyping] = useState(false);
   const chatEndRef = useRef(null);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  // ✅ Config
+  const API_CONFIG = {
+    backendUrl: import.meta.env.VITE_BACKEND_URL || "http://localhost:4000",
+  };
 
+  // ✅ Auto-scroll to bottom
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
+  // ✅ Handle message send
   const handleSend = async () => {
     if (!input.trim()) return;
 
-    const userMsg = { sender: "user", text: input, time: new Date() };
+    const userMsg = { sender: "user", text: input.trim(), time: new Date() };
     setMessages((prev) => [...prev, userMsg]);
     setInput("");
     setIsTyping(true);
 
     try {
-      const res = await fetch(`${backendUrl}/api/chat`, {
+      const response = await fetch(`${API_CONFIG.backendUrl}/api/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ prompt: userMsg.text }),
       });
 
-      const data = await res.json();
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
+      const data = await response.json();
       const botReply = {
         sender: "bot",
-        text: data.reply || "🤖 No response from the AI server.",
+        text: data.response || data.reply || "🤖 No response from the AI server.",
         time: new Date(),
       };
 
@@ -48,52 +56,104 @@ const Chatbot = () => {
       console.error("Chatbot Error:", error);
       setMessages((prev) => [
         ...prev,
-        { sender: "bot", text: "⚠️ Couldn’t reach the AI server. Try again later.", time: new Date() },
+        {
+          sender: "bot",
+          text: "⚠️ Couldn't reach the AI server. Please check your backend connection and try again.",
+          time: new Date(),
+        },
       ]);
     } finally {
       setIsTyping(false);
     }
   };
 
-  const handleKeyDown = (e) => e.key === "Enter" && handleSend();
+  // ✅ Handle Enter key
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  // ✅ Clear Chat
+  const handleClearChat = () => {
+    setMessages([
+      {
+        sender: "bot",
+        text: "👋 Hi there! I'm your AI Assistant. Ask me for the best YouTube courses or guidance on any topic!",
+        time: new Date(),
+      },
+    ]);
+  };
 
   return (
-    <div>
+    <div className="font-sans">
       {/* Floating Chat Button */}
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 bg-amber-500 text-white p-4 rounded-full shadow-xl hover:scale-110 transition-transform duration-300"
+          className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 bg-gradient-to-r from-orange-400 to-amber-500 text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-orange-300 hover:scale-110 transition-all duration-300 z-50"
+          aria-label="Open chat"
         >
-          <MessageCircle className="w-6 h-6" />
+          <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
         </button>
       )}
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-80 md:w-96 backdrop-blur-lg border border-gray-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fadeIn">
+        <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] sm:w-80 md:w-96 max-w-md h-[500px] sm:h-[600px] bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 backdrop-blur-xl border border-gray-700 rounded-2xl shadow-2xl flex flex-col overflow-hidden z-50 animate-slideUp">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3  text-orange-900">
-            <h2 className="font-semibold text-lg text-orange-300">AI Course Finder</h2>
-            <button onClick={() => setIsOpen(false)}>
-              <X className="w-5 h-5 hover:text-gray-200 transition" />
-            </button>
+          <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <h2 className="font-bold text-base sm:text-lg">AI Course Finder</h2>
+            </div>
+            <div className="flex items-center gap-2">
+              {/* Clear Chat Button */}
+              <button
+                onClick={handleClearChat}
+                className="hover:bg-white/20 p-1 text-black rounded-lg transition-colors duration-200 text-xs sm:text-sm"
+                aria-label="Clear chat"
+                title="Clear chat"
+              >
+                Clear
+              </button>
+
+              {/* Close Chat Button */}
+              <button
+                onClick={() => setIsOpen(false)}
+                className="hover:bg-white/20 p-1 rounded-lg transition-colors duration-200"
+                aria-label="Close chat"
+              >
+                <X className="w-5 h-5 text-red-900" />
+              </button>
+            </div>
           </div>
 
           {/* Chat Body */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 scroll-smooth">
+          <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3 ">
             {messages.map((msg, i) => (
-              <div key={i} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"} animate-fadeIn`}>
+              <div
+                key={i}
+                className={`flex ${
+                  msg.sender === "user" ? "justify-end" : "justify-start"
+                } animate-fadeIn`}
+              >
                 <div
-                  className={`max-w-[75%] px-4 py-3 rounded-2xl shadow-md transition-all duration-300 ${
+                  className={`max-w-[85%] sm:max-w-[75%] px-3 sm:px-4 py-2 sm:py-3 rounded-2xl shadow-lg transition-all duration-300 ${
                     msg.sender === "user"
-                      ? "bg-orange-300 text-white rounded-br-none"
-                      : "bg-white/20 text-white rounded-bl-none"
+                      ? "bg-orange-400 text-white rounded-br-none"
+                      : "bg-transparent backdrop-blur text-gray-100 rounded-bl-none border border-gray-600"
                   }`}
                 >
-                  <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.text}</p>
-                  <span className="block text-xs opacity-60 mt-1 text-right">
-                    {msg.time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  <p className="text-xs sm:text-sm whitespace-pre-wrap leading-relaxed break-words">
+                    {msg.text}
+                  </p>
+                  <span className="block text-[10px] sm:text-xs opacity-70 mt-1 text-right">
+                    {msg.time.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
                   </span>
                 </div>
               </div>
@@ -101,30 +161,32 @@ const Chatbot = () => {
 
             {/* Typing Indicator */}
             {isTyping && (
-              <div className="flex items-center text-gray-500 animate-fadeIn">
-                <div className="dot-typing"></div>
-                <p className="ml-2 text-sm">AI is typing...</p>
+              <div className="flex items-center gap-2 text-gray-400 animate-fadeIn">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <p className="text-xs sm:text-sm">AI is thinking...</p>
               </div>
             )}
-
             <div ref={chatEndRef} />
           </div>
 
           {/* Input Area */}
-          <div className="flex items-center border-t bg-white/20 px-3 py-2 shadow-inner">
+          <div className="flex items-center gap-2 border-t border-gray-700  px-3 py-2 sm:py-3">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask for a YouTube course..."
-              className="flex-1 px-4 py-2 text-gray-800  border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+              className="flex-1 px-3 py-2 text-xs sm:text-sm text-gray-100 bg-gray-700/50 border border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400 disabled:opacity-50"
+              disabled={isTyping}
             />
             <button
               onClick={handleSend}
-              className="ml-2 bg-orange-300 text-white p-2 rounded-xl shadow hover:scale-105 transition-transform duration-200"
+              disabled={isTyping || !input.trim()}
+              className="bg-orange-400 text-white p-2 rounded-xl shadow-lg hover:shadow-orange-300 hover:scale-105 disabled:opacity-50 transition-all duration-200"
+              aria-label="Send message"
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
@@ -136,23 +198,18 @@ const Chatbot = () => {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
         .animate-fadeIn { animation: fadeIn 0.3s ease-in-out; }
+        .animate-slideUp { animation: slideUp 0.4s ease-out; }
 
-        .dot-typing {
-          position: relative;
-          left: 4px;
-          width: 6px;
-          height: 6px;
-          border-radius: 50%;
-          background-color: #6b7280;
-          box-shadow: 8px 0 0 0 #6b7280, 16px 0 0 0 #6b7280;
-          animation: dotTyping 1s infinite linear;
-        }
-
-        @keyframes dotTyping {
-          0%, 60%, 100% { box-shadow: 8px 0 0 0 #6b7280, 16px 0 0 0 #6b7280; }
-          30% { box-shadow: 8px 0 0 0 #d1d5db, 16px 0 0 0 #6b7280; }
-        }
+        /* Scrollbar */
+        .overflow-y-auto::-webkit-scrollbar { width: 6px; }
+        .overflow-y-auto::-webkit-scrollbar-track { background: rgba(31,41,55,0.5); border-radius: 10px; }
+        .overflow-y-auto::-webkit-scrollbar-thumb { background: rgba(251,146,60,0.5); border-radius: 10px; }
+        .overflow-y-auto::-webkit-scrollbar-thumb:hover { background: rgba(251,146,60,0.7); }
       `}</style>
     </div>
   );

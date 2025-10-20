@@ -189,7 +189,7 @@ const removeUserPoints = async (req, res) => {
     if (!videoId || typeof completed !== "boolean")
       return res.status(400).json({ message: "Invalid data" });
 
-    const user = await User.findById(req.user.id);
+    const user = await user.findById(req.user.id);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     user.completedVideos.set(videoId, completed);

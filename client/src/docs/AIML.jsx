@@ -75,7 +75,7 @@ const AIML = () => {
       <div className="max-w-6xl mx-auto space-y-10">
 
         {/* Header */}
-        <h1 className="text-4xl mt-15 font-bold text-white text-center">
+        <h1 className="text-4xl mt-15 font-bold text-orange-700 text-center">
            AI/ML Learning Hub
         </h1>
 

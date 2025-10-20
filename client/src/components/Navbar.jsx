@@ -105,7 +105,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link
             to="/"
-            className="flex items-center gap-2 text-xl sm:text-2xl font-bold text-indigo-600 z-50"
+            className="flex items-center gap-2 text-xl sm:text-2xl font-bold text-orange-600 z-50"
             onClick={() => {
               if (location.pathname !== "/") navigate("/");
               else window.scrollTo({ top: 0, behavior: "smooth" });
@@ -208,13 +208,7 @@ const Navbar = () => {
       >
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
           <h2 className="text-lg font-semibold text-orange-400">Menu</h2>
-          <button
-            className="text-amber-400 hover:text-black transition"
-            onClick={closeMenu}
-            aria-label="Close menu"
-          >
-            <X size={24} />
-          </button>
+          
         </div>
 
         <div className="flex flex-col mt-4 space-y-2 px-4 font-medium">

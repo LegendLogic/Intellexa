@@ -136,7 +136,7 @@ const Home = () => {
         </h1>
 
         <p className="text-orange-400 max-w-2xl mt-4 text-lg md:text-xl">
-          Discover 2500+ premium online courses at <span className="font-bold text-orange-600">Intellexa</span>, empowering you to excel professionally.
+          Discover 2500+ premium online courses at <span className="font-extrabold text-orange-600">Intellexa</span>, empowering you to excel professionally.
         </p>
 
         {/* Search Bar */}

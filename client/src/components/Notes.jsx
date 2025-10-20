@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Award, Brain, Code, Database, Sparkles, Trophy, User, Zap, AlertCircle } from "lucide-react";
+import { Award, Brain, Code, Database, Sparkles, Trophy, User, Zap, AlertCircle, Lock } from "lucide-react";
 import axios from "axios";
 
 const Notes = () => {
@@ -72,6 +72,10 @@ const Notes = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [notification, setNotification] = useState({ show: false, message: "", type: "" });
+  
+  // NEW: Track quiz attempts
+  const [quizAttempts, setQuizAttempts] = useState({});
+  const [hasAttemptedCurrentQuiz, setHasAttemptedCurrentQuiz] = useState(false);
 
   const questions = quizCategories[currentCategory];
 
@@ -83,7 +87,13 @@ const Notes = () => {
     }, 3000);
   };
 
-  // Fetch user profile from backend
+  // Check if user has attempted the current quiz
+  useEffect(() => {
+    const attempted = quizAttempts[currentCategory] || false;
+    setHasAttemptedCurrentQuiz(attempted);
+  }, [currentCategory, quizAttempts]);
+
+  // Fetch user profile and quiz attempts from backend
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -109,6 +119,12 @@ const Notes = () => {
         const user = res.data?.user || res.data;
         setUserName(user?.name || "User");
         setUserCredit(user?.creditBalance ?? 0);
+        
+        // Load quiz attempts from backend (assuming it's stored in user profile)
+        // If your backend doesn't support this yet, it will use memory storage
+        const attempts = user?.quizAttempts || {};
+        setQuizAttempts(attempts);
+        
         showNotification(`Welcome back, ${user?.name || "User"}! 👋`, "success");
       } catch (err) {
         console.error("Error fetching profile:", err);
@@ -116,7 +132,6 @@ const Notes = () => {
         setError(errorMessage);
         showNotification(`❌ ${errorMessage}`, "error");
         
-        // If unauthorized, clear token
         if (err.response?.status === 401) {
           localStorage.removeItem("token");
           setUserName("Guest");
@@ -129,6 +144,41 @@ const Notes = () => {
 
     fetchUserProfile();
   }, [BASE_URL]);
+
+  // Mark quiz as attempted
+  const markQuizAsAttempted = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      
+      if (!token) {
+        // For guests, store in memory only
+        setQuizAttempts(prev => ({ ...prev, [currentCategory]: true }));
+        return;
+      }
+
+      // Update backend
+      await axios.put(
+        `${BASE_URL}/api/user/quiz-attempt`,
+        { category: currentCategory },
+        {
+          headers: { 
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+        }
+      );
+
+      // Update local state
+      setQuizAttempts(prev => ({ ...prev, [currentCategory]: true }));
+      setHasAttemptedCurrentQuiz(true);
+      
+    } catch (err) {
+      console.error("Error marking quiz as attempted:", err);
+      // Still update local state even if backend fails
+      setQuizAttempts(prev => ({ ...prev, [currentCategory]: true }));
+      setHasAttemptedCurrentQuiz(true);
+    }
+  };
 
   // Add points to user account via backend
   const addPointsToUser = async () => {
@@ -168,7 +218,6 @@ const Notes = () => {
       const errorMessage = err.response?.data?.message || "Failed to add points";
       showNotification(`⚠️ ${errorMessage}`, "error");
       
-      // If unauthorized, prompt login
       if (err.response?.status === 401) {
         localStorage.removeItem("token");
         showNotification("🔒 Session expired. Please login again.", "warning");
@@ -203,6 +252,8 @@ const Notes = () => {
         setSelected(null);
       } else {
         setCompleted(true);
+        // Mark quiz as completed when user finishes
+        markQuizAsAttempted();
       }
     }, 1000);
   };
@@ -234,7 +285,7 @@ const Notes = () => {
             className={`fixed top-4 right-4 z-50 px-6 py-3 rounded-lg shadow-lg flex items-center gap-2 ${
               notification.type === "success" ? "bg-green-500 text-white" :
               notification.type === "error" ? "bg-red-500 text-white" :
-              "bg-transparent text-white"
+              "bg-yellow-500 text-white"
             }`}
           >
             <AlertCircle className="w-5 h-5" />
@@ -247,11 +298,12 @@ const Notes = () => {
       {loading && (
         <div className="fixed inset-0 bg-transparent backdrop-blur-sm z-40 flex items-center justify-center">
           <div className="bg-white rounded-2xl p-8 flex flex-col items-center gap-4">
-            <div className="w-16 h-16 border-4 border-purple-600  rounded-full animate-spin"></div>
+            <div className="w-16 h-16 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
             <p className="text-gray-700 font-medium">Loading your profile...</p>
           </div>
         </div>
       )}
+
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 left-10 w-72 h-72 bg-white/10 rounded-full blur-3xl animate-pulse"></div>
@@ -282,13 +334,9 @@ const Notes = () => {
         </div>
       )}
 
-      <div className="max-w-4xl w-full bg-transparent overflow-hidden relative z-10"
-      
-      >
+      <div className="max-w-4xl w-full bg-transparent overflow-hidden relative z-10">
         {/* Header Section */}
-        <div className=" p-6 text-white"
-      
-        >
+        <div className="p-6 text-white">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-full">
@@ -316,7 +364,7 @@ const Notes = () => {
           </div>
 
           {/* Streak indicator */}
-          {streak > 0 && (
+          {streak > 0 && !hasAttemptedCurrentQuiz && (
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
@@ -336,141 +384,176 @@ const Notes = () => {
               <span className="text-white">Choose Your Challenge</span>
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => changeCategory(cat)}
-                  className={`p-4 rounded-xl font-semibold transition-all transform hover:scale-105 flex flex-col items-center gap-2 ${
-                    currentCategory === cat
-                      ? "bg-gradient-to-br bg-transparent border text-white hover:bg-amber-600"
-                      : "bg-transparent border text-white hover:bg-a"
-                  }`}
-                >
-                  {categoryIcons[cat]}
-                  <span className="text-sm">{cat}</span>
-                </button>
-              ))}
+              {categories.map((cat) => {
+                const isAttempted = quizAttempts[cat];
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => !isAttempted && changeCategory(cat)}
+                    disabled={isAttempted}
+                    className={`p-4 rounded-xl font-semibold transition-all transform hover:scale-105 flex flex-col items-center gap-2 relative ${
+                      currentCategory === cat
+                        ? "bg-gradient-to-br bg-transparent border text-white hover:bg-amber-600"
+                        : isAttempted
+                        ? "bg-gray-300 border text-gray-500 cursor-not-allowed opacity-60"
+                        : "bg-transparent border text-white hover:bg-amber-500"
+                    }`}
+                  >
+                    {isAttempted && (
+                      <div className="absolute top-2 right-2">
+                        <Lock className="w-4 h-4 text-gray-600" />
+                      </div>
+                    )}
+                    {categoryIcons[cat]}
+                    <span className="text-sm">{cat}</span>
+                    {isAttempted && (
+                      <span className="text-xs text-gray-600">Completed</span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          {/* Progress Bar */}
-          {!completed && (
-            <div className="mb-6">
-              <div className="flex justify-between text-sm text-gray-600 mb-2">
-                <span>Question {currentIndex + 1} of {questions.length}</span>
-                <span className="font-semibold text-purple-600">{Math.round(progress)}%</span>
-              </div>
-              <div className="h-3 bg-amber-400 rounded-full overflow-hidden">
-                <motion.div
-                  className="h-full "
-                  style={{
-        background:
-          "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
-      }}
-                  initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
-                  transition={{ duration: 0.5 }}
-                />
-              </div>
-            </div>
-          )}
-
-          {/* Quiz Section */}
-          {!completed ? (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentIndex}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -50 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="bg-amber-600 rounded-2xl mb-6">
-                  <h2 className="text-xl font-bold text-white mb-2 ml-2">
-                    {questions[currentIndex].question}
-                  </h2>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  {questions[currentIndex].options.map((option, idx) => {
-                    const isCorrect = option === questions[currentIndex].correct;
-                    const isSelected = selected === option;
-                    const letters = ['A', 'B', 'C', 'D'];
-
-                    return (
-                      <motion.button
-                        key={option}
-                        onClick={() => handleAnswer(option)}
-                        disabled={selected !== null}
-                        whileHover={selected === null ? { scale: 1.02 } : {}}
-                        whileTap={selected === null ? { scale: 0.98 } : {}}
-                        className={`p-4 rounded-xl border-2 font-medium transition-all duration-300 text-white flex items-center gap-3 ${
-                          isSelected
-                            ? isCorrect
-                              ? "bg-green-500  text-white border-green-600 shadow-lg"
-                              : "bg-red-500 text-white border-red-600 shadow-lg"
-                            : " hover:bg-amber-500 border-gray-300 hover:border-purple-400"
-                        } ${selected !== null && !isSelected ? "opacity-40" : ""}`}
-                      >
-                        <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                          isSelected
-                            ? isCorrect
-                              ? "bg-green-600"
-                              : "bg-red-600"
-                            : "bg-purple-100 text-purple-600"
-                        }`}>
-                          {letters[idx]}
-                        </div>
-                        <span>{option}</span>
-                      </motion.button>
-                    );
-                  })}
-                </div>
-
-                <div className="flex items-center justify-between bg-amber-500  rounded-xl">
-                  <div className="flex items-center gap-2">
-                    <Award className="w-5 h-5 text-purple-600" />
-                    <span className="text-gray-700 font-medium">Current Score:</span>
-                  </div>
-                  <span className="text-2xl font-bold text-purple-600">
-                    {score} <span className="text-sm text-gray-600">/ {questions.length * 20}</span>
-                  </span>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          ) : (
+          {/* Quiz Locked Message */}
+          {hasAttemptedCurrentQuiz && !completed ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ type: "spring", stiffness: 150 }}
-              className="text-center"
+              className="text-center py-12"
             >
-              <div className="bg-gradient-to-br from-purple-500 to-pink-500 text-white p-12 rounded-3xl mb-6">
-                <Trophy className="w-20 h-20 mx-auto mb-4" />
-                <h2 className="text-3xl font-bold mb-2">Quiz Completed! 🎉</h2>
-                <p className="text-purple-100 mb-6">Great job on finishing the {currentCategory} quiz!</p>
-                
-                <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-4">
-                  <p className="text-5xl font-bold mb-2">{score}</p>
-                  <p className="text-lg">out of {questions.length * 20} points</p>
-                  <div className="mt-4 text-sm">
-                    <p>Correct Answers: {score / 20} / {questions.length}</p>
-                    <p>Accuracy: {Math.round((score / (questions.length * 20)) * 100)}%</p>
+              <div className="bg-gradient-to-br from-gray-500 to-gray-600 text-white p-12 rounded-3xl">
+                <Lock className="w-20 h-20 mx-auto mb-4" />
+                <h2 className="text-3xl font-bold mb-2">Quiz Already Completed! 🔒</h2>
+                <p className="text-gray-100 mb-6">
+                  You've already taken the {currentCategory} quiz. Each quiz can only be attempted once.
+                </p>
+                <p className="text-gray-200">
+                  Choose another category to continue learning!
+                </p>
+              </div>
+            </motion.div>
+          ) : (
+            <>
+              {/* Progress Bar */}
+              {!completed && (
+                <div className="mb-6">
+                  <div className="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Question {currentIndex + 1} of {questions.length}</span>
+                    <span className="font-semibold text-purple-600">{Math.round(progress)}%</span>
+                  </div>
+                  <div className="h-3 bg-amber-400 rounded-full overflow-hidden">
+                    <motion.div
+                      className="h-full"
+                      style={{
+                        background: "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+                      }}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${progress}%` }}
+                      transition={{ duration: 0.5 }}
+                    />
                   </div>
                 </div>
+              )}
 
-                <button
-                  onClick={resetQuiz}
-                  className="bg-white text-purple-600 px-8 py-3 rounded-xl font-bold hover:bg-purple-50 transition-all duration-300 transform hover:scale-105 shadow-lg"
+              {/* Quiz Section */}
+              {!completed ? (
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentIndex}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="bg-amber-600 rounded-2xl mb-6 p-4">
+                      <h2 className="text-xl font-bold text-white">
+                        {questions[currentIndex].question}
+                      </h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                      {questions[currentIndex].options.map((option, idx) => {
+                        const isCorrect = option === questions[currentIndex].correct;
+                        const isSelected = selected === option;
+                        const letters = ['A', 'B', 'C', 'D'];
+
+                        return (
+                          <motion.button
+                            key={option}
+                            onClick={() => handleAnswer(option)}
+                            disabled={selected !== null}
+                            whileHover={selected === null ? { scale: 1.02 } : {}}
+                            whileTap={selected === null ? { scale: 0.98 } : {}}
+                            className={`p-4 rounded-xl border-2 font-medium transition-all duration-300 text-white flex items-center gap-3 ${
+                              isSelected
+                                ? isCorrect
+                                  ? "bg-green-500 text-white border-green-600 shadow-lg"
+                                  : "bg-red-500 text-white border-red-600 shadow-lg"
+                                : "hover:bg-amber-500 border-gray-300 hover:border-purple-400"
+                            } ${selected !== null && !isSelected ? "opacity-40" : ""}`}
+                          >
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
+                              isSelected
+                                ? isCorrect
+                                  ? "bg-green-600"
+                                  : "bg-red-600"
+                                : "bg-purple-100 text-purple-600"
+                            }`}>
+                              {letters[idx]}
+                            </div>
+                            <span>{option}</span>
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+
+                    <div className="flex items-center justify-between bg-amber-500 p-4 rounded-xl">
+                      <div className="flex items-center gap-2">
+                        <Award className="w-5 h-5 text-purple-600" />
+                        <span className="text-gray-700 font-medium">Current Score:</span>
+                      </div>
+                      <span className="text-2xl font-bold text-purple-600">
+                        {score} <span className="text-sm text-gray-600">/ {questions.length * 20}</span>
+                      </span>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
+              ) : (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 150 }}
+                  className="text-center"
                 >
-                  Try Again
-                </button>
-              </div>
+                  <div className="bg-gradient-to-br from-purple-500 to-pink-500 text-white p-12 rounded-3xl mb-6">
+                    <Trophy className="w-20 h-20 mx-auto mb-4" />
+                    <h2 className="text-3xl font-bold mb-2">Quiz Completed! 🎉</h2>
+                    <p className="text-purple-100 mb-6">Great job on finishing the {currentCategory} quiz!</p>
+                    
+                    <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 mb-4">
+                      <p className="text-5xl font-bold mb-2">{score}</p>
+                      <p className="text-lg">out of {questions.length * 20} points</p>
+                      <div className="mt-4 text-sm">
+                        <p>Correct Answers: {score / 20} / {questions.length}</p>
+                        <p>Accuracy: {Math.round((score / (questions.length * 20)) * 100)}%</p>
+                      </div>
+                    </div>
 
-              <p className="text-gray-600">
-                Ready for another challenge? Choose a different category above!
-              </p>
-            </motion.div>
+                    <div className="bg-yellow-500/20 backdrop-blur-sm rounded-xl p-4 mb-4">
+                      <p className="text-sm font-semibold flex items-center justify-center gap-2">
+                        <Lock className="w-4 h-4" />
+                        This quiz is now locked. You cannot retake it.
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="text-gray-600">
+                    Ready for another challenge? Choose a different category above!
+                  </p>
+                </motion.div>
+              )}
+            </>
           )}
         </div>
       </div>
