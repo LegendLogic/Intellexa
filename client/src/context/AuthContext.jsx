@@ -1,29 +1,49 @@
 import { createContext, useState, useEffect } from "react";
 
-// eslint-disable-next-line react-refresh/only-export-components
+// Create AuthContext
 export const AuthContext = createContext();
 
+// AuthProvider component
 export const AuthProvider = ({ children }) => {
-  const [isAuth, setIsAuth] = useState(false);
+  const [user, setUser] = useState(null); // Store user info
+  const [token, setToken] = useState(null); // Store auth token
+  const [isAuth, setIsAuth] = useState(false); // Auth status
 
-  // Check localStorage for token on mount
+  // Check localStorage for token and user on mount
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) setIsAuth(true);
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+    if (storedToken) {
+      setToken(storedToken);
+      setIsAuth(true);
+    }
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
   }, []);
 
-  const login = (token) => {
-    localStorage.setItem("token", token);
+  // Login function
+  const login = (userData, authToken) => {
+    localStorage.setItem("token", authToken);
+    localStorage.setItem("user", JSON.stringify(userData));
+    setToken(authToken);
+    setUser(userData);
     setIsAuth(true);
   };
 
+  // Logout function
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setToken(null);
+    setUser(null);
     setIsAuth(false);
   };
 
   return (
-    <AuthContext.Provider value={{ isAuth, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuth, user, token, login, logout, setUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

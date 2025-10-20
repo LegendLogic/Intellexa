@@ -10,7 +10,6 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import About from "./components/About";
 import Contact from "./components/Contact";
-import Profile from "./pages/MyProfile";
 import Reading from "./pages/Reading";
 import Premium from "./pages/Premium";
 import Resume from "./pages/Resume";
@@ -32,6 +31,11 @@ import DebugTheCode from "./game/DebugTheCode";
 import GuessOutput from "./game/GuessOutput";
 import AlgorithmChallenge from "./game/AlgorithmChallenge";
 import TechTrivia from "./game/TechTrivia";
+import AI from "./pages/AI";
+import UserDashboard from "./pages/UserDashboard";
+// import AlgorithmChallenge from "./game/AlgorithmChallenge";
+// import SortingVisualizer from "./game/";
+// import Pathfinder from "./pages/Games/Pathfinder";
 
 const App = () => {
   // ✅ Manage login state globally
@@ -46,7 +50,6 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/profile" element={<Profile />} />
           <Route path="/reading" element={<Reading />} />
           <Route path="/premium" element={<Premium />} />
           <Route path="/resume" element={<Resume />} />
@@ -67,6 +70,11 @@ const App = () => {
           <Route path="/game/algo-challenge" element={<AlgorithmChallenge />} />
           <Route path="/game/tech-wheel" element={<TechTrivia />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/algo" element={<AlgorithmChallenge />} />
+          <Route path="/ai" element={<AI/>} />
+          <Route path="/dashboard" element={<UserDashboard/>} />
+          {/* <Route path="/algo/sorting-visualizer" element={<SortingVisualizer />} />
+          <Route path="/algo/pathfinder" element={<Pathfinder />} /> */}
 
           {/* ✅ Pass setAuth here */}
           <Route path="/login" element={<Login setAuth={setAuth} />} />
@@ -74,7 +82,7 @@ const App = () => {
 
           {/* Redirect unknown routes */}
           <Route path="*" element={<Navigate to="/" replace />} />
-          
+
         </Routes>
       </main>
 
