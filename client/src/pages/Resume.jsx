@@ -119,23 +119,23 @@ const Resume = () => {
   }}>
       <div className="max-w-7xl mt-16 mx-auto">
         <div className="text-center mb-8 print:hidden">
-          <h1 className="text-4xl font-bold text-white mb-2">Resume Builder</h1>
-          <p className="text-gray-300">Create your professional resume in minutes</p>
+          <h1 className="text-4xl font-bold text-orange-300 mb-2">Resume Builder</h1>
+          <p className="text-orange-700">Create your professional resume in minutes</p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col border border-white lg:flex-row gap-6">
           {/* Left Panel - Edit Section */}
           <div className="lg:w-2/5 print:hidden">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-4">
+            <div className=" rounded-xl shadow-lg p-6 sticky top-4">
               <div className="flex items-center gap-2 mb-6">
                 <User className="w-6 h-6 text-blue-600" />
-                <h2 className="text-2xl font-bold text-gray-800">Edit Details</h2>
+                <h2 className="text-2xl font-bold text-white">Edit Details</h2>
               </div>
 
               <div className="space-y-6 max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
                 {/* Personal Info */}
                 <div className="space-y-3">
-                  <h3 className="font-semibold text-gray-700 flex items-center gap-2">
+                  <h3 className="font-semibold text-white flex items-center gap-2">
                     <Award className="w-4 h-4" />
                     Personal Information
                   </h3>
@@ -148,14 +148,14 @@ const Resume = () => {
                     ["GitHub", "github"],
                   ].map(([label, key]) => (
                     <div key={key}>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                      <label className="block text-xs font-medium text-white mb-1">
                         {label}
                       </label>
                       <input
                         type="text"
                         value={resumeData[key]}
                         onChange={(e) => handleInputChange(key, e.target.value)}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full border text-white border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
                   ))}
@@ -163,19 +163,19 @@ const Resume = () => {
 
                 {/* Education */}
                 <div className="space-y-3 pt-4 border-t">
-                  <h3 className="font-semibold text-gray-700 flex items-center gap-2">
-                    <GraduationCap className="w-4 h-4" />
+                  <h3 className="font-semibold text-white flex items-center gap-2">
+                    <GraduationCap className="w-4 h-4 text-white" />
                     Education
                   </h3>
                   {resumeData.education.map((edu, i) => (
-                    <div key={i} className="space-y-2 p-3 bg-gray-50 rounded-lg">
+                    <div key={i} className="space-y-2 p-3  rounded-lg">
                       <input
                         type="text"
                         value={edu.university}
                         onChange={(e) =>
                           handleArrayChange("education", i, "university", e.target.value)
                         }
-                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        className="w-full border text-white border-gray-300 rounded px-2 py-1 text-sm"
                         placeholder="University"
                       />
                       <input
@@ -184,7 +184,7 @@ const Resume = () => {
                         onChange={(e) =>
                           handleArrayChange("education", i, "degree", e.target.value)
                         }
-                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        className="w-full border text-white border-gray-300 rounded px-2 py-1 text-sm"
                         placeholder="Degree"
                       />
                       <input
@@ -193,7 +193,7 @@ const Resume = () => {
                         onChange={(e) =>
                           handleArrayChange("education", i, "duration", e.target.value)
                         }
-                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        className="w-full border text-white border-gray-300 rounded px-2 py-1 text-sm"
                         placeholder="Duration"
                       />
                     </div>
@@ -202,19 +202,19 @@ const Resume = () => {
 
                 {/* Experience */}
                 <div className="space-y-3 pt-4 border-t">
-                  <h3 className="font-semibold text-gray-700 flex items-center gap-2">
+                  <h3 className="font-semibold text-white flex items-center gap-2">
                     <Briefcase className="w-4 h-4" />
                     Experience
                   </h3>
                   {resumeData.experience.map((exp, i) => (
-                    <div key={i} className="space-y-2 p-3 bg-gray-50 rounded-lg">
+                    <div key={i} className="space-y-2 p-3 rounded-lg">
                       <input
                         type="text"
                         value={exp.company}
                         onChange={(e) =>
                           handleArrayChange("experience", i, "company", e.target.value)
                         }
-                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        className="w-full border text-white border-gray-300 rounded px-2 py-1 text-sm"
                         placeholder="Company"
                       />
                       <input
@@ -223,7 +223,7 @@ const Resume = () => {
                         onChange={(e) =>
                           handleArrayChange("experience", i, "role", e.target.value)
                         }
-                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        className="w-full border text-white border-gray-300 rounded px-2 py-1 text-sm"
                         placeholder="Role"
                       />
                       <input
@@ -232,7 +232,7 @@ const Resume = () => {
                         onChange={(e) =>
                           handleArrayChange("experience", i, "duration", e.target.value)
                         }
-                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                        className="w-full border text-white border-gray-300 rounded px-2 py-1 text-sm"
                         placeholder="Duration"
                       />
                       {exp.details.map((detail, j) => (
@@ -242,7 +242,7 @@ const Resume = () => {
                           onChange={(e) =>
                             handleDetailsChange("experience", i, j, e.target.value)
                           }
-                          className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                          className="w-full border text-white border-gray-300 rounded px-2 py-1 text-sm"
                           rows="2"
                         />
                       ))}
@@ -252,7 +252,7 @@ const Resume = () => {
 
                 {/* Skills */}
                 <div className="space-y-3 pt-4 border-t">
-                  <h3 className="font-semibold text-gray-700 flex items-center gap-2">
+                  <h3 className="font-semibold text-white  flex items-center gap-2">
                     <Code className="w-4 h-4" />
                     Technical Skills
                   </h3>
@@ -262,14 +262,14 @@ const Resume = () => {
                     ["Frameworks", "frameworks"],
                   ].map(([label, key]) => (
                     <div key={key}>
-                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                      <label className="block text-xs font-medium text-white mb-1">
                         {label}
                       </label>
                       <input
                         type="text"
                         value={resumeData.skills[key]}
                         onChange={(e) => handleSkillChange(key, e.target.value)}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full border text-white border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
                   ))}
@@ -279,10 +279,10 @@ const Resume = () => {
               <button
                 onClick={handleDownloadPDF}
                 disabled={loading}
-                className={`w-full mt-6 py-3 rounded-lg font-semibold text-white transition-all flex items-center justify-center gap-2 ${
+                className={`w-full mt-6 py-3 rounded-lg font-semibold text-orange-400 transition-all flex items-center justify-center gap-2 ${
                   loading
                     ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl"
+                    : "bg-white/20 hover:bg-white/70 shadow-lg hover:shadow-xl"
                 }`}
               >
                 <Download className="w-5 h-5" />
@@ -399,15 +399,15 @@ const Resume = () => {
           </div>
         </div>
       </div>
-     <div className="max-w-4xl mx-auto p-6 bg-gray-900 text-white rounded-2xl shadow-2xl mt-6 border border-gray-700">
-      <h2 className="text-3xl font-bold text-indigo-400 mb-6 text-center">
-        🚀 Top Resume-Building Websites
+     <div className="max-w-4xl mx-auto p-6  text-white rounded-2xl shadow-2xl mt-6 border border-gray-700">
+      <h2 className="text-3xl font-bold text-white mb-6 text-center">
+         Top Resume-Building Websites
       </h2>
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {websites.map((site, index) => (
           <li
             key={index}
-            className="flex items-center justify-between bg-gray-800 hover:bg-gray-700 transition-colors rounded-lg p-4 shadow-md"
+            className="flex items-center justify-between border hover:bg-gray-700 transition-colors rounded-lg p-4 shadow-md"
           >
             <div className="flex items-center space-x-3">
               <FaRegFileAlt className="text-indigo-400 text-xl" />

@@ -142,13 +142,14 @@ const Reward = () => {
     filter === "all" ? rewards : rewards.filter((r) => r.status === filter);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 px-6 py-12">
-      <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen mt-12 px-6 py-12"
+    >
+      <div>
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-gray-800 mb-3">Your Rewards</h1>
-          <p className="text-gray-600 text-lg mb-6">
-            Earn rewards as you progress and engage on the platform 🎯
+          <h1 className="text-5xl font-bold text-orange-400 mb-3">Your Rewards</h1>
+          <p className="text-orange-300 text-lg mb-6">
+            Earn rewards as you progress and engage on the platform 
           </p>
 
           {loading ? (
@@ -156,12 +157,12 @@ const Reward = () => {
           ) : error ? (
             <p className="text-red-500">{error}</p>
           ) : user ? (
-            <div className="inline-block bg-white rounded-2xl shadow-lg px-8 py-4 border-2 border-purple-200">
+            <div className="inline-block  rounded-2xl shadow-lg px-8 py-4 border-2 border-purple-200">
               <div className="flex items-center gap-3">
-                <Award className="w-8 h-8 text-purple-500" />
+                <Award className="w-8 h-8 text-orange-500" />
                 <div className="text-left">
-                  <p className="text-sm text-gray-500">Hello, {user.name}</p>
-                  <p className="text-3xl font-bold text-purple-600">
+                  <p className="text-sm text-orange-400">Hello, {user.name}</p>
+                  <p className="text-3xl font-bold text-orange-600">
                     {user.creditBalance} points
                   </p>
                 </div>
@@ -180,8 +181,8 @@ const Reward = () => {
               onClick={() => setFilter(tab)}
               className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
                 filter === tab
-                  ? "bg-purple-600 text-white shadow-lg scale-105"
-                  : "bg-white text-gray-700 hover:bg-gray-100 shadow"
+                  ? "bg-orange-600 text-white shadow-lg scale-105"
+                  : "bg-white/20 text-white hover:bg-orange-400 shadow"
               }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
@@ -196,7 +197,7 @@ const Reward = () => {
             return (
               <div
                 key={index}
-                className={`bg-white rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-2 ${
+                className={`bg-white/20 rounded-2xl p-6 shadow-md hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 border-2 ${
                   reward.status === "claimed"
                     ? "border-green-200"
                     : reward.status === "locked"
@@ -221,8 +222,8 @@ const Reward = () => {
                   </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-800 mb-2">{reward.title}</h3>
-                <p className="text-sm text-gray-500 mb-3">{reward.description}</p>
+                <h3 className="text-xl font-bold text-white mb-2">{reward.title}</h3>
+                <p className="text-sm text-orange-700 mb-3">{reward.description}</p>
 
                 {reward.status === "available" && (
                   <button

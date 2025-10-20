@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Code2, Bug, Brain, Cpu, Globe } from "lucide-react";
+import Notes from "../components/Notes";
+import Reward from "../components/Reward";
 
 const games = [
   {
@@ -53,7 +55,9 @@ const Game = () => {
       "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
   }}
     >
+      <Notes/>
       <div className="text-center mt-10 mb-12">
+        
         <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
           💻 Tech Skill Games
         </h1>
@@ -85,6 +89,8 @@ const Game = () => {
           </Link>
         ))}
       </div>
+      <Reward/>
+      
     </div>
   );
 };

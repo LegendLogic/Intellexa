@@ -16,14 +16,19 @@ const AI = () => {
 
     // Fake AI processing delay
     setTimeout(() => {
-      setResponse(`AI Response: You said "${prompt}"! 🤖`);
+      setResponse(`AI Response: You said "${prompt}"! `);
       setLoading(false);
     }, 1000);
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-      <h1 className="text-3xl font-bold mb-6">Demo AI Model</h1>
+    <div className="min-h-screen flex flex-col items-center justify-center  p-6"
+    style={{
+        background:
+          "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+      }}
+    >
+      <h1 className="text-3xl text-white font-bold mb-6">Demo AI Model</h1>
 
       <form
         onSubmit={handleSubmit}
@@ -39,7 +44,7 @@ const AI = () => {
 
         <button
           type="submit"
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded"
+          className="bg-white/20 hover:bg-white/60 text-white font-semibold px-4 py-2 rounded"
           disabled={loading}
         >
           {loading ? "Thinking..." : "Submit"}
@@ -47,7 +52,7 @@ const AI = () => {
       </form>
 
       {response && (
-        <div className="mt-6 p-4 bg-white rounded shadow w-full max-w-md">
+        <div className="mt-6 p-4 bg-white/20 rounded shadow w-full max-w-md">
           <p>{response}</p>
         </div>
       )}

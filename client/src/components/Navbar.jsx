@@ -10,9 +10,10 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [userInfo, setUserInfo] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
   const location = useLocation();
   const navigate = useNavigate();
-  const { isAuth, logout } = useContext(AuthContext);
+  const { isAuth, token, logout } = useContext(AuthContext); // Use token from context
 
   // Disable scroll when mobile menu is open
   useEffect(() => {
@@ -30,21 +31,27 @@ const Navbar = () => {
   // Fetch user profile info
   useEffect(() => {
     const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
+      if (!token) return;
 
-        const res = await axios.get("http://localhost:4000/api/user/profile", {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/user/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserInfo(res.data);
       } catch (err) {
         console.error("Error fetching profile:", err);
+
+        if (err.response?.status === 401) {
+          // Token invalid or expired
+          logout();
+          alert("Session expired. Please login again.");
+          navigate("/login");
+        }
       }
     };
 
     if (isAuth) fetchProfile();
-  }, [isAuth]);
+  }, [isAuth, token, logout, navigate]);
 
   // Logout
   const handleLogout = () => {
@@ -54,7 +61,7 @@ const Navbar = () => {
     setDropdownOpen(false);
   };
 
-  // Go to Dashboard
+  // Navigate to dashboard
   const goToDashboard = () => {
     navigate("/dashboard");
     setDropdownOpen(false);
@@ -86,6 +93,7 @@ const Navbar = () => {
 
   return (
     <>
+      {/* Header */}
       <header
         className={`fixed top-0 z-50 w-full transition-all duration-500 ${
           isScrolled
@@ -128,25 +136,22 @@ const Navbar = () => {
               </button>
             ))}
 
-            {/* ✅ User Dropdown */}
+            {/* User Dropdown */}
             {isAuth && userInfo && (
               <div
                 className="relative"
                 onMouseEnter={() => setDropdownOpen(true)}
                 onMouseLeave={() => setDropdownOpen(false)}
               >
-                <div
-                  className="flex items-center gap-3 px-4 py-2 bg-orange-500/20 rounded-full border border-orange-400/30 cursor-pointer hover:bg-orange-500/30 transition"
-                >
+                <div className="flex items-center gap-3 px-4 py-2 bg-orange-500/20 rounded-full border border-orange-400/30 cursor-pointer hover:bg-orange-500/30 transition">
                   <span className="text-sm font-semibold text-red-400">
                     {userInfo.name}
                   </span>
-                  <span className="text-sm bg-orange-500 text-amber-400 px-3 py-1 rounded-full">
+                  <span className="text-sm bg-orange-500 text-white border-2 px-3 py-1 rounded-full">
                     🏆 {userInfo.creditBalance || 0} pts
                   </span>
                 </div>
 
-                {/* Dropdown menu */}
                 {dropdownOpen && (
                   <div className="absolute top-12 right-0 bg-white text-gray-800 rounded-lg shadow-xl border border-gray-200 w-40 py-2 transition-all duration-300 z-50">
                     <button
@@ -166,7 +171,6 @@ const Navbar = () => {
               </div>
             )}
 
-            {/* Auth Buttons */}
             {!isAuth && (
               <button
                 onClick={() => handleNavClick("/login")}
@@ -228,14 +232,12 @@ const Navbar = () => {
             </button>
           ))}
 
-          {/* ✅ Mobile User Dropdown */}
           {isAuth && userInfo && (
             <div className="mt-4 border-t border-white/10 pt-3">
               <p className="font-semibold text-orange-400">{userInfo.name}</p>
               <p className="text-sm text-amber-300 mt-1">
                 🏆 {userInfo.creditBalance || 0} pts
               </p>
-
               <div className="mt-3 flex flex-col gap-2">
                 <button
                   onClick={goToDashboard}

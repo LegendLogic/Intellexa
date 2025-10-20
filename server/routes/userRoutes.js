@@ -1,5 +1,5 @@
 import express from "express";
-import {registerUser,loginUser , getUserProfile , getAllUsers , addUserPoints , removeUserPoints} from "../controllers/userController.js";
+import {registerUser,loginUser , getUserProfile , getAllUsers , addUserPoints , removeUserPoints ,updateVideoCompletion} from "../controllers/userController.js";
 import userAuth from "../middleware/auth.js";
 
 
@@ -13,6 +13,7 @@ userRouter.get("/profile", userAuth,getUserProfile);
 userRouter.get("/all", getAllUsers);
 userRouter.put("/addpoint", userAuth, addUserPoints);
 userRouter.put("/removepoint", userAuth, removeUserPoints);
+userRouter.put("/videos", userAuth, updateVideoCompletion);
 
 
 

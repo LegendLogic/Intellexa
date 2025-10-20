@@ -113,6 +113,7 @@ export const deleteQuizQuestion = async (req, res) => {
 
 // ✅ Add quiz points after user answers
 
+
 export const addQuizPoints = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -128,43 +129,58 @@ export const addQuizPoints = async (req, res) => {
 
     // Find question
     const question = await QuizQuestion.findById(questionId);
-    if (!question)
+    if (!question) {
       return res.status(404).json({ success: false, message: "Question not found" });
+    }
 
     // Find user
     const user = await User.findById(userId);
-    if (!user)
+    if (!user) {
       return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Prevent multiple submissions for the same question
+    const alreadyAnswered = user.quizAnswers?.some(
+      (qa) => qa.questionId.toString() === questionId
+    );
+    if (alreadyAnswered) {
+      return res.status(200).json({
+        success: true,
+        correct: question.answer === selectedOption,
+        message: "You have already answered this question",
+        totalPoints: user.points || 0,
+      });
+    }
 
     // Check if answer is correct
     const isCorrect = question.answer === selectedOption;
 
-    if (!isCorrect) {
-      return res.status(200).json({
-        success: true,
-        correct: false,
-        message: "❌ Incorrect answer. Better luck next time!",
-        correctAnswer: question.answer, // optional to send correct answer
-        updatedUser: {
-          _id: user._id,
-          name: user.name,
-          email: user.email,
-          points: user.points,
-        },
-      });
+    // Save the answer in user's record
+    user.quizAnswers = user.quizAnswers || [];
+    user.quizAnswers.push({
+      questionId,
+      selectedOption,
+      isCorrect,
+      answeredAt: new Date(),
+    });
+
+    let earnedPoints = 0;
+    if (isCorrect) {
+      earnedPoints = question.points || 20;
+      user.points = (user.points || 0) + earnedPoints;
     }
 
-    // ✅ Add points for correct answer
-    const earnedPoints = question.points || 20;
-    user.points = (user.points || 0) + earnedPoints;
     await user.save();
 
     return res.status(200).json({
       success: true,
-      correct: true,
-      message: `✅ Correct! You've earned ${earnedPoints} points.`,
+      correct: isCorrect,
+      message: isCorrect
+        ? `✅ Correct! You've earned ${earnedPoints} points.`
+        : `❌ Incorrect answer. Better luck next time!`,
       earnedPoints,
       totalPoints: user.points,
+      correctAnswer: !isCorrect ? question.answer : undefined, // optional
       updatedUser: {
         _id: user._id,
         name: user.name,
@@ -179,6 +195,66 @@ export const addQuizPoints = async (req, res) => {
       message: "Server error while adding quiz points",
       error: error.message,
     });
+  }
+};
+
+
+export const submitAnswer = async (req, res) => {
+  try {
+    const userId = req.user._id; // from userAuth middleware
+    const { questionId, selectedOption } = req.body;
+
+    if (!questionId || !selectedOption) {
+      return res.status(400).json({ success: false, message: "Question ID and selected option are required." });
+    }
+
+    // Find question
+    const question = await QuizQuestion.findById(questionId);
+    if (!question) return res.status(404).json({ success: false, message: "Question not found." });
+
+    // Find user
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ success: false, message: "User not found." });
+
+    // Check if answer is correct
+    const isCorrect = question.answer === selectedOption;
+
+    if (!isCorrect) {
+      return res.status(200).json({
+        success: true,
+        correct: false,
+        message: "❌ Incorrect answer. Better luck next time!",
+        correctAnswer: question.answer,
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          points: user.points,
+        },
+      });
+    }
+
+    // Add points for correct answer
+    const earnedPoints = question.points || 20;
+    user.points = (user.points || 0) + earnedPoints;
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      correct: true,
+      message: `✅ Correct! You've earned ${earnedPoints} points.`,
+      earnedPoints,
+      totalPoints: user.points,
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        points: user.points,
+      },
+    });
+  } catch (error) {
+    console.error("Error submitting answer:", error);
+    return res.status(500).json({ success: false, message: "Server error.", error: error.message });
   }
 };
 

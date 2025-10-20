@@ -63,7 +63,7 @@ const Chatbot = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-4 rounded-full shadow-xl hover:scale-110 transition-transform duration-300"
+          className="fixed bottom-6 right-6 bg-amber-500 text-white p-4 rounded-full shadow-xl hover:scale-110 transition-transform duration-300"
         >
           <MessageCircle className="w-6 h-6" />
         </button>
@@ -71,10 +71,10 @@ const Chatbot = () => {
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 w-80 md:w-96 bg-white/90 backdrop-blur-lg border border-gray-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fadeIn">
+        <div className="fixed bottom-6 right-6 w-80 md:w-96 backdrop-blur-lg border border-gray-200 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-fadeIn">
           {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-            <h2 className="font-semibold text-lg">AI Course Finder</h2>
+          <div className="flex items-center justify-between px-4 py-3  text-orange-900">
+            <h2 className="font-semibold text-lg text-orange-300">AI Course Finder</h2>
             <button onClick={() => setIsOpen(false)}>
               <X className="w-5 h-5 hover:text-gray-200 transition" />
             </button>
@@ -87,8 +87,8 @@ const Chatbot = () => {
                 <div
                   className={`max-w-[75%] px-4 py-3 rounded-2xl shadow-md transition-all duration-300 ${
                     msg.sender === "user"
-                      ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-br-none"
-                      : "bg-gray-100 text-gray-800 rounded-bl-none"
+                      ? "bg-orange-300 text-white rounded-br-none"
+                      : "bg-white/20 text-white rounded-bl-none"
                   }`}
                 >
                   <p className="text-sm whitespace-pre-wrap leading-relaxed">{msg.text}</p>
@@ -111,18 +111,18 @@ const Chatbot = () => {
           </div>
 
           {/* Input Area */}
-          <div className="flex items-center border-t bg-white/70 px-3 py-2 shadow-inner">
+          <div className="flex items-center border-t bg-white/20 px-3 py-2 shadow-inner">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask for a YouTube course..."
-              className="flex-1 px-4 py-2 text-gray-800 bg-white border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
+              className="flex-1 px-4 py-2 text-gray-800  border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200"
             />
             <button
               onClick={handleSend}
-              className="ml-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white p-2 rounded-xl shadow hover:scale-105 transition-transform duration-200"
+              className="ml-2 bg-orange-300 text-white p-2 rounded-xl shadow hover:scale-105 transition-transform duration-200"
             >
               <Send className="w-5 h-5" />
             </button>

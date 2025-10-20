@@ -1,15 +1,41 @@
 import mongoose from "mongoose";
 
+const userSchema = new mongoose.Schema(
+  {
+    name: { 
+      type: String, 
+      required: true 
+    },
+    email: { 
+      type: String, 
+      required: true, 
+      unique: true 
+    },
+    password: { 
+      type: String, 
+      required: true 
+    },
 
-const  userSchema = new mongoose.Schema({
-    name:{type:String ,required:true},
-    email:{type:String,required:true, unique:true},
-    password:{type:String , required:true},
-    creditBalance: { type: Number, default: 255, min: 0 } ,
+    // 🧠 Points earned from quizzes, rewards, etc.
+    points: { 
+      type: Number, 
+      default: 0 
+    },
 
+    // 💰 Credit balance (used in your React quiz system)
+    creditBalance: { 
+      type: Number, 
+      default: 5 
+    },
 
-})
+    // 🎥 Track completed videos or lessons
+    completedVideos: {
+      type: Map,
+      of: Boolean, // true if video completed
+      default: {},
+    },
+  },
+  { timestamps: true }
+);
 
-const userModel = mongoose.models.user || mongoose.model("User",userSchema)
-
-export default userModel;
+export default mongoose.model("User", userSchema);

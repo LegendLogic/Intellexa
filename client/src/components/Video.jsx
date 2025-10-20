@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { CheckCircle, Circle, Play } from "lucide-react";
+import Chatbot from "./Chatbot";
 
 // Professional video data with categories and recommendations
 const videos = [
@@ -146,14 +147,14 @@ const Video = () => {
     background:
       "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
   }}>
-      <div className="max-w-7xl mt-11 mx-auto px-4 py-8">
+      <div className="max-w-7xl  mx-auto px-4 py-8">
         {/* Header */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-2">
-            🎓 Video Learning Hub
+        <div className="border rounded-2xl shadow-lg p-6 mb-6">
+          <h1 className="text-3xl sm:text-4xl font-bold text-orange-300 mb-2">
+             Video Learning Hub
           </h1>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 text-sm text-gray-600">
-            <span>Progress: {completedCount}/{videos.length} videos completed</span>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4 text-sm text-white">
+            <span className="text-red-600" >Progress: {completedCount}/{videos.length} videos completed</span>
             <div className="flex-1 bg-gray-200 rounded-full h-2 max-w-xs">
               <div
                 className="bg-blue-500 h-2 rounded-full transition-all duration-300"
@@ -172,8 +173,8 @@ const Video = () => {
               onClick={() => setSelectedCategory(category)}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
                 selectedCategory === category
-                  ? "bg-blue-500 text-white shadow-md"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
+                  ? "bg-orange-400 text-white shadow-md"
+                  : "bg-transparent border text-white hover:bg-red-500"
               }`}
             >
               {category}
@@ -204,17 +205,17 @@ const Video = () => {
                   </h2>
                   <p className="text-gray-600 mb-3">{currentVideo.description}</p>
                   <div className="flex flex-wrap gap-3 text-sm">
-                    <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full">
+                    <span className="px-3 py-1 border bg-blue-100 text-blue-700 rounded-full">
                       {currentVideo.category}
                     </span>
-                    <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full">
+                    <span className="px-3 py-1 border bg-green-100 text-green-700 rounded-full">
                       {currentVideo.level}
                     </span>
-                    <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full">
-                      ⏱️ {currentVideo.duration}
+                    <span className="px-3 py-1 border bg-purple-100 text-purple-700 rounded-full">
+                       {currentVideo.duration}
                     </span>
-                    <span className="px-3 py-1 bg-orange-100 text-orange-700 rounded-full">
-                      👨‍🏫 {currentVideo.instructor}
+                    <span className="px-3 py-1 border bg-orange-100 text-orange-700 rounded-full">
+                       {currentVideo.instructor}
                     </span>
                   </div>
                 </div>
@@ -228,12 +229,12 @@ const Video = () => {
                 >
                   {completedVideos[currentVideo.id] ? (
                     <>
-                      <CheckCircle size={20} />
+                      <CheckCircle className="border-black" size={20} />
                       Completed
                     </>
                   ) : (
                     <>
-                      <Circle size={20} />
+                      <Circle className="border-amber-500" size={20} />
                       Mark Complete
                     </>
                   )}
@@ -243,16 +244,16 @@ const Video = () => {
 
             {/* Recommendations */}
             {recommendations.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-4">
-                  📚 Recommended for You
+              <div className=" rounded-2xl shadow-lg p-6">
+                <h3 className="text-xl font-bold text-white mb-4">
+                   Recommended for You
                 </h3>
                 <div className="space-y-3">
                   {recommendations.map((video) => (
                     <div
                       key={video.id}
                       onClick={() => setCurrentVideo(video)}
-                      className="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 cursor-pointer transition-all border border-gray-100"
+                      className="flex items-center gap-4 p-3 rounded-xl hover:bg-orange-300 cursor-pointer transition-all border border-gray-100"
                     >
                       <div
                         className={`w-16 h-16 ${video.color} rounded-lg flex items-center justify-center text-2xl flex-shrink-0`}
@@ -260,10 +261,10 @@ const Video = () => {
                         <Play size={24} className="text-white" fill="white" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-semibold text-gray-800 truncate">
+                        <h4 className="font-semibold text-white truncate">
                           {video.title}
                         </h4>
-                        <p className="text-sm text-gray-600">
+                        <p className="text-sm text-white ">
                           {video.instructor} · {video.duration}
                         </p>
                       </div>
@@ -278,10 +279,10 @@ const Video = () => {
           </div>
 
           {/* Sidebar - Video List */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl shadow-lg p-6 sticky top-6 max-h-[calc(100vh-2rem)] overflow-y-auto">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">
-                📋 Course Playlist
+          <div className="lg:col-span-1 border-2">
+            <div className=" rounded-2xl shadow-lg p-6 sticky top-6 max-h-[calc(100vh-2rem)] overflow-y-auto">
+              <h3 className="text-xl font-bold text-white mb-4">
+                 Course Playlist
               </h3>
               <div className="space-y-2">
                 {filteredVideos.map((video) => (
@@ -290,8 +291,8 @@ const Video = () => {
                     onClick={() => setCurrentVideo(video)}
                     className={`flex items-start gap-3 p-3 rounded-xl cursor-pointer transition-all ${
                       currentVideo.id === video.id
-                        ? "bg-blue-50 border-2 border-blue-500"
-                        : "hover:bg-gray-50 border-2 border-transparent"
+                        ? " border-white bg-white/20 "
+                        : "hover:bg-orange-500 border-2 "
                     }`}
                   >
                     <button
@@ -310,12 +311,12 @@ const Video = () => {
                     <div className="flex-1 min-w-0">
                       <h4
                         className={`font-semibold text-sm mb-1 ${
-                          currentVideo.id === video.id ? "text-blue-700" : "text-gray-800"
+                          currentVideo.id === video.id ? "text-white" : "text-gray-800"
                         }`}
                       >
                         {video.title}
                       </h4>
-                      <p className="text-xs text-gray-600">{video.duration}</p>
+                      <p className="text-xs text-white">{video.duration}</p>
                     </div>
                   </div>
                 ))}
@@ -324,6 +325,7 @@ const Video = () => {
           </div>
         </div>
       </div>
+      <Chatbot/>
     </div>
   );
 };

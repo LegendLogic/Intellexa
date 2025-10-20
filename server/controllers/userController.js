@@ -129,7 +129,11 @@ const getAllUsers = async (req, res) => {
 
 const addUserPoints = async (req, res) => {
   try {
-    const userId = req.user._id; // authenticated user
+    // Ensure user is authenticated
+    const userId = req.user?._id;
+    if (!userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized: User not authenticated" });
+    }
 
     // Find user by ID
     const user = await userModel.findById(userId);
@@ -138,9 +142,10 @@ const addUserPoints = async (req, res) => {
     }
 
     // Increment creditBalance by 40
-    user.creditBalance += 40;
+    user.creditBalance = (user.creditBalance || 0) + 40;
     await user.save();
 
+    // Respond with success
     return res.status(200).json({
       success: true,
       message: "Points updated successfully",
@@ -150,7 +155,8 @@ const addUserPoints = async (req, res) => {
     console.error("Error updating points:", error);
     return res.status(500).json({ success: false, message: "Server error" });
   }
-}
+};
+
 
 
 const removeUserPoints = async (req, res) => {
@@ -177,8 +183,29 @@ const removeUserPoints = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 }
+ const updateVideoCompletion = async (req, res) => {
+  try {
+    const { videoId, completed } = req.body;
+    if (!videoId || typeof completed !== "boolean")
+      return res.status(400).json({ message: "Invalid data" });
+
+    const user = await User.findById(req.user.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.completedVideos.set(videoId, completed);
+    await user.save();
+
+    res.json({
+      message: "Video completion updated",
+      completedVideos: Object.fromEntries(user.completedVideos),
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 
 
 
-export { registerUser, loginUser ,getUserProfile , getAllUsers , addUserPoints ,removeUserPoints  };
+export { registerUser, loginUser ,getUserProfile , getAllUsers , addUserPoints ,removeUserPoints ,updateVideoCompletion  };

@@ -1,43 +1,56 @@
-import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
-import { AuthContext } from "../context/AuthContext";
+import React, { useEffect, useState } from "react";
 import { User, Mail, Trophy, Calendar, TrendingUp, Award, Target, Activity, Star } from "lucide-react";
 
 const UserDashboard = () => {
-  const { user, setUser } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
 
-  const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
+  const backendUrl = "http://localhost:4000";
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = user?.token || localStorage.getItem("token");
+        const token = localStorage.getItem("token");
         if (!token) {
           setError("You are not logged in.");
           setLoading(false);
           return;
         }
 
-        const res = await axios.get(`${backendUrl}/api/user/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
+        const response = await fetch(`${backendUrl}/api/user/profile`, {
+          method: "GET",
+          headers: { 
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
         });
 
-        const userData = res.data?.user || res.data;
-        setCurrentUser({ ...userData, token });
-        setUser({ ...userData, token });
+        if (!response.ok) {
+          if (response.status === 401) {
+            localStorage.removeItem("token");
+            setError("Session expired. Please login again.");
+          } else {
+            throw new Error("Failed to load profile.");
+          }
+          setLoading(false);
+          return;
+        }
+
+        const data = await response.json();
+        const userData = data?.user || data;
+        setCurrentUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
       } catch (err) {
         console.error("Error fetching user profile:", err);
-        setError(err.response?.data?.message || "Failed to load profile.");
+        setError(err.message || "Failed to load profile.");
       } finally {
         setLoading(false);
       }
     };
 
     fetchUser();
-  }, [backendUrl, setUser, user?.token]);
+  }, [backendUrl]);
 
   if (loading) {
     return (
@@ -52,11 +65,12 @@ const UserDashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center "
-      style={{
-    background:
-      "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
-  }}
+      <div
+        className="min-h-screen flex items-center justify-center"
+        style={{
+          background:
+            "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+        }}
       >
         <div className="bg-red-500/10 border border-red-500/50 rounded-2xl p-8 backdrop-blur-sm max-w-md">
           <div className="text-center">
@@ -64,8 +78,8 @@ const UserDashboard = () => {
               <span className="text-3xl">⚠️</span>
             </div>
             <p className="text-red-300 text-lg mb-4">{error}</p>
-            <button 
-              onClick={() => window.location.href = '/login'}
+            <button
+              onClick={() => (window.location.href = "/login")}
               className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition-colors"
             >
               Go to Login
@@ -76,23 +90,22 @@ const UserDashboard = () => {
     );
   }
 
-  const points = currentUser?.points || 0;
+  const points = currentUser?.points || currentUser?.creditBalance || 0;
   const level = Math.floor(points / 100) + 1;
   const nextLevelPoints = level * 100;
   const progress = ((points % 100) / 100) * 100;
-  const memberSince = currentUser?.createdAt 
-    ? new Date(currentUser.createdAt).toLocaleDateString("en-US", { 
-        month: "long", 
-        year: "numeric" 
-      })
+  const memberSince = currentUser?.createdAt
+    ? new Date(currentUser.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })
     : "Recently";
 
   return (
-    <div className="min-h-screen p-4 md:p-6 pb-16" 
-    style={{
-    background:
-      "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
-  }}>
+    <div
+      className="min-h-screen p-4 md:p-6 pb-16"
+      style={{
+        background:
+          "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+      }}
+    >
       <div className="max-w-6xl mx-auto mt-8">
         {/* Header Section */}
         <div className="text-center mb-12">
@@ -105,7 +118,7 @@ const UserDashboard = () => {
             </div>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">
-            Welcome back, {currentUser?.name?.split(' ')[0] || 'User'}!
+            Welcome back, {currentUser?.name?.split(" ")[0] || "User"}!
           </h1>
           <p className="text-purple-300 text-lg flex items-center justify-center gap-2">
             <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
@@ -115,194 +128,20 @@ const UserDashboard = () => {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-          {/* Profile Card */}
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105 cursor-pointer group">
-            <div className="flex  items-start gap-3">
-              <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <User className="w-6 h-6 text-blue-400" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-gray-400 text-sm mb-1">Full Name</p>
-                <p className="text-white font-semibold truncate">{currentUser?.name || "N/A"}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Email Card */}
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105 cursor-pointer group">
-            <div className="flex items-start gap-3">
-              <div className="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Mail className="w-6 h-6 text-purple-400" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-gray-400 text-sm mb-1">Email</p>
-                <p className="text-white font-semibold text-sm truncate">
-                  {currentUser?.email || "N/A"}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Points Card */}
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105 cursor-pointer group">
-            <div className="flex items-start gap-3">
-              <div className="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Trophy className="w-6 h-6 text-yellow-400" />
-              </div>
-              <div className="flex-1">
-                <p className="text-gray-400 text-sm mb-1">Total Points</p>
-                <p className="text-white font-bold text-2xl">{points.toLocaleString()}</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Member Since Card */}
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105 cursor-pointer group">
-            <div className="flex items-start gap-3">
-              <div className="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Calendar className="w-6 h-6 text-green-400" />
-              </div>
-              <div className="flex-1">
-                <p className="text-gray-400 text-sm mb-1">Member Since</p>
-                <p className="text-white font-semibold">{memberSince}</p>
-              </div>
-            </div>
-          </div>
+          <Card icon={User} label="Full Name" value={currentUser?.name || "N/A"} color="blue" />
+          <Card icon={Mail} label="Email" value={currentUser?.email || "N/A"} color="purple" />
+          <Card icon={Trophy} label="Total Points" value={points.toLocaleString()} color="yellow" />
+          <Card icon={Calendar} label="Member Since" value={memberSince} color="green" />
         </div>
 
         {/* Progress Section */}
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 md:p-8 mb-8">
-          <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-purple-400" />
-              </div>
-              <div>
-                <h2 className="text-xl md:text-2xl font-bold text-white">Your Progress</h2>
-                <p className="text-gray-400 text-sm">Keep going to reach the next level!</p>
-              </div>
-            </div>
-            <div className="text-left md:text-right">
-              <p className="text-gray-400 text-sm">Next Level</p>
-              <p className="text-white font-bold text-2xl">Level {level + 1}</p>
-            </div>
-          </div>
-          
-          <div>
-            <div className="flex justify-between text-sm mb-2">
-              <span className="text-purple-300 font-semibold">{points} points</span>
-              <span className="text-purple-300 font-semibold">{currentUser?.creditBalance || "N/A"} points</span>
-            </div>
-            <div className="w-full bg-gray-700/50 rounded-full h-5 overflow-hidden shadow-inner">
-              <div 
-                className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-full transition-all duration-500 shadow-lg shadow-purple-500/50 relative overflow-hidden"
-                style={{ width: `${progress}%` }}
-              >
-                <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
-              </div>
-            </div>
-            <p className="text-center text-gray-400 text-sm mt-3">
-              <span className="text-white font-semibold">{nextLevelPoints - points}</span> points to next level
-            </p>
-          </div>
-        </div>
+        <ProgressSection points={points} level={level} nextLevelPoints={nextLevelPoints} progress={progress} creditBalance={currentUser?.creditBalance || 0} />
 
         {/* Achievements Section */}
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 md:p-8 mb-8">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
-              <Award className="w-5 h-5 text-yellow-400" />
-            </div>
-            <div>
-              <h2 className="text-xl md:text-2xl font-bold text-white">Achievements</h2>
-              <p className="text-gray-400 text-sm">Unlock badges as you progress</p>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { name: "Beginner", icon: Target, required: 0, unlocked: points >= 0, color: "blue" },
-              { name: "Explorer", icon: TrendingUp, required: 100, unlocked: points >= 100, color: "purple" },
-              { name: "Expert", icon: Award, required: 500, unlocked: points >= 500, color: "pink" },
-              { name: "Master", icon: Trophy, required: 1000, unlocked: points >= 1000, color: "yellow" },
-            ].map((achievement, idx) => (
-              <div 
-                key={idx}
-                className={`${
-                  achievement.unlocked 
-                    ? 'bg-gradient-to-br from-yellow-500/20 to-orange-500/20 border-yellow-500/50' 
-                    : 'bg-gray-800/50 border-gray-700/50'
-                } border rounded-xl p-4 text-center transition-all duration-300 hover:scale-105 cursor-pointer relative overflow-hidden`}
-              >
-                {achievement.unlocked && (
-                  <div className="absolute inset-0 bg-gradient-to-br from-yellow-400/10 to-transparent animate-pulse"></div>
-                )}
-                <achievement.icon 
-                  className={`w-10 h-10 mx-auto mb-2 relative z-10 ${
-                    achievement.unlocked ? 'text-yellow-400' : 'text-gray-600'
-                  }`} 
-                />
-                <p className={`text-sm font-semibold relative z-10 ${
-                  achievement.unlocked ? 'text-white' : 'text-gray-500'
-                }`}>
-                  {achievement.name}
-                </p>
-                <p className="text-xs text-gray-400 mt-1 relative z-10">
-                  {achievement.required} pts
-                </p>
-                {achievement.unlocked && (
-                  <div className="mt-2 relative z-10">
-                    <span className="text-xs bg-yellow-500/30 text-yellow-200 px-2 py-1 rounded-full border border-yellow-500/50">
-                      ✓ Unlocked
-                    </span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
+        <Achievements points={points} />
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <Activity className="w-5 h-5 text-blue-400" />
-              </div>
-              <h3 className="text-white font-semibold">Activity</h3>
-            </div>
-            <p className="text-3xl md:text-4xl font-bold text-white mb-1">
-              {Math.floor(points / 10)}
-            </p>
-            <p className="text-gray-400 text-sm">tasks completed</p>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                <Trophy className="w-5 h-5 text-purple-400" />
-              </div>
-              <h3 className="text-white font-semibold">Level Rank</h3>
-            </div>
-            <p className="text-3xl md:text-4xl font-bold text-white mb-1">
-              Level {level}
-            </p>
-            <p className="text-gray-400 text-sm">current standing</p>
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
-                <Target className="w-5 h-5 text-green-400" />
-              </div>
-              <h3 className="text-white font-semibold">Goal Progress</h3>
-            </div>
-            <p className="text-3xl md:text-4xl font-bold text-white mb-1">
-              {Math.round(progress)}%
-            </p>
-            <p className="text-gray-400 text-sm">to next level</p>
-          </div>
-        </div>
+        <QuickStats points={points} level={level} progress={progress} />
       </div>
 
       {/* Footer */}
@@ -316,3 +155,140 @@ const UserDashboard = () => {
 };
 
 export default UserDashboard;
+
+// -----------------------------
+// Reusable Card Component
+const Card = ({ icon: Icon, label, value, color }) => {
+  const colorClasses = {
+    blue: { bg: "bg-blue-500/20", text: "text-blue-400" },
+    purple: { bg: "bg-purple-500/20", text: "text-purple-400" },
+    yellow: { bg: "bg-yellow-500/20", text: "text-yellow-400" },
+    green: { bg: "bg-green-500/20", text: "text-green-400" }
+  };
+
+  const colors = colorClasses[color] || colorClasses.blue;
+
+  return (
+    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 hover:bg-white/15 transition-all duration-300 hover:scale-105 cursor-pointer group">
+      <div className="flex items-start gap-3">
+        <div className={`w-12 h-12 ${colors.bg} rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
+          <Icon className={`w-6 h-6 ${colors.text}`} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-gray-400 text-sm mb-1">{label}</p>
+          <p className="text-white font-semibold truncate">{value}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// -----------------------------
+// Progress Section Component
+const ProgressSection = ({ points, level, nextLevelPoints, progress, creditBalance }) => (
+  <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-purple-500/30 rounded-2xl p-8 mb-8">
+    <div className="flex items-center justify-between mb-4">
+      <div>
+        <h2 className="text-2xl font-bold text-white mb-1">Level {level}</h2>
+        <p className="text-purple-200">
+          {points} / {nextLevelPoints} points to Level {level + 1}
+        </p>
+      </div>
+      <div className="text-right">
+        <p className="text-purple-300 text-sm">Credit Balance</p>
+        <p className="text-3xl font-bold text-white">{creditBalance}</p>
+      </div>
+    </div>
+    <div className="w-full bg-slate-800/50 rounded-full h-4 overflow-hidden">
+      <div
+        className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500 flex items-center justify-end pr-2"
+        style={{ width: `${progress}%` }}
+      >
+        {progress > 10 && <span className="text-xs text-white font-bold">{Math.round(progress)}%</span>}
+      </div>
+    </div>
+  </div>
+);
+
+// -----------------------------
+// Achievements Component
+const Achievements = ({ points }) => {
+  const achievements = [
+    { icon: Trophy, name: "First Steps", desc: "Earned your first 100 points", unlocked: points >= 100, color: "yellow" },
+    { icon: Award, name: "Rising Star", desc: "Reached 500 points", unlocked: points >= 500, color: "blue" },
+    { icon: Target, name: "Point Master", desc: "Accumulated 1000 points", unlocked: points >= 1000, color: "purple" },
+    { icon: Activity, name: "Elite Explorer", desc: "Achieved 2500 points", unlocked: points >= 2500, color: "green" },
+  ];
+
+  const colorClasses = {
+    yellow: { bg: "bg-yellow-500/20", border: "border-yellow-500/50", iconBg: "bg-yellow-500/30", text: "text-yellow-400" },
+    blue: { bg: "bg-blue-500/20", border: "border-blue-500/50", iconBg: "bg-blue-500/30", text: "text-blue-400" },
+    purple: { bg: "bg-purple-500/20", border: "border-purple-500/50", iconBg: "bg-purple-500/30", text: "text-purple-400" },
+    green: { bg: "bg-green-500/20", border: "border-green-500/50", iconBg: "bg-green-500/30", text: "text-green-400" }
+  };
+
+  return (
+    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 mb-8">
+      <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+        <Award className="w-6 h-6 text-yellow-400" />
+        Achievements
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {achievements.map((achievement, idx) => {
+          const colors = colorClasses[achievement.color] || colorClasses.blue;
+          return (
+            <div
+              key={idx}
+              className={`p-4 rounded-xl border-2 transition-all ${
+                achievement.unlocked
+                  ? `${colors.bg} ${colors.border}`
+                  : "bg-slate-800/30 border-slate-700/50 opacity-50"
+              }`}
+            >
+              <div className="flex flex-col items-center text-center">
+                <div
+                  className={`w-16 h-16 rounded-full flex items-center justify-center mb-3 ${
+                    achievement.unlocked ? colors.iconBg : "bg-slate-700/30"
+                  }`}
+                >
+                  <achievement.icon className={`w-8 h-8 ${achievement.unlocked ? colors.text : "text-slate-500"}`} />
+                </div>
+                <h3 className="font-bold text-white mb-1">{achievement.name}</h3>
+                <p className="text-sm text-gray-400">{achievement.desc}</p>
+                {achievement.unlocked && (
+                  <div className="mt-2 text-xs text-green-400 font-semibold">✓ Unlocked</div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+// -----------------------------
+// Quick Stats Component
+const QuickStats = ({ points, level, progress }) => (
+  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+    <StatCard icon={TrendingUp} label="Current Level" value={level} color="purple" />
+    <StatCard icon={Trophy} label="Total Points" value={points.toLocaleString()} color="yellow" />
+    <StatCard icon={Target} label="Progress" value={`${Math.round(progress)}%`} color="green" />
+  </div>
+);
+
+const StatCard = ({ icon: Icon, label, value, color }) => {
+  const colorClasses = {
+    purple: "text-purple-400",
+    yellow: "text-yellow-400",
+    green: "text-green-400"
+  };
+
+  return (
+    <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 text-center hover:bg-white/10 transition-all">
+      <Icon className={`w-8 h-8 ${colorClasses[color] || "text-purple-400"} mx-auto mb-3`} />
+      <p className="text-gray-400 text-sm mb-1">{label}</p>
+      <p className="text-3xl font-bold text-white">{value}</p>
+    </div>
+  );
+};

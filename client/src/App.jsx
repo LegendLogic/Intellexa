@@ -33,6 +33,8 @@ import AlgorithmChallenge from "./game/AlgorithmChallenge";
 import TechTrivia from "./game/TechTrivia";
 import AI from "./pages/AI";
 import UserDashboard from "./pages/UserDashboard";
+import Footer from "./components/Footer";
+import UserProfile from "./pages/UserProfile";
 // import AlgorithmChallenge from "./game/AlgorithmChallenge";
 // import SortingVisualizer from "./game/";
 // import Pathfinder from "./pages/Games/Pathfinder";
@@ -73,6 +75,8 @@ const App = () => {
           <Route path="/algo" element={<AlgorithmChallenge />} />
           <Route path="/ai" element={<AI/>} />
           <Route path="/dashboard" element={<UserDashboard/>} />
+          <Route path="/userprofile" element={<UserProfile/>} />
+
           {/* <Route path="/algo/sorting-visualizer" element={<SortingVisualizer />} />
           <Route path="/algo/pathfinder" element={<Pathfinder />} /> */}
 
@@ -95,12 +99,9 @@ const App = () => {
         pauseOnHover
       />
 
-      <footer className="bg-gray-900 text-white text-center py-4">
-        <p className="text-sm">
-          © {new Date().getFullYear()}{" "}
-          <span className="text-indigo-400 font-medium">Sangram Das</span> — All Rights Reserved.
-        </p>
-      </footer>
+      
+      <Footer/>
+      
     </div>
   );
 };

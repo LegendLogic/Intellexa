@@ -198,7 +198,7 @@ const Article = () => {
   }}
     >
       {/* Header */}
-      <div className="bg-white shadow-sm border-b">
+      <div className=" shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -206,7 +206,7 @@ const Article = () => {
                 <Sparkles className="text-purple-600" size={32} />
                 AI Article Hub
               </h1>
-              <p className="text-gray-600 mt-2">Personalized learning powered by AI</p>
+              <p className="text-white mt-2">Personalized learning powered by AI</p>
             </div>
             <div className="flex gap-3">
               <button className="px-4 py-2 bg-purple-100 text-purple-700 rounded-lg font-semibold hover:bg-purple-200 transition-colors flex items-center gap-2">
@@ -219,13 +219,13 @@ const Article = () => {
           {/* Search and Sort */}
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-3 text-gray-400" size={20} />
-              <input
+              <Search className="absolute left-3 top-3 text-white" size={20} />
+              <input 
                 type="text"
                 placeholder="Search articles by title or content..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
+                className="w-full pl-10 pr-4 py-3 rounded-xl text-white border  border-gray-300 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none"
               />
             </div>
             <button
@@ -239,7 +239,7 @@ const Article = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none"
+              className="px-4 py-3 rounded-xl text-white border border-gray-300 focus:ring-2 focus:ring-purple-500 outline-none"
             >
               <option value="trending">Trending</option>
               <option value="popular">Most Popular</option>
@@ -305,7 +305,7 @@ const Article = () => {
               {recommendations.map(article => (
                 <div
                   key={article.id}
-                  className="bg-gradient-to-br from-purple-100 to-blue-100 rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300 border-2 border-purple-200"
+                  className="bg- rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300 border-2 border-purple-200"
                 >
                   <div className="relative">
                     <img
@@ -319,8 +319,8 @@ const Article = () => {
                     </div>
                   </div>
                   <div className="p-5">
-                    <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2">{article.title}</h3>
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{article.summary}</p>
+                    <h3 className="text-lg font-bold text-white mb-2 line-clamp-2">{article.title}</h3>
+                    <p className="text-white text-sm mb-3 line-clamp-2">{article.summary}</p>
                     <a
                       href={article.url}
                       target="_blank"
@@ -349,7 +349,7 @@ const Article = () => {
           {filteredArticles.map(article => (
             <div
               key={article.id}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 group"
+              className=" rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 group"
             >
               <div className="relative overflow-hidden">
                 <img
@@ -380,17 +380,17 @@ const Article = () => {
                   <span className="text-xs font-semibold text-purple-600 bg-purple-100 px-2 py-1 rounded-full">
                     {article.category}
                   </span>
-                  <span className="text-xs text-gray-500">{article.difficulty}</span>
+                  <span className="text-xs text-white">{article.difficulty}</span>
                 </div>
 
-                <h2 className="text-xl font-bold text-gray-800 mb-2 line-clamp-2 group-hover:text-purple-600 transition-colors">
+                <h2 className="text-xl font-bold text-white mb-2 line-clamp-2 group-hover:text-purple-600 transition-colors">
                   {article.title}
                 </h2>
 
-                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{article.summary}</p>
+                <p className="text-white text-sm mb-3 line-clamp-2">{article.summary}</p>
 
                 <div className="text-gray-500 text-xs mb-4">
-                  By <span className="font-semibold">{article.author}</span> • {article.date} • {article.readTime}
+                  By <span className="font-semibold text-white">{article.author}</span> • {article.date} • {article.readTime}
                 </div>
 
                 <div className="flex flex-wrap gap-2 mb-4">
@@ -404,11 +404,11 @@ const Article = () => {
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100">
                   <div className="flex items-center gap-4 text-sm text-gray-500">
                     <div className="flex items-center gap-1">
-                      <Eye size={16} />
+                      <Eye className="text-red-800" size={16} />
                       {article.views.toLocaleString()}
                     </div>
                     <div className="flex items-center gap-1">
-                      <ThumbsUp size={16} />
+                      <ThumbsUp className="text-green-500" size={16} />
                       {article.likes.toLocaleString()}
                     </div>
                   </div>
@@ -431,8 +431,8 @@ const Article = () => {
         {filteredArticles.length === 0 && (
           <div className="text-center py-16">
             <div className="text-6xl mb-4">📭</div>
-            <p className="text-xl text-gray-600 font-semibold">No articles found</p>
-            <p className="text-gray-500 mt-2">Try adjusting your filters or search terms</p>
+            <p className="text-xl text-white font-semibold">No articles found</p>
+            <p className="text-white mt-2">Try adjusting your filters or search terms</p>
           </div>
         )}
       </div>

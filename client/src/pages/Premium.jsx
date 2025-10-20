@@ -99,14 +99,14 @@ const Premium = () => {
         <div className="max-w-7xl w-full">
           {/* Header Section */}
           <div className="text-center mt-10 mb-16">
-            <div className="inline-flex items-center gap-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in">
+            <div className="inline-flex items-center gap-2 border text-indigo-700 px-4 py-2 rounded-full text-sm font-medium mb-6 animate-fade-in">
               <Sparkles className="w-4 h-4" />
-              <span>Unlock Your Full Potential</span>
+              <span className="text-orange-300">Unlock Your Full Potential</span>
             </div>
             
             <h1 className="text-6xl font-extrabold text-white mb-6 leading-tight">
               Upgrade to{" "}
-              <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+              <span className="bg-orange-300 bg-clip-text text-transparent">
                 Premium
               </span>
             </h1>
@@ -135,7 +135,7 @@ const Premium = () => {
                 <div
                   onMouseEnter={() => setHoveredCard(idx)}
                   onMouseLeave={() => setHoveredCard(null)}
-                  className={`relative bg-white rounded-3xl shadow-xl overflow-hidden h-full transition-all duration-300 ${
+                  className={`relative bg-transparent rounded-3xl shadow-xl overflow-hidden h-full transition-all duration-300 ${
                     plan.popular ? "ring-2 ring-indigo-600" : ""
                   } ${hoveredCard === idx ? "transform -translate-y-2" : ""}`}
                   style={{
@@ -143,17 +143,17 @@ const Premium = () => {
                   }}
                 >
                   {/* Gradient Top Bar */}
-                  <div className={`h-2 bg-gradient-to-r ${plan.gradient}`}></div>
+                  <div className={`h-2 bg-gradient-to-r  ${plan.gradient}`}></div>
 
                   <div className="p-8">
                     {/* Plan Header */}
                     <div className="mb-6">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-2">{plan.title}</h2>
+                      <h2 className="text-2xl font-bold text-white mb-2">{plan.title}</h2>
                       <div className="flex items-baseline gap-2 mb-3">
-                        <span className="text-5xl font-extrabold text-gray-900">{plan.price}</span>
-                        <span className="text-gray-500">/ {plan.period}</span>
+                        <span className="text-5xl font-extrabold text-white">{plan.price}</span>
+                        <span className="text-white">/ {plan.period}</span>
                       </div>
-                      <p className="text-gray-600">{plan.desc}</p>
+                      <p className="text-white">{plan.desc}</p>
                     </div>
 
                     {/* Features List */}
@@ -175,7 +175,7 @@ const Premium = () => {
                               <X className="w-4 h-4" />
                             )}
                           </div>
-                          <span className={feat.included ? "text-gray-700" : "text-gray-400"}>
+                          <span className={feat.included ? "text-white" : "text-gray-600"}>
                             {feat.text}
                           </span>
                         </li>
@@ -184,7 +184,7 @@ const Premium = () => {
 
                     {/* CTA Button */}
                     {plan.btnDisabled ? (
-                      <button className="w-full py-4 rounded-xl font-semibold bg-gray-200 text-gray-500 cursor-not-allowed">
+                      <button className="w-full py-4 rounded-xl font-semibold bg-gray-200 text-white cursor-not-allowed">
                         {plan.btnText}
                       </button>
                     ) : (
@@ -204,7 +204,7 @@ const Premium = () => {
 
           {/* Benefits Section */}
           <div className="mb-24">
-            <h2 className="text-4xl font-bold text-center text-white mb-12">
+            <h2 className="text-4xl font-bold text-center text-orange-300 mb-12">
               Why Go Premium?
             </h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -213,14 +213,14 @@ const Premium = () => {
                 return (
                   <div
                     key={benefit.title}
-                    className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                    className="border border-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                     style={{ animation: `fadeIn 0.6s ease-out ${idx * 0.1}s both` }}
                   >
-                    <div className="bg-gradient-to-br from-indigo-500 to-purple-600 w-12 h-12 rounded-xl flex items-center justify-center mb-4">
-                      <Icon className="w-6 h-6 text-white" />
+                    <div className=" w-12 h-12 rounded-xl flex items-center justify-center mb-4">
+                      <Icon className="w-6 h-6 text-orange-300" />
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{benefit.title}</h3>
-                    <p className="text-gray-600 text-sm">{benefit.desc}</p>
+                    <h3 className="text-lg font-semibold text-orange-400 mb-2">{benefit.title}</h3>
+                    <p className="text-orange-600 text-sm">{benefit.desc}</p>
                   </div>
                 );
               })}
@@ -228,7 +228,7 @@ const Premium = () => {
           </div>
 
           {/* Final CTA Section */}
-          <div className="bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 rounded-3xl p-12 text-center shadow-2xl relative overflow-hidden">
+          <div className=" rounded-3xl p-12 text-center shadow-2xl relative overflow-hidden">
             {/* Animated Background */}
             <div className="absolute inset-0 opacity-20">
               <div className="absolute top-0 left-1/4 w-64 h-64 bg-white rounded-full blur-3xl animate-pulse"></div>
@@ -236,18 +236,18 @@ const Premium = () => {
             </div>
 
             <div className="relative z-10">
-              <Users className="w-16 h-16 text-white mx-auto mb-6" />
-              <h2 className="text-4xl font-bold text-white mb-4">
+              <Users className="w-16 h-16 text-orange-500 mx-auto mb-6" />
+              <h2 className="text-4xl font-bold text-orange-600 mb-4">
                 Join 10,000+ Premium Members
               </h2>
-              <p className="text-indigo-100 text-lg mb-8 max-w-2xl mx-auto">
+              <p className="text-orange-400 text-lg mb-8 max-w-2xl mx-auto">
                 Premium members enjoy priority access, deeper insights, and faster growth.
                 Whether you're building your brand or scaling your business — our tools give you the edge you need.
               </p>
               <a href="/subscribe">
-                <button className="bg-white text-indigo-600 px-10 py-4 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 inline-flex items-center gap-2 hover:scale-105">
+                <button className="border text-orange-300 px-10 py-4 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl transition-all duration-300 inline-flex items-center gap-2 hover:scale-105">
                   <span>Get Started with Premium</span>
-                  <Zap className="w-5 h-5" />
+                  <Zap className="text-red-700 w-5 h-5" />
                 </button>
               </a>
             </div>

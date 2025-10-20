@@ -1,49 +1,54 @@
 import { createContext, useState, useEffect } from "react";
 
-// Create AuthContext
+// Create context
 export const AuthContext = createContext();
 
-// AuthProvider component
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Store user info
-  const [token, setToken] = useState(null); // Store auth token
-  const [isAuth, setIsAuth] = useState(false); // Auth status
+  const [isAuth, setIsAuth] = useState(false);
+  const [token, setToken] = useState(null);
+  const [user, setUser] = useState(null); // Added user state
 
   // Check localStorage for token and user on mount
   useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-    if (storedToken) {
-      setToken(storedToken);
+    const savedToken = localStorage.getItem("token");
+    const savedUser = localStorage.getItem("user");
+
+    if (savedToken) {
+      setToken(savedToken);
       setIsAuth(true);
     }
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+
+    if (savedUser) {
+      try {
+        setUser(JSON.parse(savedUser));
+      } catch (err) {
+        console.error("Error parsing stored user:", err);
+        localStorage.removeItem("user");
+      }
     }
   }, []);
 
-  // Login function
-  const login = (userData, authToken) => {
-    localStorage.setItem("token", authToken);
-    localStorage.setItem("user", JSON.stringify(userData));
-    setToken(authToken);
-    setUser(userData);
+  const login = (newToken, userData) => {
+    localStorage.setItem("token", newToken);
+    setToken(newToken);
     setIsAuth(true);
+
+    if (userData) {
+      setUser(userData);
+      localStorage.setItem("user", JSON.stringify(userData));
+    }
   };
 
-  // Logout function
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setToken(null);
-    setUser(null);
     setIsAuth(false);
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider
-      value={{ isAuth, user, token, login, logout, setUser }}
-    >
+    <AuthContext.Provider value={{ isAuth, token, user, setUser, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

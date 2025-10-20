@@ -50,14 +50,19 @@ const sections = [
 
 const RoadMap = () => {
   return (
-    <div className="min-h-screen bg-gray-50 py-16 px-6 flex flex-col items-center">
+    <div className="min-h-screen  py-16 px-6 flex flex-col items-center"
+    style={{
+    background:
+      "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+  }}
+    >
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="text-4xl font-bold text-indigo-700 mt-9 mb-12 text-center"
       >
-        🚀 Developer Roadmap 2025
+         Developer Roadmap 2025
       </motion.h1>
 
       <div className="relative w-full max-w-5xl">

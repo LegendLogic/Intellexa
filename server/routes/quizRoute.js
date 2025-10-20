@@ -5,28 +5,28 @@ import {
   getSingleQuizQuestion,
   deleteQuizQuestion,
   updateQuizQuestion,
-  addQuizPoints,
+  submitAnswer, // import the new controller
 } from "../controllers/quizController.js";
-import userAuth from "../middleware/auth.js"; // if you want to protect some routes
+import userAuth from "../middleware/auth.js";
 
 const quizRouter = express.Router();
 
-// ✅ Get all quiz questions
+// Get all quiz questions
 quizRouter.get("/all", getAllQuizQuestions);
 
-// ✅ Get a single question by ID
+// Get single question by ID
 quizRouter.get("/id", getSingleQuizQuestion);
 
-// ✅ Add a new quiz question (admin or authenticated)
+// Add new question (admin or authenticated)
 quizRouter.post("/add-question", addQuizQuestion);
 
-// add the user point after the correct 
-quizRouter.put('/add-point', userAuth, addQuizPoints)
+// ✅ Submit answer & update user points
+quizRouter.post("/submit-answer", userAuth, submitAnswer);
 
-// ✅ Update an existing quiz question
+// Update question
 quizRouter.put("/update", userAuth, updateQuizQuestion);
 
-// ✅ Delete a question
+// Delete question
 quizRouter.delete("/delete", userAuth, deleteQuizQuestion);
 
 export default quizRouter;
