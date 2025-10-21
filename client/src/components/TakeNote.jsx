@@ -98,7 +98,7 @@ const TakeNote = () => {
       {/* Floating Notes Button */}
       <button
         onClick={() => setOpenWindow(!openWindow)}
-        className="fixed bottom-22 right-8 bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-full p-4 shadow-2xl transition-all duration-300 flex items-center justify-center z-50 hover:scale-110 active:scale-95"
+        className="fixed bottom-22 right-6 bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white rounded-full p-4 shadow-2xl transition-all duration-300 flex items-center justify-center z-50 hover:scale-110 active:scale-95"
         title={openWindow ? "Close Notes" : "Open Notes"}
       >
         {openWindow ? <X size={24} /> : <NotebookPen size={24} />}
