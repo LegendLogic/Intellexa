@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+
 const Leaderboard = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -130,7 +131,7 @@ const Leaderboard = () => {
           </div>
         )}
 
-        <p className="text-pink-500 text-3xl mt-6 text-center">
+        <p className="text-orange-700 text-3xl mt-6 text-center">
           © {new Date().getFullYear()} Intellexa Leaderboard
         </p>
       </div>

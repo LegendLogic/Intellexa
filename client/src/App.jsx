@@ -35,6 +35,7 @@ import AI from "./pages/AI";
 import UserDashboard from "./pages/UserDashboard";
 import Footer from "./components/Footer";
 import UserProfile from "./pages/UserProfile";
+import TakeNote from "./components/TakeNote";
 // import AlgorithmChallenge from "./game/AlgorithmChallenge";
 // import SortingVisualizer from "./game/";
 // import Pathfinder from "./pages/Games/Pathfinder";
@@ -76,6 +77,9 @@ const App = () => {
           <Route path="/ai" element={<AI/>} />
           <Route path="/dashboard" element={<UserDashboard/>} />
           <Route path="/userprofile" element={<UserProfile/>} />
+          <Route path="/takenotes" element={<TakeNote/>} />
+
+          
 
           {/* <Route path="/algo/sorting-visualizer" element={<SortingVisualizer />} />
           <Route path="/algo/pathfinder" element={<Pathfinder />} /> */}

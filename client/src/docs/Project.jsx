@@ -101,10 +101,15 @@ const Project = () => {
     : projects.filter(p => p.category === selectedCategory);
 
   return (
-    <div className="min-h-screen mt-16 bg-gradient-to-br from-gray-50 to-gray-100 p-6">
+    <div className="min-h-screen  p-6"
+     style={{
+    background:
+      "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
+  }}
+    >
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-4xl font-bold text-gray-800 mb-6 flex items-center gap-3">
-          <BookOpen className="text-indigo-600" size={40} /> Project Roadmap
+        <h1 className="text-4xl mt-10 font-bold text-white mb-6 flex items-center gap-3">
+          <BookOpen className="text-orange-600" size={40} /> Project Roadmap
         </h1>
 
         {/* Category Filter */}
@@ -115,8 +120,8 @@ const Project = () => {
               onClick={() => setSelectedCategory(cat)}
               className={`px-4 py-2 rounded-full font-medium text-sm transition-all ${
                 selectedCategory === cat
-                  ? "bg-indigo-600 text-white shadow-md"
-                  : "bg-white text-gray-700 hover:bg-gray-100"
+                  ? "bg-orange-600 text-white shadow-md"
+                  : "border text-white hover:bg-orange-400"
               }`}
             >
               {cat}
@@ -132,15 +137,15 @@ const Project = () => {
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white rounded-2xl shadow-lg p-5 hover:shadow-2xl transition-all flex flex-col justify-between"
+              className="border-2 rounded-2xl shadow-lg p-5 hover:shadow-2xl transition-all flex flex-col justify-between"
             >
               <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-2">{project.title}</h3>
-                <p className="text-sm text-gray-600 mb-3">{project.description}</p>
+                <h3 className="text-lg font-bold text-orange-500 mb-2">{project.title}</h3>
+                <p className="text-sm text-white mb-3">{project.description}</p>
               </div>
-              <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
-                <span className="px-2 py-1 bg-gray-100 rounded-full">{project.level}</span>
-                <PlayCircle size={20} className="text-indigo-600" />
+              <div className="flex justify-between items-center mt-4 text-sm text-black">
+                <span className="px-2 py-1 bg-white/40 rounded-full">{project.level}</span>
+                <PlayCircle size={20} className="text-orange-600" />
               </div>
             </a>
           ))}

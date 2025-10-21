@@ -57,7 +57,7 @@ const UserDashboard = () => {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-purple-200 text-lg">Loading your dashboard...</p>
+          <p className="text-orange-600 text-lg">Loading your dashboard...</p>
         </div>
       </div>
     );
@@ -110,7 +110,7 @@ const UserDashboard = () => {
         {/* Header Section */}
         <div className="text-center mb-12">
           <div className="relative inline-block mb-4">
-            <div className="w-24 mt-10 h-24 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center shadow-2xl shadow-purple-500/50">
+            <div className="w-24 mt-10 h-24 bg-orange-600 rounded-full flex items-center justify-center shadow-2xl shadow-purple-500/50">
               <User className="w-12 h-12 text-white" />
             </div>
             <div className="absolute -bottom-1 -right-1 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full w-8 h-8 flex items-center justify-center border-4 border-slate-900">
@@ -175,8 +175,8 @@ const Card = ({ icon: Icon, label, value, color }) => {
           <Icon className={`w-6 h-6 ${colors.text}`} />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-gray-400 text-sm mb-1">{label}</p>
-          <p className="text-white font-semibold truncate">{value}</p>
+          <p className="text-white text-sm mb-1">{label}</p>
+          <p className="text-red-400 font-semibold truncate">{value}</p>
         </div>
       </div>
     </div>
@@ -186,22 +186,22 @@ const Card = ({ icon: Icon, label, value, color }) => {
 // -----------------------------
 // Progress Section Component
 const ProgressSection = ({ points, level, nextLevelPoints, progress, creditBalance }) => (
-  <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 backdrop-blur-md border border-purple-500/30 rounded-2xl p-8 mb-8">
+  <div className="bg-gradient-to-br from-purple-500/20 to-orange-400/20 backdrop-blur-md border border-purple-500/30 rounded-2xl p-8 mb-8">
     <div className="flex items-center justify-between mb-4">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-1">Level {level}</h2>
+        <h2 className="text-2xl font-bold text-orange-600 mb-1">Level {level}</h2>
         <p className="text-purple-200">
           {points} / {nextLevelPoints} points to Level {level + 1}
         </p>
       </div>
       <div className="text-right">
         <p className="text-purple-300 text-sm">Credit Balance</p>
-        <p className="text-3xl font-bold text-white">{creditBalance}</p>
+        <p className="text-3xl font-bold text-orange-600">{creditBalance}</p>
       </div>
     </div>
     <div className="w-full bg-slate-800/50 rounded-full h-4 overflow-hidden">
       <div
-        className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full transition-all duration-500 flex items-center justify-end pr-2"
+        className="h-full bg-gradient-to-r from-orange-500 to-orange-500 rounded-full transition-all duration-500 flex items-center justify-end pr-2"
         style={{ width: `${progress}%` }}
       >
         {progress > 10 && <span className="text-xs text-white font-bold">{Math.round(progress)}%</span>}
@@ -229,7 +229,7 @@ const Achievements = ({ points }) => {
 
   return (
     <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl p-8 mb-8">
-      <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
+      <h2 className="text-2xl font-bold text-orange-400 mb-6 flex items-center gap-2">
         <Award className="w-6 h-6 text-yellow-400" />
         Achievements
       </h2>
@@ -251,7 +251,7 @@ const Achievements = ({ points }) => {
                     achievement.unlocked ? colors.iconBg : "bg-slate-700/30"
                   }`}
                 >
-                  <achievement.icon className={`w-8 h-8 ${achievement.unlocked ? colors.text : "text-slate-500"}`} />
+                  <achievement.icon className={`w-8 h-8 ${achievement.unlocked ? colors.text : "text-orange-500"}`} />
                 </div>
                 <h3 className="font-bold text-white mb-1">{achievement.name}</h3>
                 <p className="text-sm text-gray-400">{achievement.desc}</p>
@@ -286,9 +286,9 @@ const StatCard = ({ icon: Icon, label, value, color }) => {
 
   return (
     <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-xl p-6 text-center hover:bg-white/10 transition-all">
-      <Icon className={`w-8 h-8 ${colorClasses[color] || "text-purple-400"} mx-auto mb-3`} />
+      <Icon className={`w-8 h-8 ${colorClasses[color] || "text-orange-400"} mx-auto mb-3`} />
       <p className="text-gray-400 text-sm mb-1">{label}</p>
-      <p className="text-3xl font-bold text-white">{value}</p>
+      <p className="text-3xl font-bold text-orange-400">{value}</p>
     </div>
   );
 };

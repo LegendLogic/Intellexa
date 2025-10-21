@@ -12,6 +12,8 @@ import {
   Cpu,
   Rocket,
 } from "lucide-react";
+import TakeNote from '../components/TakeNote';
+
 
 const resources = [
   {
@@ -123,7 +125,7 @@ const Home = () => {
         transition={{ duration: 0.8 }}
         className="max-w-7xl mx-auto px-6 lg:px-12 py-24 flex flex-col items-center text-center"
       >
-        <p className="text-sm text-orange-300 font-semibold mb-2 tracking-widest"># Online Courses 2025</p>
+        <p className="text-sm text-orange-300 font-semibold mb-2 tracking-widest"># Online Best Courses 2025</p>
 
         <h1
           className="text-5xl md:text-7xl font-extrabold leading-tight bg-clip-text text-transparent"
@@ -132,7 +134,7 @@ const Home = () => {
               "linear-gradient(90deg, #ff6b00, #ff3d00, #ff9f00)",
           }}
         >
-          Your Gateway to <span className="underline decoration-wavy">2500+</span> <br /> Online Courses
+          Smart Learning.  <span className="underline decoration-wavy"></span> <br /> Powered by AI.
         </h1>
 
         <p className="text-orange-400 max-w-2xl mt-4 text-lg md:text-xl">
@@ -214,6 +216,8 @@ const Home = () => {
       </motion.div>
 
       <Chatbot />
+      <TakeNote/>
+ 
     </section>
   );
 };

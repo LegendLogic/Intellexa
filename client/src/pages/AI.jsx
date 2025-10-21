@@ -153,27 +153,27 @@ const AI = () => {
     }
   };
 
-  const updateUserProfile = async () => {
-    setSaveStatus('saving');
-    try {
-      const data = await api.call('/user/profile', 'PUT', settings);
-      setUserProfile(data);
-      setSaveStatus('saved');
-      setTimeout(() => setSaveStatus(''), 2000);
-      setError('');
-    } catch (err) {
-      setSaveStatus('error');
-      setError('Error updating profile: ' + err.message);
-      setTimeout(() => setSaveStatus(''), 2000);
-    }
-  };
+  // const updateUserProfile = async () => {
+  //   setSaveStatus('saving');
+  //   try {
+  //     const data = await api.call('/user/profile', 'PUT', settings);
+  //     setUserProfile(data);
+  //     setSaveStatus('saved');
+  //     setTimeout(() => setSaveStatus(''), 2000);
+  //     setError('');
+  //   } catch (err) {
+  //     setSaveStatus('error');
+  //     setError('Error updating profile: ' + err.message);
+  //     setTimeout(() => setSaveStatus(''), 2000);
+  //   }
+  // };
 
   const generateLearningPlan = async () => {
     setLoading(true);
     setError('');
 
     try {
-      await updateUserProfile();
+      // await updateUserProfile();
 
       const data = await api.call('/learning-plan/generate', 'POST', {
         goal: settings.goal,
