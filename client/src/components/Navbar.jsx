@@ -73,11 +73,12 @@ const Navbar = () => {
   const navLinks = [
     { name: "Home", path: "/" },
     { name: "Reading", path: "/reading" },
-    { name: "Premium", path: "/premium" },
+    { name: "AI", path: "/ai" },
     { name: "Resume", path: "/resume" },
     { name: "Leaderboard", path: "/leaderboard" },
     { name: "Game", path: "/game" },
-    { name: "AI", path: "/ai" },
+    { name: "Premium", path: "/premium" },
+    
   ];
 
   const protectedPaths = ["/reading", "/resume", "/game"];

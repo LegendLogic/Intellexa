@@ -266,7 +266,7 @@ const AI = () => {
       <div className="flex-1 overflow-auto mt-14 lg:mt-0">
         <div className="p-4 md:p-6 lg:p-8 lg:pt-20">
           <div className="mb-6 lg:mb-8">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-orange-500 mb-2">
+            <h1 className="text-2xl mt-20 md:text-3xl lg:text-4xl font-bold text-orange-500 mb-2">
               Intellexa — AI Learning & Interview Coach
             </h1>
             <p className="text-white text-sm md:text-base">
@@ -543,7 +543,7 @@ const AI = () => {
 
                 <div className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 md:p-6">
                   <h3 className="text-lg md:text-xl font-bold text-white mb-4">
-                    📈 Weekly Activity
+                     Weekly Activity
                   </h3>
                   <div className="h-48 md:h-64">
                     <ResponsiveContainer width="100%" height="100%">
