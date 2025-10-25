@@ -3,6 +3,7 @@ import Notes from '../components/Notes';
 import Video from '../components/Video';
 import Article from '../components/Article';
 import DailyStreak from '../components/DailyStrike';
+import TakeNote from '../components/TakeNote';
 // import TakeNote from '../components/TakeNote';
 
 const Reading = () => {
@@ -17,7 +18,7 @@ const Reading = () => {
       <Video/>
       <Article/>
       <Notes />
-      {/* <TakeNote/> */}
+      <TakeNote/>
       
     </div>
 

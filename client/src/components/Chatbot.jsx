@@ -6,7 +6,7 @@ const Chatbot = () => {
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "👋 Hi there! I'm your AI Assistant. Ask me for the best YouTube courses or guidance on any topic!",
+      text: "👋 Hi there! I'm your AI Intellexa. Ask me for the best YouTube courses or guidance on any topic!",
       time: new Date(),
     },
   ]);
@@ -106,7 +106,7 @@ const Chatbot = () => {
           <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg">
             <div className="flex items-center gap-2">
               <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-              <h2 className="font-bold text-base sm:text-lg">INTELLEXA</h2>
+              <h2 className="font-bold text-base sm:text-lg">INTELLEXAA</h2>
             </div>
             <div className="flex items-center gap-2">
               {/* Clear Chat Button */}
@@ -163,7 +163,7 @@ const Chatbot = () => {
             {isTyping && (
               <div className="flex items-center gap-2 text-gray-400 animate-fadeIn">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <p className="text-xs sm:text-sm">INTELLEXA is thinking...</p>
+                <p className="text-xs sm:text-sm">INTELLEXAA is thinking...</p>
               </div>
             )}
             <div ref={chatEndRef} />

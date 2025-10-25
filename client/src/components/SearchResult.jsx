@@ -82,7 +82,7 @@ const SearchResult = () => {
           transition={{ delay: 0.4, duration: 0.8 }}
           className="mt-6 text-orange-300 text-lg font-medium tracking-wide"
         >
-          Fetching AI-powered learning results...
+          Fetching  INTELLEXA learning results...,
         </motion.p>
 
         <motion.div

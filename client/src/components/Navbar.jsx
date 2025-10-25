@@ -118,7 +118,7 @@ const Navbar = () => {
               alt="Intellexa Logo"
               className="h-10 w-auto object-cover transition-transform duration-300 hover:scale-110"
             />
-            INTELLEXA
+            INTELLEXAA
           </Link>
 
           {/* Desktop Navigation */}
