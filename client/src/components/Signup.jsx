@@ -9,9 +9,13 @@ const Signup = () => {
   const navigate = useNavigate();
   const { isAuth } = useContext(AuthContext);
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    profileImage: null,
+  });
+
   const [message, setMessage] = useState("Create your account below!");
   const [attempts, setAttempts] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -23,77 +27,81 @@ const Signup = () => {
     if (isAuth) navigate("/");
   }, [isAuth, navigate]);
 
+  // Handle input changes
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    if (files) {
+      setFormData((prev) => ({ ...prev, [name]: files[0] }));
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
   const handleSignup = async () => {
     if (loading) return;
     setLoading(true);
     setAttempts((prev) => prev + 1);
 
+    const { name, email, password, profileImage } = formData;
+
     if (!backendUrl) {
-      setMessage("❌ Backend URL not configured!");
       toast.error("⚠️ Backend URL not configured!");
       setLoading(false);
       return;
     }
 
-    const trimmedName = name.trim();
-    const trimmedEmail = email.trim();
-    const trimmedPassword = password.trim();
-
-    // Name validation
-    if (trimmedName.length < 2) {
-      setMessage("❌ Please enter your full name.");
+    // Input Validations
+    if (name.trim().length < 2) {
       toast.warning("⚠️ Please enter your full name.");
       setLoading(false);
       return;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(trimmedEmail)) {
-      setMessage("❌ Please enter a valid email address.");
+    if (!emailRegex.test(email.trim())) {
       toast.warning("⚠️ Please enter a valid email address.");
       setLoading(false);
       return;
     }
 
-    // Password validation
-    if (trimmedPassword.length < 6) {
-      setMessage("❌ Password must be at least 6 characters long.");
+    if (password.trim().length < 6) {
       toast.warning("⚠️ Password must be at least 6 characters long.");
       setLoading(false);
       return;
     }
 
+    // Prepare form data for Multer (file upload)
+    const data = new FormData();
+    data.append("name", name.trim());
+    data.append("email", email.trim());
+    data.append("password", password.trim());
+    if (profileImage) data.append("profileImage", profileImage);
+
     try {
-      const res = await axios.post(`${backendUrl}/api/user/register`, {
-        name: trimmedName,
-        email: trimmedEmail,
-        password: trimmedPassword,
+      const res = await axios.post(`${backendUrl}/api/user/register`, data, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
 
       if (res.data.success) {
-        setMessage("🎉 Signup successful! Redirecting to login...");
         toast.success("✅ Account created successfully!");
+        setMessage("🎉 Signup successful! Redirecting to login...");
         setTimeout(() => navigate("/login"), 1500);
       } else {
-        const msg = res.data.message || "Signup failed!";
-        setMessage(`❌ ${msg}`);
-        toast.error(`❌ ${msg}`);
+        toast.error(`❌ ${res.data.message || "Signup failed!"}`);
+        setMessage(`❌ ${res.data.message || "Signup failed!"}`);
       }
     } catch (err) {
       console.error("Signup Error:", err);
       const msg = err.response?.data?.message || "Error signing up.";
-      setMessage(`❌ ${msg}`);
       toast.error(`❌ ${msg}`);
+      setMessage(`❌ ${msg}`);
     } finally {
       setLoading(false);
     }
   };
 
   const handleReset = () => {
-    setName("");
-    setEmail("");
-    setPassword("");
+    setFormData({ name: "", email: "", password: "", profileImage: null });
     setMessage("Create your account below!");
     setAttempts(0);
     toast.info("🔄 Form reset!");
@@ -108,15 +116,7 @@ const Signup = () => {
       }}
     >
       {/* Toastify */}
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        pauseOnHover
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
 
       {/* Signup Card */}
       <div className="bg-white/20 backdrop-blur-xl p-8 rounded-3xl shadow-2xl border border-white/30 w-full max-w-md text-center relative z-10">
@@ -126,23 +126,37 @@ const Signup = () => {
         {/* Input Fields */}
         <input
           type="text"
+          name="name"
           placeholder="Full Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={formData.name}
+          onChange={handleChange}
           className="w-full p-3 mb-4 rounded-xl text-gray-800 bg-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400"
         />
+
         <input
           type="email"
+          name="email"
           placeholder="Email Address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-3 mb-4 rounded-xl text-gray-800 bg-white/20  focus:outline-none focus:ring-2 focus:ring-pink-400"
+          value={formData.email}
+          onChange={handleChange}
+          className="w-full p-3 mb-4 rounded-xl text-gray-800 bg-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400"
         />
+
         <input
           type="password"
+          name="password"
           placeholder="Password (min 6 chars)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={formData.password}
+          onChange={handleChange}
+          className="w-full p-3 mb-4 rounded-xl text-gray-800 bg-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400"
+        />
+
+        {/* Profile Image Upload */}
+        <input
+          type="file"
+          name="profileImage"
+          accept="image/*"
+          onChange={handleChange}
           className="w-full p-3 mb-6 rounded-xl text-gray-800 bg-white/20 focus:outline-none focus:ring-2 focus:ring-pink-400"
         />
 
@@ -168,13 +182,13 @@ const Signup = () => {
           </button>
         </div>
 
-        <p className="text-white  mt-5">
+        <p className="text-white mt-5">
           Already have an account?{" "}
           <span
             onClick={() => navigate("/login")}
             className="text-yellow-300 font-semibold cursor-pointer hover:underline"
           >
-            Login
+            LOGIN
           </span>
         </p>
 

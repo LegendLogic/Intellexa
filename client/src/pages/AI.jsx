@@ -73,8 +73,8 @@ const ComingSoonCard = ({ icon, title, description }) => (
 const AI = () => {
   const [activeTab, setActiveTab] = useState('learning-plan');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
-  const [saveStatus, setSaveStatus] = useState('');
+  // const [userProfile, setUserProfile] = useState(null);
+  // const [saveStatus, setSaveStatus] = useState('');
   
   const [settings, setSettings] = useState({
     name: 'sangram',
@@ -123,7 +123,7 @@ const AI = () => {
   const fetchUserProfile = async () => {
     try {
       const data = await api.call('/user/profile');
-      setUserProfile(data);
+      // setUserProfile(data);
       
       if (data) {
         setSettings({

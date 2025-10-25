@@ -184,7 +184,7 @@ const Premium = () => {
 
                     {/* CTA Button */}
                     {plan.btnDisabled ? (
-                      <button className="w-full py-4 rounded-xl font-semibold bg-gray-200 text-white cursor-not-allowed">
+                      <button className="w-full py-4 rounded-xl font-semibold bg-gray-200 text-black cursor-not-allowed">
                         {plan.btnText}
                       </button>
                     ) : (

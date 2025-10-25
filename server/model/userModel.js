@@ -15,7 +15,10 @@ const userSchema = new mongoose.Schema(
       type: String, 
       required: true 
     },
-
+    image:{
+      type:String,
+      require:true,
+    },
     // 🧠 Points earned from quizzes, rewards, etc.
     points: { 
       type: Number, 
@@ -35,7 +38,11 @@ const userSchema = new mongoose.Schema(
       default: {},
     },
   },
+
   { timestamps: true }
+
 );
+
+// <img src={image? URL.createObjectURL(image):assets.upload_area} alt="" />
 
 export default mongoose.model("User", userSchema);

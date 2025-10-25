@@ -24,7 +24,7 @@ const Footer = () => {
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="text-orange-300" size={32} />
               <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-orange-500 bg-clip-text text-transparent">
-                Intellexa
+                INTELLEXA
               </h1>
             </div>
             <p className="text-gray-400 text-base mb-6 max-w-md">

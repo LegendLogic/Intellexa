@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { User, Mail, Trophy, Calendar, TrendingUp, Award, Target, Activity, Star } from "lucide-react";
+import { User, Mail, Trophy, Calendar, TrendingUp, Award, Target, Activity, Star ,Video ,FileQuestionMark  } from "lucide-react";
 
 const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
@@ -132,6 +132,8 @@ const UserDashboard = () => {
           <Card icon={Mail} label="Email" value={currentUser?.email || "N/A"} color="purple" />
           <Card icon={Trophy} label="Total Points" value={points.toLocaleString()} color="yellow" />
           <Card icon={Calendar} label="Member Since" value={memberSince} color="green" />
+          <Card icon={FileQuestionMark } label="Completed Quiz" value={memberSince} color="green" />
+          <Card icon={Video} label="Completed Video" value={memberSince} color="green" />
         </div>
 
         {/* Progress Section */}

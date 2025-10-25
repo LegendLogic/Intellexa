@@ -9,7 +9,7 @@ const Resume = () => {
     phone: "123-456-7890",
     email: "email@gmail.com",
     linkedin: "linkedin.com/in/username",
-    github: "github.com/username",
+    github: "github.com/sangram03",
     education: [
       {
         university: "State University",

@@ -74,7 +74,7 @@ const Leaderboard = () => {
       }}
     >
       <div className="max-w-4xl w-full mt-20 bg-transparent border border-white shadow-lg rounded-2xl p-8">
-        <h1 className="text-4xl font-bold text-red-500 mb-6 text-center">Leaderboard</h1>
+        <h1 className="text-4xl font-bold text-red-500 mb-6 text-center">LEADERBOARD</h1>
 
         {/* Logged-in User Info */}
         {userLoading ? (
@@ -132,7 +132,7 @@ const Leaderboard = () => {
         )}
 
         <p className="text-orange-700 text-3xl mt-6 text-center">
-          © {new Date().getFullYear()} Intellexa Leaderboard
+          © {new Date().getFullYear()} INTELLEXA LEADERBOARD
         </p>
       </div>
     </div>

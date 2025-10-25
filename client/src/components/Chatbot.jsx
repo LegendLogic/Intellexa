@@ -47,7 +47,7 @@ const Chatbot = () => {
       const data = await response.json();
       const botReply = {
         sender: "bot",
-        text: data.response || data.reply || "🤖 No response from the AI server.",
+        text: data.response || data.reply || "🤖 No response from the INTELLEXA AI server.",
         time: new Date(),
       };
 
@@ -80,7 +80,7 @@ const Chatbot = () => {
     setMessages([
       {
         sender: "bot",
-        text: "👋 Hi there! I'm your AI Assistant. Ask me for the best YouTube courses or guidance on any topic!",
+        text: "👋 Hi there! I'm your INTELLEXA. Ask me for doubts.",
         time: new Date(),
       },
     ]);
@@ -105,8 +105,8 @@ const Chatbot = () => {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-              <h2 className="font-bold text-base sm:text-lg">AI Course Finder</h2>
+              <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+              <h2 className="font-bold text-base sm:text-lg">INTELLEXA</h2>
             </div>
             <div className="flex items-center gap-2">
               {/* Clear Chat Button */}
@@ -163,7 +163,7 @@ const Chatbot = () => {
             {isTyping && (
               <div className="flex items-center gap-2 text-gray-400 animate-fadeIn">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <p className="text-xs sm:text-sm">AI is thinking...</p>
+                <p className="text-xs sm:text-sm">INTELLEXA is thinking...</p>
               </div>
             )}
             <div ref={chatEndRef} />
@@ -176,8 +176,8 @@ const Chatbot = () => {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask for a YouTube course..."
-              className="flex-1 px-3 py-2 text-xs sm:text-sm text-gray-100 bg-gray-700/50 border border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400 disabled:opacity-50"
+              placeholder="Ask me your doubts...,"
+              className="flex-1 px-3 py-2 text-xs sm:text-sm text-orange-300 bg-gray-700/50 border border-gray-600 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 placeholder-gray-400 disabled:opacity-50"
               disabled={isTyping}
             />
             <button

@@ -1,19 +1,20 @@
 import express from "express";
-import {registerUser,loginUser , getUserProfile , getAllUsers , addUserPoints , removeUserPoints ,updateVideoCompletion} from "../controllers/userController.js";
+import {registerUser,loginUser , getUserProfile , getAllUsers , addUserPoints , removeUserPoints , completedVideo} from "../controllers/userController.js";
 import userAuth from "../middleware/auth.js";
+import upload from "../middleware/multer.js";
 
 
 
 
 const userRouter = express.Router()
 
-userRouter.post('/register',registerUser)
-userRouter.post("/login",loginUser)
+userRouter.post('/register', upload.single("profileImage"),registerUser)
+userRouter.post("/login",upload.single("profileImage"),loginUser)
 userRouter.get("/profile", userAuth,getUserProfile);
 userRouter.get("/all", getAllUsers);
 userRouter.put("/addpoint", userAuth, addUserPoints);
 userRouter.put("/removepoint", userAuth, removeUserPoints);
-userRouter.put("/videos", userAuth, updateVideoCompletion);
+userRouter.post("/complete-video", userAuth, completedVideo);
 
 
 

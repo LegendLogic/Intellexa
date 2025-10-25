@@ -71,13 +71,13 @@ const Navbar = () => {
   const closeMenu = () => setIsOpen(false);
 
   const navLinks = [
-    { name: "Home", path: "/" },
-    { name: "Reading", path: "/reading" },
+    { name: "HOME", path: "/" },
+    { name: "READING", path: "/reading" },
     { name: "AI", path: "/ai" },
-    { name: "Resume", path: "/resume" },
-    { name: "Leaderboard", path: "/leaderboard" },
-    { name: "Game", path: "/game" },
-    { name: "Premium", path: "/premium" },
+    { name: "RESUME", path: "/resume" },
+    { name: "LEADERBOARD", path: "/leaderboard" },
+    { name: "GAME", path: "/game" },
+    { name: "PREMIUM", path: "/premium" },
     
   ];
 
@@ -96,7 +96,7 @@ const Navbar = () => {
     <>
       {/* Header */}
       <header
-        className={`fixed top-0 z-50 w-full transition-all duration-500 ${
+        className={`fixed z-50 w-full transition-all duration-500 ${
           isScrolled
             ? "bg-transparent shadow-md backdrop-blur-md"
             : "bg-transparent"
@@ -118,7 +118,7 @@ const Navbar = () => {
               alt="Intellexa Logo"
               className="h-10 w-auto object-cover transition-transform duration-300 hover:scale-110"
             />
-            Intellexa
+            INTELLEXA
           </Link>
 
           {/* Desktop Navigation */}
@@ -175,13 +175,12 @@ const Navbar = () => {
             {!isAuth && (
               <button
                 onClick={() => handleNavClick("/login")}
-                className="px-3 py-2 text-indigo-400 rounded-md hover:bg-indigo-500/10 transition"
+                className="px-3 py-2 text-orange-300 rounded-md hover:bg-indigo-500/10 transition"
               >
-                Login
+                LOGIN
               </button>
             )}
           </div>
-
           {/* Mobile Hamburger */}
           <button
             className="md:hidden text-amber-600 text-2xl focus:outline-none z-50 relative"
@@ -203,12 +202,12 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`fixed top-0 left-0 h-full w-72 bg-gradient-to-b from-amber-950 via-neutral-900 to-black text-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
+        className={`fixed  top-0 left-0 h-full w-72 bg-gradient-to-b from-amber-950 via-neutral-900 to-black text-white shadow-xl transform transition-transform duration-300 ease-in-out z-50 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-          <h2 className="text-lg font-semibold text-orange-400">Menu</h2>
+        <div className="flex  items-center justify-between px-5 py-4 border-b border-white/40">
+          <h2 className="text-lg font-semibold text-orange-400">MENU</h2>
           
         </div>
 
@@ -253,9 +252,9 @@ const Navbar = () => {
           {!isAuth && (
             <button
               onClick={() => handleNavClick("/login")}
-              className="px-4 py-2 text-left text-indigo-400 rounded-md hover:bg-indigo-500/10 transition mt-3"
+              className="px-4 py-2 text-left text-orange-300 rounded-md hover:bg-indigo-500/10 transition mt-3"
             >
-              Login
+              LOGIN
             </button>
           )}
         </div>

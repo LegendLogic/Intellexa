@@ -6,6 +6,12 @@ import connectCloudinary from "./config/cloudinary.js";
 import userRouter from "./routes/userRoutes.js";
 import quizRouter from "./routes/quizRoute.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import VideoRouter from "./routes/videoRoute.js";
+import searchRouter from "./routes/searchRoute.js";
+import youtubeRoutes from "./routes/youtubeRoutes.js";
+import serpRoutes from "./routes/serpRoutes.js";
+import openRouterRoutes from "./routes/openRouterRoutes.js";
+import roadmapRouter from "./routes/roadmapRouter.js";
 
 // App config
 const app = express();
@@ -42,6 +48,26 @@ app.use(express.json());
 app.use("/api/user", userRouter);
 app.use("/api/quiz", quizRouter);
 app.use("/api", chatRoutes);
+app.use("/api/video", VideoRouter);
+app.use('/api/search', searchRouter);
+
+// ✅ Register test routes
+
+app.use("/api/youtube", youtubeRoutes);
+app.use("/api/serpapi", serpRoutes);
+// Register route
+app.use("/api/openrouter", openRouterRoutes);
+
+// ✅ Add image generation route
+
+
+app.use("/roadmap", roadmapRouter);
+
+
+
+
+app.use("/uploads", express.static("uploads"));
+
 
 // Default route
 app.get("/", (req, res) => {

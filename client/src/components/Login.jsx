@@ -15,6 +15,7 @@ const Login = () => {
   const [message, setMessage] = useState("Enter your email and password to login!");
   const [attempts, setAttempts] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [userImage, setUserImage] = useState(null); // 🖼️ New: profile image preview
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -45,7 +46,6 @@ const Login = () => {
     const trimmedEmail = email.trim();
     const trimmedPassword = password.trim();
 
-    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(trimmedEmail)) {
       toast.warning("⚠️ Please enter a valid email address.");
@@ -78,10 +78,19 @@ const Login = () => {
         // Save token in context
         login(receivedToken);
 
+        // ✅ Fetch user profile (with image)
+        const profileRes = await axios.get(`${backendUrl}/api/user/profile`, {
+          headers: { Authorization: `Bearer ${receivedToken}` },
+        });
+
+        if (profileRes.data?.image) {
+          setUserImage(`${backendUrl}/${profileRes.data.image}`);
+        }
+
         toast.success("✅ Login Successful!");
         setMessage(`🎉 Login successful after ${attempts + 1} attempt(s)! Redirecting...`);
 
-        setTimeout(() => navigate("/"), 1200);
+        setTimeout(() => navigate("/"), 1500);
       } else {
         const msg = res.data.message || "Login failed!";
         toast.error(`❌ ${msg}`);
@@ -100,6 +109,7 @@ const Login = () => {
   const handleReset = () => {
     setEmail("");
     setPassword("");
+    setUserImage(null);
     setMessage("Enter your email and password to login!");
     setAttempts(0);
     toast.info("🔄 Form reset!");
@@ -113,14 +123,7 @@ const Login = () => {
           "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
       }}
     >
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        closeOnClick
-        pauseOnHover
-        theme="colored"
-      />
+      <ToastContainer position="top-right" autoClose={2000} theme="colored" />
 
       <motion.div
         initial={{ opacity: 0, y: 40 }}
@@ -128,15 +131,26 @@ const Login = () => {
         transition={{ duration: 0.8 }}
         className="relative z-10 w-full max-w-md bg-white/20 backdrop-blur-xl p-10 rounded-3xl shadow-2xl border border-white/30"
       >
-        <h2 className="text-4xl font-extrabold text-orange-400 mb-6 text-center">Login</h2>
+        <h2 className="text-4xl font-extrabold text-orange-400 mb-6 text-center">LOGIN</h2>
 
         <motion.p
           animate={{ opacity: [0, 1] }}
           transition={{ duration: 0.5 }}
-          className="text-white mb-6 text-center transition-colors duration-300"
+          className="text-white mb-6 text-center"
         >
           {message}
         </motion.p>
+
+        {userImage && (
+          <motion.img
+            src={userImage}
+            alt="User"
+            className="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-orange-400 shadow-lg"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+          />
+        )}
 
         <div className="flex flex-col gap-4 mb-6">
           <div className="relative">
@@ -145,10 +159,10 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="peer w-full p-4 rounded-xl bg-white/20 text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 placeholder-transparent transition-all duration-300"
+              className="peer w-full p-4 rounded-xl bg-white/20 text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 placeholder-transparent"
               placeholder="Email"
             />
-            <label className="absolute left-4 top-4 text-gray-900 text-sm transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-white peer-focus:text-sm">
+            <label className="absolute left-4 top-4 text-gray-900 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:text-white peer-focus:text-sm">
               Email
             </label>
           </div>
@@ -159,10 +173,10 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="peer w-full p-4 rounded-xl bg-white/20 text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 placeholder-transparent transition-all duration-300"
+              className="peer w-full p-4 rounded-xl bg-white/20 text-gray-800 focus:outline-none focus:ring-2 focus:ring-pink-400 placeholder-transparent"
               placeholder="Password"
             />
-            <label className="absolute left-4 top-4 text-gray-500 text-sm transition-all duration-300 peer-placeholder-shown:top-4 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-white peer-focus:text-sm">
+            <label className="absolute left-4 top-4 text-gray-500 text-sm transition-all peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-base peer-focus:text-white peer-focus:text-sm">
               Password
             </label>
           </div>
@@ -197,11 +211,11 @@ const Login = () => {
             onClick={() => navigate("/signup")}
             className="text-orange-300 font-semibold cursor-pointer hover:underline"
           >
-            Sign Up
+            SIGN UP
           </span>
         </p>
 
-        <p className="text-gray-200 mt-2 text-center">Attempts: {attempts}</p>
+        <p className="text-gray-200 mt-2 text-center">ATTEMPTS: {attempts}</p>
       </motion.div>
     </div>
   );

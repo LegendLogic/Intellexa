@@ -36,6 +36,7 @@ import UserDashboard from "./pages/UserDashboard";
 import Footer from "./components/Footer";
 import UserProfile from "./pages/UserProfile";
 import TakeNote from "./components/TakeNote";
+import SearchResult from "./components/SearchResult";
 // import AlgorithmChallenge from "./game/AlgorithmChallenge";
 // import SortingVisualizer from "./game/";
 // import Pathfinder from "./pages/Games/Pathfinder";
@@ -78,6 +79,7 @@ const App = () => {
           <Route path="/dashboard" element={<UserDashboard/>} />
           <Route path="/userprofile" element={<UserProfile/>} />
           <Route path="/takenotes" element={<TakeNote/>} />
+          <Route path="/search-results" element={<SearchResult/>} />
 
           
 
