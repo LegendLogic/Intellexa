@@ -50,6 +50,7 @@ app.use("/api/quiz", quizRouter);
 app.use("/api", chatRoutes);
 app.use("/api/video", VideoRouter);
 app.use('/api/search', searchRouter);
+app.use('/api/roadmap',roadmapRouter)
 
 // ✅ Register test routes
 

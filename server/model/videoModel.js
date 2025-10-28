@@ -43,8 +43,8 @@ const RecommandVideoSchema = new mongoose.Schema(
       default: false,
     },
     recommendations: {
-      type: Number,
-      default: 0,
+      type: [String],
+      required: true,
     },
   },
   { timestamps: true }

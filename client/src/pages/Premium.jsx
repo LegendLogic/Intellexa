@@ -26,11 +26,11 @@ const plans = [
     period: "per month",
     desc: "For professionals who need more power and control.",
     features: [
-      { text: "Unlimited Projects", included: true },
-      { text: "Advanced Analytics", included: true },
-      { text: "AI-Powered Recommendations", included: true },
-      { text: "Priority Email Support", included: true },
-      { text: "Custom Integrations", included: true },
+      { text: "Unlimited Projects ideas", included: true },
+      { text: "Advanced Analytics dashboard", included: true },
+      { text: "AI-Powered Recommendations sytem", included: true },
+      { text: "Priority Email Support ", included: true },
+      { text: "Custom Integrations for user needs", included: true },
     ],
     btnText: "Upgrade Now",
     btnLink: "/subscribe",
@@ -238,7 +238,7 @@ const Premium = () => {
             <div className="relative z-10">
               <Users className="w-16 h-16 text-orange-500 mx-auto mb-6" />
               <h2 className="text-4xl font-bold text-orange-600 mb-4">
-                Join 10,000+ Premium Members
+                Join 10+ Premium Members
               </h2>
               <p className="text-orange-400 text-lg mb-8 max-w-2xl mx-auto">
                 Premium members enjoy priority access, deeper insights, and faster growth.

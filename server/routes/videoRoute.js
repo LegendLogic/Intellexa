@@ -3,6 +3,7 @@ import {
 
   createRecommandVideo,
   getAllVideos,
+  getVideos
   
 
 } 
@@ -18,6 +19,8 @@ const VideoRouter = express.Router();
 // ✅ ADMIN LOGIN
 VideoRouter.post('/post-video', createRecommandVideo);
 VideoRouter.get("/get-video", getAllVideos);
+VideoRouter.get("/get-recomm", getVideos);
+
 
 
 export default VideoRouter;

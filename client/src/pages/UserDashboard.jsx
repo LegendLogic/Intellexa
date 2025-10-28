@@ -1,26 +1,36 @@
 import React, { useEffect, useState } from "react";
-import { User, Mail, Trophy, Calendar, TrendingUp, Award, Target, Activity, Star ,Video ,FileQuestionMark  } from "lucide-react";
+import { User, Mail, Trophy, Calendar, TrendingUp, Award, Target, Activity, Star, Video, FileQuestion, Edit, Trash2, X, Save } from "lucide-react";
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UserDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "" });
+  const [deletePassword, setDeletePassword] = useState("");
+  const [actionLoading, setActionLoading] = useState(false);
 
-  const backendUrl = "http://localhost:4000";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:4000";
 
+  // Fetch User Profile
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
           setError("You are not logged in.");
+          toast.error("You are not logged in. Please login to continue.");
           setLoading(false);
           return;
         }
 
         const response = await fetch(`${backendUrl}/api/user/profile`, {
           method: "GET",
-          headers: { 
+          headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
           },
@@ -30,6 +40,7 @@ const UserDashboard = () => {
           if (response.status === 401) {
             localStorage.removeItem("token");
             setError("Session expired. Please login again.");
+            toast.error("Session expired. Please login again.");
           } else {
             throw new Error("Failed to load profile.");
           }
@@ -40,10 +51,21 @@ const UserDashboard = () => {
         const data = await response.json();
         const userData = data?.user || data;
         setCurrentUser(userData);
+        setFormData({
+          name: userData.name || "",
+          email: userData.email || "",
+          joinedDate:currentUser?.joinedDate ||"",
+
+        });
+
+
+
         localStorage.setItem("user", JSON.stringify(userData));
+        toast.success(`Welcome back, ${userData.name?.split(" ")[0] || "User"}!`);
       } catch (err) {
         console.error("Error fetching user profile:", err);
         setError(err.message || "Failed to load profile.");
+        toast.error(err.message || "Failed to load profile.");
       } finally {
         setLoading(false);
       }
@@ -51,6 +73,174 @@ const UserDashboard = () => {
 
     fetchUser();
   }, [backendUrl]);
+
+  // Update Profile Function
+  const updateProfile = async () => {
+    if (!formData.name.trim() || !formData.email.trim()) {
+      toast.warning("Please fill in all required fields");
+      return;
+    }
+
+    setActionLoading(true);
+    const updateToast = toast.loading("Updating your profile...");
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.update(updateToast, {
+          render: "Authentication token not found. Please login again.",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000
+        });
+        return;
+      }
+
+      const response = await axios.put(
+        `${backendUrl}/api/user/profile-updates`,
+        formData,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+
+      if (response.data) {
+        const updatedUser = response.data.user || response.data;
+        setCurrentUser(updatedUser);
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+
+        toast.update(updateToast, {
+          render: "Profile updated successfully! 🎉",
+          type: "success",
+          isLoading: false,
+          autoClose: 3000
+        });
+
+        setShowEditModal(false);
+      }
+
+    } catch (error) {
+      console.error("Error updating profile:", error);
+
+      let errorMessage = "Failed to update profile";
+      if (error.response) {
+        errorMessage = error.response.data.message || errorMessage;
+      } else if (error.request) {
+        errorMessage = "No response from server. Please check your connection.";
+      } else {
+        errorMessage = error.message || "An unexpected error occurred";
+      }
+
+      toast.update(updateToast, {
+        render: errorMessage,
+        type: "error",
+        isLoading: false,
+        autoClose: 3000
+      });
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Delete Account Function
+  const deleteAccount = async () => {
+    if (!deletePassword.trim()) {
+      toast.warning("Please enter your password to confirm deletion");
+      return;
+    }
+
+    const confirmDelete = window.confirm(
+      "⚠️ Are you absolutely sure? This action CANNOT be undone. Your account and all data will be permanently deleted."
+    );
+
+    if (!confirmDelete) return;
+
+    setActionLoading(true);
+    const deleteToast = toast.loading("Deleting your account...");
+
+    try {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.update(deleteToast, {
+          render: "Authentication token not found. Please login again.",
+          type: "error",
+          isLoading: false,
+          autoClose: 3000
+        });
+        return;
+      }
+
+      const response = await axios.delete(
+        `${backendUrl}/api/user/delete`,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          },
+          data: { password: deletePassword }
+        }
+      );
+
+      if (response.data) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        toast.update(deleteToast, {
+          render: "Account deleted successfully. Redirecting to login...",
+          type: "success",
+          isLoading: false,
+          autoClose: 2000
+        });
+
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 2000);
+      }
+
+    } catch (error) {
+      console.error("Error deleting account:", error);
+
+      let errorMessage = "Failed to delete account";
+      if (error.response) {
+        errorMessage = error.response.data.message || errorMessage;
+      } else if (error.request) {
+        errorMessage = "No response from server. Please check your connection.";
+      } else {
+        errorMessage = error.message || "An unexpected error occurred";
+      }
+
+      toast.update(deleteToast, {
+        render: errorMessage,
+        type: "error",
+        isLoading: false,
+        autoClose: 3000
+      });
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Handle form input changes
+  const handleInputChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  // Calculate completed videos count
+  const calculateCompletedVideos = () => {
+    if (!currentUser?.completedVideos) return 0;
+
+    // Count all videos marked as true in completedVideos object
+    const completed = Object.values(currentUser.completedVideos).filter(value => value === true).length;
+    return completed;
+  };
 
   if (loading) {
     return (
@@ -90,13 +280,16 @@ const UserDashboard = () => {
     );
   }
 
+
   const points = currentUser?.points || currentUser?.creditBalance || 0;
   const level = Math.floor(points / 100) + 1;
   const nextLevelPoints = level * 100;
   const progress = ((points % 100) / 100) * 100;
-  const memberSince = currentUser?.createdAt
-    ? new Date(currentUser.createdAt).toLocaleDateString("en-US", { month: "long", year: "numeric" })
-    : "Recently";
+
+
+
+  const completedVideosCount = calculateCompletedVideos();
+  const completedQuizCount = currentUser?.completedQuizzes?.length || 0;
 
   return (
     <div
@@ -106,6 +299,20 @@ const UserDashboard = () => {
           "radial-gradient(circle 600px at 60% 20%, rgba(249,115,22,0.25), transparent 70%), radial-gradient(circle 800px at 10% 80%, rgba(255,56,0,0.15), transparent 70%), #0e0b11",
       }}
     >
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+
       <div className="max-w-6xl mx-auto mt-8">
         {/* Header Section */}
         <div className="text-center mb-12">
@@ -124,6 +331,24 @@ const UserDashboard = () => {
             <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
             Level {level} Explorer
           </p>
+
+          {/* Action Buttons */}
+          <div className="flex gap-4 justify-center mt-6">
+            <button
+              onClick={() => setShowEditModal(true)}
+              className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2 rounded-lg transition-all flex items-center gap-2 shadow-lg"
+            >
+              <Edit className="w-4 h-4" />
+              Edit Profile
+            </button>
+            <button
+              onClick={() => setShowDeleteModal(true)}
+              className="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-lg transition-all flex items-center gap-2 shadow-lg"
+            >
+              <Trash2 className="w-4 h-4" />
+              Delete Account
+            </button>
+          </div>
         </div>
 
         {/* Stats Grid */}
@@ -131,19 +356,31 @@ const UserDashboard = () => {
           <Card icon={User} label="Full Name" value={currentUser?.name || "N/A"} color="blue" />
           <Card icon={Mail} label="Email" value={currentUser?.email || "N/A"} color="purple" />
           <Card icon={Trophy} label="Total Points" value={points.toLocaleString()} color="yellow" />
-          <Card icon={Calendar} label="Member Since" value={memberSince} color="green" />
-          <Card icon={FileQuestionMark } label="Completed Quiz" value={memberSince} color="green" />
-          <Card icon={Video} label="Completed Video" value={memberSince} color="green" />
+          <Card icon={Calendar} label="Member Since" value={currentUser?.joinedDate} color="green" />
+          <Card icon={FileQuestion} label="Completed Quizzes" value={completedQuizCount} color="green" />
+          <Card icon={Video} label="Completed Videos" value={completedVideosCount} color="green" />
         </div>
 
         {/* Progress Section */}
-        <ProgressSection points={points} level={level} nextLevelPoints={nextLevelPoints} progress={progress} creditBalance={currentUser?.creditBalance || 0} />
+        <ProgressSection
+          points={points}
+          level={level}
+          nextLevelPoints={nextLevelPoints}
+          progress={progress}
+          creditBalance={currentUser?.creditBalance || 0}
+        />
 
         {/* Achievements Section */}
         <Achievements points={points} />
 
         {/* Quick Stats */}
-        <QuickStats points={points} level={level} progress={progress} />
+        <QuickStats
+          points={points}
+          level={level}
+          progress={progress}
+          completedVideos={completedVideosCount}
+          completedQuizzes={completedQuizCount}
+        />
       </div>
 
       {/* Footer */}
@@ -152,14 +389,141 @@ const UserDashboard = () => {
           © {new Date().getFullYear()} Intellexa Dashboard • Crafted with passion
         </p>
       </div>
+
+      {/* Edit Profile Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-900 border border-orange-500/30 rounded-2xl p-8 max-w-md w-full shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-orange-500 flex items-center gap-2">
+                <Edit className="w-6 h-6" />
+                Edit Profile
+              </h2>
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="text-purple-300 text-sm mb-2 block">Full Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className="w-full bg-slate-800 border border-purple-500/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-orange-500"
+                  placeholder="Enter your name"
+                />
+              </div>
+
+              <div>
+                <label className="text-purple-300 text-sm mb-2 block">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-full bg-slate-800 border border-purple-500/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-orange-500"
+                  placeholder="Enter your email"
+                />
+              </div>
+
+              <button
+                onClick={updateProfile}
+                disabled={actionLoading}
+                className="w-full bg-orange-600 hover:bg-orange-700 disabled:bg-gray-600 text-white px-6 py-3 rounded-lg transition-all flex items-center justify-center gap-2 font-semibold"
+              >
+                {actionLoading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Updating...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-5 h-5" />
+                    Save Changes
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Account Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-900 border border-red-500/30 rounded-2xl p-8 max-w-md w-full shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-bold text-red-500 flex items-center gap-2">
+                <Trash2 className="w-6 h-6" />
+                Delete Account
+              </h2>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 mb-6">
+              <p className="text-red-300 text-sm">
+                ⚠️ <strong>Warning:</strong> This action cannot be undone. All your data, progress, and achievements will be permanently deleted.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <label className="text-purple-300 text-sm mb-2 block">Enter your password to confirm</label>
+                <input
+                  type="password"
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  className="w-full bg-slate-800 border border-red-500/30 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-red-500"
+                  placeholder="Enter password"
+                />
+              </div>
+
+              <button
+                onClick={deleteAccount}
+                disabled={actionLoading}
+                className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-600 text-white px-6 py-3 rounded-lg transition-all flex items-center justify-center gap-2 font-semibold"
+              >
+                {actionLoading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-5 h-5" />
+                    Delete My Account
+                  </>
+                )}
+              </button>
+
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="w-full bg-slate-700 hover:bg-slate-600 text-white px-6 py-3 rounded-lg transition-all"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default UserDashboard;
 
-// -----------------------------
-// Reusable Card Component
+// Card Component
 const Card = ({ icon: Icon, label, value, color }) => {
   const colorClasses = {
     blue: { bg: "bg-blue-500/20", text: "text-blue-400" },
@@ -185,7 +549,6 @@ const Card = ({ icon: Icon, label, value, color }) => {
   );
 };
 
-// -----------------------------
 // Progress Section Component
 const ProgressSection = ({ points, level, nextLevelPoints, progress, creditBalance }) => (
   <div className="bg-gradient-to-br from-purple-500/20 to-orange-400/20 backdrop-blur-md border border-purple-500/30 rounded-2xl p-8 mb-8">
@@ -212,7 +575,6 @@ const ProgressSection = ({ points, level, nextLevelPoints, progress, creditBalan
   </div>
 );
 
-// -----------------------------
 // Achievements Component
 const Achievements = ({ points }) => {
   const achievements = [
@@ -241,17 +603,15 @@ const Achievements = ({ points }) => {
           return (
             <div
               key={idx}
-              className={`p-4 rounded-xl border-2 transition-all ${
-                achievement.unlocked
-                  ? `${colors.bg} ${colors.border}`
-                  : "bg-slate-800/30 border-slate-700/50 opacity-50"
-              }`}
+              className={`p-4 rounded-xl border-2 transition-all ${achievement.unlocked
+                ? `${colors.bg} ${colors.border}`
+                : "bg-slate-800/30 border-slate-700/50 opacity-50"
+                }`}
             >
               <div className="flex flex-col items-center text-center">
                 <div
-                  className={`w-16 h-16 rounded-full flex items-center justify-center mb-3 ${
-                    achievement.unlocked ? colors.iconBg : "bg-slate-700/30"
-                  }`}
+                  className={`w-16 h-16 rounded-full flex items-center justify-center mb-3 ${achievement.unlocked ? colors.iconBg : "bg-slate-700/30"
+                    }`}
                 >
                   <achievement.icon className={`w-8 h-8 ${achievement.unlocked ? colors.text : "text-orange-500"}`} />
                 </div>
@@ -269,12 +629,12 @@ const Achievements = ({ points }) => {
   );
 };
 
-// -----------------------------
 // Quick Stats Component
-const QuickStats = ({ points, level, progress }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
+const QuickStats = ({ points, level, progress, completedVideos, completedQuizzes }) => (
+  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
     <StatCard icon={TrendingUp} label="Current Level" value={level} color="purple" />
     <StatCard icon={Trophy} label="Total Points" value={points.toLocaleString()} color="yellow" />
+    <StatCard icon={Video} label="Videos Completed" value={completedVideos} color="blue" />
     <StatCard icon={Target} label="Progress" value={`${Math.round(progress)}%`} color="green" />
   </div>
 );
@@ -283,7 +643,8 @@ const StatCard = ({ icon: Icon, label, value, color }) => {
   const colorClasses = {
     purple: "text-purple-400",
     yellow: "text-yellow-400",
-    green: "text-green-400"
+    green: "text-green-400",
+    blue: "text-blue-400"
   };
 
   return (

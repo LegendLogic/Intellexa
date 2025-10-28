@@ -31,19 +31,18 @@ import DebugTheCode from "./game/DebugTheCode";
 import GuessOutput from "./game/GuessOutput";
 import AlgorithmChallenge from "./game/AlgorithmChallenge";
 import TechTrivia from "./game/TechTrivia";
-import AI from "./pages/AI";
 import UserDashboard from "./pages/UserDashboard";
 import Footer from "./components/Footer";
 import UserProfile from "./pages/UserProfile";
 import TakeNote from "./components/TakeNote";
 import SearchResult from "./components/SearchResult";
-// import AlgorithmChallenge from "./game/AlgorithmChallenge";
-// import SortingVisualizer from "./game/";
-// import Pathfinder from "./pages/Games/Pathfinder";
+
+import SearchBar from "./pages/SearchBar";
+
 
 const App = () => {
   // ✅ Manage login state globally
-  const [, setAuth] = useState(!!localStorage.getItem("token"));
+  const [ setAuth] = useState(!!localStorage.getItem("token"));
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
@@ -75,9 +74,9 @@ const App = () => {
           <Route path="/game/tech-wheel" element={<TechTrivia />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/algo" element={<AlgorithmChallenge />} />
-          <Route path="/ai" element={<AI/>} />
+          <Route path="/search" element={<SearchBar/>} />
           <Route path="/dashboard" element={<UserDashboard/>} />
-          <Route path="/userprofile" element={<UserProfile/>} />
+          <Route path="/userprofile/:id" element={<UserProfile />} />
           <Route path="/takenotes" element={<TakeNote/>} />
           <Route path="/search-results" element={<SearchResult/>} />
 

@@ -73,7 +73,7 @@ const Navbar = () => {
   const navLinks = [
     { name: "HOME", path: "/" },
     { name: "READING", path: "/reading" },
-    { name: "AI", path: "/ai" },
+    { name: "SEARCH", path: "/search" },
     { name: "RESUME", path: "/resume" },
     { name: "LEADERBOARD", path: "/leaderboard" },
     { name: "GAME", path: "/game" },
@@ -81,7 +81,7 @@ const Navbar = () => {
     
   ];
 
-  const protectedPaths = ["/reading", "/resume", "/game"];
+  const protectedPaths = ["/reading", "/resume", "/game" , "/search"];
 
   const handleNavClick = (path) => {
     if (protectedPaths.includes(path) && !isAuth) {
@@ -118,7 +118,7 @@ const Navbar = () => {
               alt="Intellexa Logo"
               className="h-10 w-auto object-cover transition-transform duration-300 hover:scale-110"
             />
-            INTELLEXAA
+            INTELLEXA.AI
           </Link>
 
           {/* Desktop Navigation */}
@@ -127,9 +127,9 @@ const Navbar = () => {
               <button
                 key={i}
                 onClick={() => handleNavClick(link.path)}
-                className={`px-3 py-2 rounded-md transition ${
+                className={`px-1 py-1 rounded-md transition ${
                   location.pathname === link.path
-                    ? "text-orange-400 font-semibold"
+                    ? "text-orange-400 font-bold"
                     : "hover:text-orange-400"
                 }`}
               >

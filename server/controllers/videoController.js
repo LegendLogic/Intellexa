@@ -1,8 +1,11 @@
 import RecommandVideo from "../model/videoModel.js";
+import axios from "axios";
 
-// @desc    Create (POST) a new recommended video
-// @route   POST /api/recommand-videos
-// @access  Public or Admin (depending on your setup)
+
+
+/* --------------------------------------------------
+ 📌 Create a new recommended video
+-------------------------------------------------- */
 export const createRecommandVideo = async (req, res) => {
   try {
     const {
@@ -19,7 +22,7 @@ export const createRecommandVideo = async (req, res) => {
       recommendations,
     } = req.body;
 
-    // Validation (optional but recommended)
+    // ✅ Validation
     if (
       !id ||
       !title ||
@@ -31,10 +34,13 @@ export const createRecommandVideo = async (req, res) => {
       !level ||
       !instructor
     ) {
-      return res.status(400).json({ message: "All required fields must be provided." });
+      return res.status(400).json({
+        success: false,
+        message: "All required fields must be provided.",
+      });
     }
 
-    // Create new video document
+    // ✅ Create new video
     const newVideo = new RecommandVideo({
       id,
       title,
@@ -49,35 +55,44 @@ export const createRecommandVideo = async (req, res) => {
       recommendations: recommendations || 0,
     });
 
-    // Save to MongoDB
+    // ✅ Save to MongoDB
     const savedVideo = await newVideo.save();
 
     res.status(201).json({
-      message: "Recommand video created successfully!",
+      success: true,
+      message: "Recommended video created successfully!",
       video: savedVideo,
     });
   } catch (error) {
-    console.error("Error creating recommand video:", error);
-    res.status(500).json({ message: "Server error", error: error.message });
+    console.error("❌ Error creating recommended video:", error.message);
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 };
 
+/* --------------------------------------------------
+ 📊 Get dashboard data (recommendations & progress)
+-------------------------------------------------- */
 export const getDashboardData = async (req, res) => {
   try {
-    const recommendations = await RecommandVideo.getRecommendations(req.params.videoId);
+    const { videoId } = req.params;
+
+    const recommendations = await RecommandVideo.getRecommendations(videoId);
     const progress = await RecommandVideo.calculateProgress();
 
-    res.status(200).json({ recommendations, progress });
+    res.status(200).json({ success: true, recommendations, progress });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("❌ Error fetching dashboard data:", error.message);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
+
+/* --------------------------------------------------
+ 🎬 Get all videos from MongoDB
+-------------------------------------------------- */
 export const getAllVideos = async (req, res) => {
   try {
-    // Fetch all videos from MongoDB
     const videos = await RecommandVideo.find().lean();
 
-    // Return response
     res.status(200).json({
       success: true,
       count: videos.length,
@@ -93,6 +108,46 @@ export const getAllVideos = async (req, res) => {
   }
 };
 
+/* --------------------------------------------------
+ 🎥 Fetch YouTube videos dynamically
+-------------------------------------------------- */
+export const getVideos = async (req, res) => {
+  try {
+    const prompt = req.body?.prompt || req.query?.prompt; // ✅ Works for both
 
+    if (!prompt || !prompt.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Please provide a valid prompt",
+      });
+    }
 
+    const ytResp = await axios.get("https://www.googleapis.com/youtube/v3/search", {
+      params: {
+        part: "snippet",
+        q: `${prompt} tutorial`,
+        type: "video",
+        maxResults: 3,
+        key: process.env.YOUTUBE_API_KEY,
+      },
+    });
+
+    const videos =
+      ytResp.data.items?.map((item) => ({
+        title: item.snippet.title,
+        channel: item.snippet.channelTitle,
+        thumbnail: item.snippet.thumbnails?.medium?.url,
+        url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+      })) || [];
+
+    res.status(200).json({ success: true, videos });
+  } catch (error) {
+    console.warn("⚠️ YouTube API fetch failed:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "YouTube API error",
+      error: error.message,
+    });
+  }
+};
 

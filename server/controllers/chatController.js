@@ -1,8 +1,8 @@
 // server/controllers/chatController.js
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import dotenv from "dotenv";
 
-dotenv.config();
+
+
 
 export const chatController = async (req, res) => {
   try {

@@ -18,7 +18,7 @@ const resources = [
     color: "bg-gradient-to-br from-orange-200 to-orange-300",
     icon: Code2,
     link: "/webdev",
-    keywords: ["web", "html", "css", "javascript", "website", "frontend", "development"],
+    keywords: [],
   },
   {
     title: "AI / ML",
@@ -26,7 +26,7 @@ const resources = [
     color: "bg-gradient-to-br from-blue-400 to-blue-600",
     icon: Cpu,
     link: "/ai-ml",
-    keywords: ["ai", "ml", "artificial", "intelligence", "machine", "learning"],
+    keywords: [],
   },
   {
     title: "Machine Learning Projects",
@@ -34,7 +34,7 @@ const resources = [
     color: "bg-gradient-to-br from-teal-400 to-teal-600",
     icon: Brain,
     link: "/ml-projects",
-    keywords: ["machine", "learning", "ml", "projects", "hands-on", "practical"],
+    keywords: [],
   },
   {
     title: "Data Science",
@@ -42,7 +42,7 @@ const resources = [
     color: "bg-gradient-to-br from-purple-400 to-purple-600",
     icon: BarChart,
     link: "/data-science",
-    keywords: ["data", "science", "python", "analytics", "analysis", "visualization"],
+    keywords: [],
   },
   {
     title: "Interview Prep",
@@ -50,7 +50,7 @@ const resources = [
     color: "bg-gradient-to-br from-yellow-400 to-yellow-600",
     icon: Lightbulb,
     link: "/interview-prep",
-    keywords: ["interview", "prep", "preparation", "coding", "technical", "job"],
+    keywords: [],
   },
   {
     title: "Projects & Practice",
@@ -58,7 +58,7 @@ const resources = [
     color: "bg-gradient-to-br from-red-200 to-red-400",
     icon: Rocket,
     link: "/projects-practices",
-    keywords: ["projects", "practice", "real-world", "skills", "hands-on"],
+    keywords: [],
   },
 ];
 
@@ -170,7 +170,7 @@ const Home = () => {
 
         <p className="text-orange-400 max-w-2xl mt-4 text-lg md:text-xl">
           Discover premium online courses at{" "}
-          <span className="font-extrabold text-orange-600">INTELLEXA</span>, empowering you to excel professionally.
+          <span className="font-extrabold text-orange-600">INTELLEXA.AI</span>, empowering you to excel professionally.
         </p>
 
         {/* Search Bar */}
