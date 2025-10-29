@@ -12,7 +12,7 @@ import youtubeRoutes from "./routes/youtubeRoutes.js";
 import serpRoutes from "./routes/serpRoutes.js";
 import openRouterRoutes from "./routes/openRouterRoutes.js";
 import roadmapRouter from "./routes/roadmapRouter.js";
-
+import noteRoutes from "./routes/noteRoutes.js";
 // App config
 const app = express();
 const port = process.env.PORT || 4000;
@@ -51,6 +51,7 @@ app.use("/api", chatRoutes);
 app.use("/api/video", VideoRouter);
 app.use('/api/search', searchRouter);
 app.use('/api/roadmap',roadmapRouter)
+app.use("/api/notes", noteRoutes);
 
 // ✅ Register test routes
 

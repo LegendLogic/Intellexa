@@ -8,6 +8,7 @@ import axios from "axios";
 import { Brain, Code2, BarChart, Lightbulb, Cpu, Rocket } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import TakeNote from "../components/TakeNote";
 
 const backendUrl = "http://localhost:4000";
 
@@ -236,7 +237,7 @@ const Home = () => {
           })}
         </div>
       </div>
-
+       <TakeNote/>
       <Chatbot />
     </section>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { User, Mail, Trophy, Calendar, TrendingUp, Award, Target, Activity, Star, Video, FileQuestion, Edit, Trash2, X, Save } from "lucide-react";
+import { User, Mail, Trophy, Calendar,Flame, Medal, Crown, TrendingUp, Award, Target, Activity, Star, Video, FileQuestion, Edit, Trash2, X, Save } from "lucide-react";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -578,12 +578,63 @@ const ProgressSection = ({ points, level, nextLevelPoints, progress, creditBalan
 // Achievements Component
 const Achievements = ({ points }) => {
   const achievements = [
-    { icon: Trophy, name: "First Steps", desc: "Earned your first 100 points", unlocked: points >= 100, color: "yellow" },
-    { icon: Award, name: "Rising Star", desc: "Reached 500 points", unlocked: points >= 500, color: "blue" },
-    { icon: Target, name: "Point Master", desc: "Accumulated 1000 points", unlocked: points >= 1000, color: "purple" },
-    { icon: Activity, name: "Elite Explorer", desc: "Achieved 2500 points", unlocked: points >= 2500, color: "green" },
-  ];
-
+  { 
+    icon: Trophy, 
+    name: "First Steps", 
+    desc: "Earned your first 1,000 points", 
+    unlocked: points >= 1000, 
+    color: "yellow" 
+  },
+  { 
+    icon: Award, 
+    name: "Rising Star", 
+    desc: "Crossed 5,000 points milestone", 
+    unlocked: points >= 5000, 
+    color: "blue" 
+  },
+  { 
+    icon: Target, 
+    name: "Sharp Shooter", 
+    desc: "Scored 10,000 points with precision", 
+    unlocked: points >= 10000, 
+    color: "purple" 
+  },
+  { 
+    icon: Flame, 
+    name: "Elite Explorer", 
+    desc: "Achieved 25,000 points — you're on fire!", 
+    unlocked: points >= 25000, 
+    color: "orange" 
+  },
+  { 
+    icon: Star, 
+    name: "Pro Coder", 
+    desc: "Reached 35,000 points and mastered your craft", 
+    unlocked: points >= 35000, 
+    color: "red" 
+  },
+  { 
+    icon: Medal, 
+    name: "Consistency King", 
+    desc: "Logged in daily for 70 consecutive days", 
+    unlocked: points >= 45000, 
+    color: "green" 
+  },
+  { 
+    icon: Activity, 
+    name: "Learning Machine", 
+    desc: "Watched 50+ videos and kept improving", 
+    unlocked: points >= 75000, 
+    color: "teal" 
+  },
+  { 
+    icon: Crown, 
+    name: "Legendary Dev", 
+    desc: "Reached 50,000 points — the true champion!", 
+    unlocked: points >= 50000, 
+    color: "pink" 
+  },
+];
   const colorClasses = {
     yellow: { bg: "bg-yellow-500/20", border: "border-yellow-500/50", iconBg: "bg-yellow-500/30", text: "text-yellow-400" },
     blue: { bg: "bg-blue-500/20", border: "border-blue-500/50", iconBg: "bg-blue-500/30", text: "text-blue-400" },

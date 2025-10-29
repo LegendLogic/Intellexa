@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import { Youtube, FileText, Compass } from "lucide-react";
+import TakeNote from "../components/TakeNote";
 
 const backendUrl = "http://localhost:4000";
 
@@ -256,6 +257,7 @@ const SearchBar = () => {
           © {new Date().getFullYear()} INTELLEXA RESOURCE FINDER — Powered by AI
         </p>
       </motion.div>
+      <TakeNote/>
     </div>
   );
 };

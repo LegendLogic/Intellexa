@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Download, Plus, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import TakeNote from "../components/TakeNote";
 
 const Resume = () => {
   const [resumeData, setResumeData] = useState({
@@ -659,6 +660,7 @@ const Resume = () => {
           </div>
         </div>
       </div>
+      <TakeNote/>
     </div>
   );
 };

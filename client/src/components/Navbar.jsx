@@ -116,7 +116,7 @@ const Navbar = () => {
             <img
               src={Images.backImage}
               alt="Intellexa Logo"
-              className="h-10 w-auto object-cover transition-transform duration-300 hover:scale-110"
+              className="h-15 w-auto object-cover transition-transform duration-300 hover:scale-110"
             />
             INTELLEXA.AI
           </Link>

@@ -7,7 +7,7 @@ const Notes = () => {
   const BASE_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
   
   // Expanded quiz categories with more questions
-  const quizCategories = {
+ const quizCategories = {
     React: [
       { id: 1, question: "Which hook is used for side effects in React?", options: ["useState", "useEffect", "useRef", "useMemo"], correct: "useEffect" },
       { id: 2, question: "What does React use to manage component data?", options: ["Props", "State", "Functions", "Variables"], correct: "State" },
@@ -17,6 +17,48 @@ const Notes = () => {
       { id: 6, question: "Which hook replaces componentDidMount?", options: ["useState", "useEffect", "useContext", "useReducer"], correct: "useEffect" },
       { id: 7, question: "What are React fragments used for?", options: ["Grouping elements without extra nodes", "Styling", "Routing", "State management"], correct: "Grouping elements without extra nodes" },
       { id: 8, question: "What is prop drilling?", options: ["Passing props through multiple levels", "Drilling holes in components", "A design pattern", "A build tool"], correct: "Passing props through multiple levels" },
+      { id: 9, question: "What does useMemo hook do?", options: ["Memoizes values", "Creates side effects", "Manages state", "Handles refs"], correct: "Memoizes values" },
+      { id: 10, question: "What is the purpose of useCallback?", options: ["Memoize functions", "Create callbacks", "Handle events", "Update state"], correct: "Memoize functions" },
+      { id: 11, question: "What is React Context used for?", options: ["Global state management", "Routing", "Styling", "Animation"], correct: "Global state management" },
+      { id: 12, question: "What is a Higher-Order Component (HOC)?", options: ["A function that takes a component and returns a new component", "A parent component", "A class component", "A functional component"], correct: "A function that takes a component and returns a new component" },
+      { id: 13, question: "What is the purpose of useRef?", options: ["Access DOM elements and persist values", "Manage state", "Create effects", "Handle callbacks"], correct: "Access DOM elements and persist values" },
+      { id: 14, question: "What is lazy loading in React?", options: ["Loading components on demand", "Slow rendering", "Delayed mounting", "Async state"], correct: "Loading components on demand" },
+      { id: 15, question: "What does React.memo do?", options: ["Prevents unnecessary re-renders", "Memoizes state", "Creates context", "Handles routing"], correct: "Prevents unnecessary re-renders" },
+      { id: 16, question: "What is the purpose of key prop in lists?", options: ["Helps React identify which items have changed", "Styles the element", "Adds event listeners", "Creates unique IDs"], correct: "Helps React identify which items have changed" },
+      { id: 17, question: "What is the difference between state and props?", options: ["State is internal, props are external", "State is external, props are internal", "They are the same", "State is for classes only"], correct: "State is internal, props are external" },
+      { id: 18, question: "What is React Router used for?", options: ["Client-side routing", "State management", "API calls", "Styling"], correct: "Client-side routing" },
+      { id: 19, question: "What is the purpose of useReducer?", options: ["Complex state logic", "Side effects", "Context creation", "Memoization"], correct: "Complex state logic" },
+      { id: 20, question: "What are controlled components?", options: ["Form inputs controlled by React state", "Components with props", "Class components", "Styled components"], correct: "Form inputs controlled by React state" },
+      { id: 21, question: "What is the purpose of componentWillUnmount?", options: ["Cleanup before component removal", "Initialize state", "Update DOM", "Handle props"], correct: "Cleanup before component removal" },
+      { id: 22, question: "What is reconciliation in React?", options: ["Process of updating the DOM", "State management", "Error handling", "Routing"], correct: "Process of updating the DOM" },
+      { id: 23, question: "What is the purpose of StrictMode?", options: ["Highlights potential problems", "Improves performance", "Handles errors", "Manages state"], correct: "Highlights potential problems" },
+      { id: 24, question: "What are portals in React?", options: ["Render children into a different DOM node", "Navigate routes", "Manage state", "Create effects"], correct: "Render children into a different DOM node" },
+      { id: 25, question: "What is the purpose of getDerivedStateFromProps?", options: ["Update state based on props", "Handle errors", "Create effects", "Manage context"], correct: "Update state based on props" },
+      { id: 26, question: "What is the purpose of shouldComponentUpdate?", options: ["Optimize rendering", "Update state", "Handle props", "Create refs"], correct: "Optimize rendering" },
+      { id: 27, question: "What are synthetic events in React?", options: ["Cross-browser wrapper around native events", "Custom events", "DOM events", "Browser events"], correct: "Cross-browser wrapper around native events" },
+      { id: 28, question: "What is the purpose of forwardRef?", options: ["Pass refs to child components", "Create refs", "Update DOM", "Handle state"], correct: "Pass refs to child components" },
+      { id: 29, question: "What is the purpose of useImperativeHandle?", options: ["Customize ref value", "Create effects", "Manage state", "Handle callbacks"], correct: "Customize ref value" },
+      { id: 30, question: "What is the purpose of useLayoutEffect?", options: ["Synchronous effects after DOM mutations", "Asynchronous effects", "State updates", "Context creation"], correct: "Synchronous effects after DOM mutations" },
+      { id: 31, question: "What is the difference between createElement and cloneElement?", options: ["createElement makes new elements, cloneElement copies existing ones", "They are the same", "createElement is deprecated", "cloneElement is faster"], correct: "createElement makes new elements, cloneElement copies existing ones" },
+      { id: 32, question: "What is the purpose of React.Children?", options: ["Utility to work with children prop", "Create components", "Manage state", "Handle routing"], correct: "Utility to work with children prop" },
+      { id: 33, question: "What is code splitting in React?", options: ["Breaking code into smaller bundles", "Splitting components", "Dividing state", "Separating styles"], correct: "Breaking code into smaller bundles" },
+      { id: 34, question: "What is the purpose of Suspense?", options: ["Handle async operations during render", "Manage state", "Create effects", "Handle errors"], correct: "Handle async operations during render" },
+      { id: 35, question: "What is the purpose of Error Boundaries?", options: ["Catch JavaScript errors in components", "Handle async errors", "Validate props", "Manage state"], correct: "Catch JavaScript errors in components" },
+      { id: 36, question: "What is the purpose of useDebugValue?", options: ["Display custom hook labels in DevTools", "Debug components", "Log errors", "Track state"], correct: "Display custom hook labels in DevTools" },
+      { id: 37, question: "What is the difference between useEffect and useLayoutEffect?", options: ["useLayoutEffect runs synchronously", "useEffect is deprecated", "They are the same", "useLayoutEffect is async"], correct: "useLayoutEffect runs synchronously" },
+      { id: 38, question: "What is the purpose of React.PureComponent?", options: ["Shallow comparison of props and state", "Deep comparison", "No comparison", "Custom comparison"], correct: "Shallow comparison of props and state" },
+      { id: 39, question: "What is the purpose of defaultProps?", options: ["Set default values for props", "Create props", "Validate props", "Pass props"], correct: "Set default values for props" },
+      { id: 40, question: "What is the purpose of propTypes?", options: ["Type checking for props", "Define props", "Pass props", "Update props"], correct: "Type checking for props" },
+      { id: 41, question: "What is the difference between controlled and uncontrolled components?", options: ["Controlled use React state, uncontrolled use DOM", "They are the same", "Controlled are faster", "Uncontrolled use props"], correct: "Controlled use React state, uncontrolled use DOM" },
+      { id: 42, question: "What is the purpose of dangerouslySetInnerHTML?", options: ["Insert raw HTML", "Style components", "Create elements", "Handle events"], correct: "Insert raw HTML" },
+      { id: 43, question: "What is the purpose of React.createContext?", options: ["Create context object", "Manage state", "Create components", "Handle routing"], correct: "Create context object" },
+      { id: 44, question: "What is the purpose of useContext?", options: ["Consume context values", "Create context", "Update context", "Delete context"], correct: "Consume context values" },
+      { id: 45, question: "What is the purpose of React.Fragment?", options: ["Group elements without wrapper", "Create fragments", "Split components", "Manage state"], correct: "Group elements without wrapper" },
+      { id: 46, question: "What is the purpose of React.StrictMode?", options: ["Identify unsafe lifecycle methods", "Improve performance", "Handle errors", "Manage state"], correct: "Identify unsafe lifecycle methods" },
+      { id: 47, question: "What is the purpose of React.lazy?", options: ["Lazy load components", "Slow rendering", "Delay mounting", "Async loading"], correct: "Lazy load components" },
+      { id: 48, question: "What is server-side rendering (SSR) in React?", options: ["Rendering React on server", "Client rendering", "Static rendering", "Hybrid rendering"], correct: "Rendering React on server" },
+      { id: 49, question: "What is hydration in React?", options: ["Attaching event listeners to SSR markup", "Adding water to components", "Updating state", "Creating elements"], correct: "Attaching event listeners to SSR markup" },
+      { id: 50, question: "What is the purpose of React DevTools?", options: ["Debug React applications", "Build apps", "Test apps", "Deploy apps"], correct: "Debug React applications" },
     ],
     JavaScript: [
       { id: 1, question: "Which keyword declares a block-scoped variable?", options: ["var", "let", "const", "function"], correct: "let" },
@@ -27,6 +69,48 @@ const Notes = () => {
       { id: 6, question: "What is a Promise in JavaScript?", options: ["An async operation result", "A variable type", "A function", "A loop"], correct: "An async operation result" },
       { id: 7, question: "Which keyword creates a constant?", options: ["const", "let", "var", "final"], correct: "const" },
       { id: 8, question: "What is the spread operator?", options: ["...", "---", "***", "+++"], correct: "..." },
+      { id: 9, question: "What is hoisting in JavaScript?", options: ["Moving declarations to top", "Lifting variables", "Raising functions", "Elevating scope"], correct: "Moving declarations to top" },
+      { id: 10, question: "What is the difference between let and var?", options: ["let is block-scoped, var is function-scoped", "They are the same", "let is global", "var is faster"], correct: "let is block-scoped, var is function-scoped" },
+      { id: 11, question: "What is the purpose of async/await?", options: ["Handle asynchronous operations", "Create functions", "Manage loops", "Define variables"], correct: "Handle asynchronous operations" },
+      { id: 12, question: "What is the event loop in JavaScript?", options: ["Mechanism for handling async operations", "A loop statement", "An event handler", "A function"], correct: "Mechanism for handling async operations" },
+      { id: 13, question: "What is the difference between map() and forEach()?", options: ["map() returns array, forEach() doesn't", "They are the same", "forEach() is faster", "map() is deprecated"], correct: "map() returns array, forEach() doesn't" },
+      { id: 14, question: "What is destructuring in JavaScript?", options: ["Extracting values from objects/arrays", "Breaking code", "Creating objects", "Deleting properties"], correct: "Extracting values from objects/arrays" },
+      { id: 15, question: "What is the purpose of the 'this' keyword?", options: ["Refers to current object", "Creates variables", "Defines functions", "Returns values"], correct: "Refers to current object" },
+      { id: 16, question: "What is a callback function?", options: ["Function passed as argument", "Function that returns", "Function that loops", "Function that waits"], correct: "Function passed as argument" },
+      { id: 17, question: "What is the difference between undefined and null?", options: ["undefined is unassigned, null is intentionally empty", "They are the same", "null is an error", "undefined is better"], correct: "undefined is unassigned, null is intentionally empty" },
+      { id: 18, question: "What is the purpose of Array.prototype.reduce()?", options: ["Reduce array to single value", "Remove elements", "Add elements", "Sort array"], correct: "Reduce array to single value" },
+      { id: 19, question: "What is a higher-order function?", options: ["Function that takes or returns functions", "Function in upper scope", "Complex function", "Advanced function"], correct: "Function that takes or returns functions" },
+      { id: 20, question: "What is the purpose of Object.freeze()?", options: ["Make object immutable", "Cool down object", "Stop execution", "Delete properties"], correct: "Make object immutable" },
+      { id: 21, question: "What is the difference between == and ===?", options: ["=== checks type and value, == only value", "They are the same", "== is stricter", "=== is deprecated"], correct: "=== checks type and value, == only value" },
+      { id: 22, question: "What is the purpose of bind()?", options: ["Set 'this' context", "Connect functions", "Link objects", "Join arrays"], correct: "Set 'this' context" },
+      { id: 23, question: "What is the purpose of call() and apply()?", options: ["Invoke functions with specific 'this'", "Call functions", "Apply methods", "Create functions"], correct: "Invoke functions with specific 'this'" },
+      { id: 24, question: "What is a generator function?", options: ["Function that can pause and resume", "Function that creates", "Function that generates", "Function that loops"], correct: "Function that can pause and resume" },
+      { id: 25, question: "What is the purpose of Symbol in JavaScript?", options: ["Create unique identifiers", "Mathematical symbol", "String type", "Number type"], correct: "Create unique identifiers" },
+      { id: 26, question: "What is the purpose of Proxy in JavaScript?", options: ["Intercept object operations", "Network proxy", "Function wrapper", "Object copy"], correct: "Intercept object operations" },
+      { id: 27, question: "What is the purpose of Reflect in JavaScript?", options: ["Built-in object for interceptable operations", "Mirror objects", "Copy objects", "Delete objects"], correct: "Built-in object for interceptable operations" },
+      { id: 28, question: "What is the purpose of WeakMap?", options: ["Map with weak key references", "Weak data structure", "Small map", "Light map"], correct: "Map with weak key references" },
+      { id: 29, question: "What is the purpose of WeakSet?", options: ["Set with weak value references", "Weak collection", "Small set", "Light set"], correct: "Set with weak value references" },
+      { id: 30, question: "What is the purpose of Array.from()?", options: ["Create array from array-like object", "Copy array", "Convert array", "Filter array"], correct: "Create array from array-like object" },
+      { id: 31, question: "What is the purpose of Array.of()?", options: ["Create array from arguments", "Make array", "Build array", "Generate array"], correct: "Create array from arguments" },
+      { id: 32, question: "What is the purpose of Object.assign()?", options: ["Copy properties to target object", "Assign variables", "Create objects", "Delete properties"], correct: "Copy properties to target object" },
+      { id: 33, question: "What is the purpose of Object.keys()?", options: ["Get object property names", "Create keys", "Lock object", "Delete keys"], correct: "Get object property names" },
+      { id: 34, question: "What is the purpose of Object.values()?", options: ["Get object property values", "Set values", "Create values", "Delete values"], correct: "Get object property values" },
+      { id: 35, question: "What is the purpose of Object.entries()?", options: ["Get key-value pairs", "Create entries", "Add entries", "Remove entries"], correct: "Get key-value pairs" },
+      { id: 36, question: "What is memoization in JavaScript?", options: ["Caching function results", "Remembering values", "Storing data", "Saving state"], correct: "Caching function results" },
+      { id: 37, question: "What is currying in JavaScript?", options: ["Transform multi-argument function to single-argument", "Cooking functions", "Wrapping functions", "Calling functions"], correct: "Transform multi-argument function to single-argument" },
+      { id: 38, question: "What is the purpose of setTimeout()?", options: ["Execute code after delay", "Set time", "Create timer", "Stop execution"], correct: "Execute code after delay" },
+      { id: 39, question: "What is the purpose of setInterval()?", options: ["Execute code repeatedly at intervals", "Set intervals", "Create loops", "Repeat code"], correct: "Execute code repeatedly at intervals" },
+      { id: 40, question: "What is the purpose of clearTimeout()?", options: ["Cancel setTimeout", "Clear time", "Stop timer", "Reset timeout"], correct: "Cancel setTimeout" },
+      { id: 41, question: "What is the purpose of clearInterval()?", options: ["Cancel setInterval", "Clear intervals", "Stop loop", "Reset interval"], correct: "Cancel setInterval" },
+      { id: 42, question: "What is the purpose of JSON.stringify()?", options: ["Convert object to JSON string", "Create JSON", "Parse JSON", "Format JSON"], correct: "Convert object to JSON string" },
+      { id: 43, question: "What is the purpose of JSON.parse()?", options: ["Convert JSON string to object", "Parse strings", "Create objects", "Read JSON"], correct: "Convert JSON string to object" },
+      { id: 44, question: "What is the purpose of localStorage?", options: ["Store data in browser persistently", "Local storage space", "Temporary storage", "Session storage"], correct: "Store data in browser persistently" },
+      { id: 45, question: "What is the purpose of sessionStorage?", options: ["Store data for session duration", "Store sessions", "Temporary data", "Cache data"], correct: "Store data for session duration" },
+      { id: 46, question: "What is the difference between localStorage and sessionStorage?", options: ["localStorage persists, sessionStorage clears on close", "They are the same", "localStorage is faster", "sessionStorage is bigger"], correct: "localStorage persists, sessionStorage clears on close" },
+      { id: 47, question: "What is the purpose of fetch()?", options: ["Make HTTP requests", "Get data", "Retrieve information", "Download files"], correct: "Make HTTP requests" },
+      { id: 48, question: "What is AJAX in JavaScript?", options: ["Asynchronous JavaScript and XML", "A framework", "A library", "A method"], correct: "Asynchronous JavaScript and XML" },
+      { id: 49, question: "What is the purpose of try-catch?", options: ["Handle errors", "Try code", "Catch bugs", "Test code"], correct: "Handle errors" },
+      { id: 50, question: "What is the purpose of throw statement?", options: ["Create custom errors", "Throw objects", "Remove errors", "Stop execution"], correct: "Create custom errors" },
     ],
     Python: [
       { id: 1, question: "Which data type is immutable in Python?", options: ["List", "Dictionary", "Tuple", "Set"], correct: "Tuple" },
@@ -37,6 +121,48 @@ const Notes = () => {
       { id: 6, question: "What does 'self' represent in a class?", options: ["The instance of the class", "A keyword", "A variable", "A function"], correct: "The instance of the class" },
       { id: 7, question: "Which method converts a string to lowercase?", options: ["lower()", "lowercase()", "toLower()", "downcase()"], correct: "lower()" },
       { id: 8, question: "What is a decorator in Python?", options: ["A function modifier", "A variable", "A class", "A module"], correct: "A function modifier" },
+      { id: 9, question: "What is the purpose of __init__ method?", options: ["Initialize object attributes", "Create class", "Define methods", "Delete objects"], correct: "Initialize object attributes" },
+      { id: 10, question: "What is the difference between list and tuple?", options: ["Lists are mutable, tuples are immutable", "They are the same", "Tuples are faster", "Lists are immutable"], correct: "Lists are mutable, tuples are immutable" },
+      { id: 11, question: "What is the purpose of lambda functions?", options: ["Create anonymous functions", "Define variables", "Create classes", "Import modules"], correct: "Create anonymous functions" },
+      { id: 12, question: "What is the purpose of map() function?", options: ["Apply function to all items", "Create maps", "Transform data", "Filter items"], correct: "Apply function to all items" },
+      { id: 13, question: "What is the purpose of filter() function?", options: ["Filter items based on condition", "Remove duplicates", "Sort items", "Create lists"], correct: "Filter items based on condition" },
+      { id: 14, question: "What is the purpose of reduce() function?", options: ["Reduce sequence to single value", "Remove items", "Simplify code", "Decrease size"], correct: "Reduce sequence to single value" },
+      { id: 15, question: "What is the purpose of *args in Python?", options: ["Accept variable number of arguments", "Multiply arguments", "Create arguments", "Pass arguments"], correct: "Accept variable number of arguments" },
+      { id: 16, question: "What is the purpose of **kwargs in Python?", options: ["Accept keyword arguments", "Power operation", "Create dictionaries", "Pass keywords"], correct: "Accept keyword arguments" },
+      { id: 17, question: "What is the purpose of enumerate() function?", options: ["Get index and value in loop", "Count items", "Number items", "Create enumeration"], correct: "Get index and value in loop" },
+      { id: 18, question: "What is the purpose of zip() function?", options: ["Combine multiple iterables", "Compress files", "Create tuples", "Join lists"], correct: "Combine multiple iterables" },
+      { id: 19, question: "What is the difference between is and ==?", options: ["is checks identity, == checks equality", "They are the same", "is is faster", "== checks type"], correct: "is checks identity, == checks equality" },
+      { id: 20, question: "What is the purpose of try-except block?", options: ["Handle exceptions", "Try code", "Test code", "Catch errors"], correct: "Handle exceptions" },
+      { id: 21, question: "What is the purpose of with statement?", options: ["Context management", "Create context", "Define scope", "Import modules"], correct: "Context management" },
+      { id: 22, question: "What is the purpose of pass statement?", options: ["Placeholder for empty code", "Skip iteration", "Stop loop", "Continue execution"], correct: "Placeholder for empty code" },
+      { id: 23, question: "What is the purpose of break statement?", options: ["Exit loop", "Break code", "Stop program", "Create break"], correct: "Exit loop" },
+      { id: 24, question: "What is the purpose of continue statement?", options: ["Skip current iteration", "Continue program", "Resume loop", "Next item"], correct: "Skip current iteration" },
+      { id: 25, question: "What is the difference between append() and extend()?", options: ["append() adds single item, extend() adds multiple", "They are the same", "extend() is faster", "append() is better"], correct: "append() adds single item, extend() adds multiple" },
+      { id: 26, question: "What is the purpose of split() method?", options: ["Split string into list", "Divide string", "Break string", "Separate string"], correct: "Split string into list" },
+      { id: 27, question: "What is the purpose of join() method?", options: ["Join list elements into string", "Combine strings", "Merge lists", "Connect items"], correct: "Join list elements into string" },
+      { id: 28, question: "What is the purpose of replace() method?", options: ["Replace substring with another", "Change string", "Modify text", "Update string"], correct: "Replace substring with another" },
+      { id: 29, question: "What is the purpose of strip() method?", options: ["Remove whitespace from ends", "Delete spaces", "Clean string", "Trim text"], correct: "Remove whitespace from ends" },
+      { id: 30, question: "What is a dictionary in Python?", options: ["Key-value pairs collection", "Word list", "Data structure", "Array type"], correct: "Key-value pairs collection" },
+      { id: 31, question: "What is the purpose of get() method in dictionaries?", options: ["Get value without KeyError", "Retrieve item", "Find key", "Access value"], correct: "Get value without KeyError" },
+      { id: 32, question: "What is the purpose of items() method?", options: ["Get key-value pairs", "List items", "Show elements", "Display data"], correct: "Get key-value pairs" },
+      { id: 33, question: "What is the purpose of keys() method?", options: ["Get all keys", "List keys", "Show keys", "Access keys"], correct: "Get all keys" },
+      { id: 34, question: "What is the purpose of values() method?", options: ["Get all values", "List values", "Show values", "Access values"], correct: "Get all values" },
+      { id: 35, question: "What is a set in Python?", options: ["Unordered unique elements collection", "Array type", "List type", "Dictionary type"], correct: "Unordered unique elements collection" },
+      { id: 36, question: "What is the purpose of add() method in sets?", options: ["Add element to set", "Create set", "Update set", "Insert item"], correct: "Add element to set" },
+      { id: 37, question: "What is the purpose of remove() method in sets?", options: ["Remove element from set", "Delete set", "Clear set", "Pop item"], correct: "Remove element from set" },
+      { id: 38, question: "What is the difference between remove() and discard()?", options: ["remove() raises error if not found, discard() doesn't", "They are the same", "discard() is faster", "remove() is better"], correct: "remove() raises error if not found, discard() doesn't" },
+      { id: 39, question: "What is the purpose of union() method?", options: ["Combine sets", "Join sets", "Merge sets", "Add sets"], correct: "Combine sets" },
+      { id: 40, question: "What is the purpose of intersection() method?", options: ["Get common elements", "Find overlap", "Match items", "Compare sets"], correct: "Get common elements" },
+      { id: 41, question: "What is the purpose of difference() method?", options: ["Get elements in first but not second", "Find difference", "Compare sets", "Subtract sets"], correct: "Get elements in first but not second" },
+      { id: 42, question: "What is the purpose of isinstance() function?", options: ["Check object type", "Create instance", "Define type", "Verify class"], correct: "Check object type" },
+      { id: 43, question: "What is the purpose of type() function?", options: ["Get object type", "Create type", "Define type", "Check type"], correct: "Get object type" },
+      { id: 44, question: "What is multiple inheritance in Python?", options: ["Class inherits from multiple classes", "Multiple objects", "Many classes", "Several instances"], correct: "Class inherits from multiple classes" },
+      { id: 45, question: "What is the purpose of super() function?", options: ["Call parent class method", "Create superclass", "Define parent", "Access base"], correct: "Call parent class method" },
+      { id: 46, question: "What is a static method in Python?", options: ["Method without self or cls parameter", "Fixed method", "Constant method", "Unchanging method"], correct: "Method without self or cls parameter" },
+      { id: 47, question: "What is a class method in Python?", options: ["Method with cls as first parameter", "Method in class", "Class function", "Object method"], correct: "Method with cls as first parameter" },
+      { id: 48, question: "What is the purpose of @property decorator?", options: ["Create getter method", "Define property", "Set attribute", "Access field"], correct: "Create getter method" },
+      { id: 49, question: "What is the purpose of __str__ method?", options: ["String representation of object", "Convert to string", "Print object", "Display object"], correct: "String representation of object" },
+      { id: 50, question: "What is the purpose of __repr__ method?", options: ["Official string representation", "Reproduce object", "Represent object", "Show object"], correct: "Official string representation" },
     ],
     DataScience: [
       { id: 1, question: "Which library is commonly used for data manipulation in Python?", options: ["NumPy", "Pandas", "Matplotlib", "Seaborn"], correct: "Pandas" },
@@ -47,6 +173,48 @@ const Notes = () => {
       { id: 6, question: "What does 'NaN' stand for?", options: ["Not a Number", "Null and Nil", "New Array Node", "None"], correct: "Not a Number" },
       { id: 7, question: "Which metric is used for regression models?", options: ["Accuracy", "Precision", "RMSE", "F1-score"], correct: "RMSE" },
       { id: 8, question: "What is feature scaling?", options: ["Normalizing data ranges", "Adding features", "Removing features", "Splitting data"], correct: "Normalizing data ranges" },
+      { id: 9, question: "What is the purpose of train_test_split?", options: ["Split data into training and testing sets", "Train model", "Test data", "Validate model"], correct: "Split data into training and testing sets" },
+      { id: 10, question: "What is cross-validation?", options: ["Technique to assess model performance", "Data validation", "Model testing", "Error checking"], correct: "Technique to assess model performance" },
+      { id: 11, question: "What is the purpose of StandardScaler?", options: ["Standardize features", "Scale data", "Normalize values", "Transform data"], correct: "Standardize features" },
+      { id: 12, question: "What is the purpose of MinMaxScaler?", options: ["Scale features to range", "Minimize data", "Maximize values", "Normalize data"], correct: "Scale features to range" },
+      { id: 13, question: "What is the difference between classification and regression?", options: ["Classification predicts categories, regression predicts continuous values", "They are the same", "Regression is faster", "Classification is better"], correct: "Classification predicts categories, regression predicts continuous values" },
+      { id: 14, question: "What is the purpose of K-means algorithm?", options: ["Clustering data", "Classification", "Regression", "Dimensionality reduction"], correct: "Clustering data" },
+      { id: 15, question: "What is the purpose of PCA?", options: ["Reduce dimensionality", "Principal analysis", "Component analysis", "Create features"], correct: "Reduce dimensionality" },
+      { id: 16, question: "What is the purpose of Random Forest?", options: ["Ensemble learning method", "Random sampling", "Forest of trees", "Data randomization"], correct: "Ensemble learning method" },
+      { id: 17, question: "What is the purpose of Gradient Boosting?", options: ["Ensemble technique combining weak learners", "Gradient calculation", "Boosting performance", "Model optimization"], correct: "Ensemble technique combining weak learners" },
+      { id: 18, question: "What is the purpose of SVM?", options: ["Find optimal hyperplane for classification", "Support vectors", "Machine learning", "Vector operations"], correct: "Find optimal hyperplane for classification" },
+      { id: 19, question: "What is the purpose of Decision Trees?", options: ["Make decisions based on features", "Tree structure", "Decision making", "Data organization"], correct: "Make decisions based on features" },
+      { id: 20, question: "What is the purpose of Neural Networks?", options: ["Model complex patterns", "Network of neurons", "Brain simulation", "Deep learning"], correct: "Model complex patterns" },
+      { id: 21, question: "What is the purpose of activation functions?", options: ["Introduce non-linearity", "Activate neurons", "Function activation", "Enable learning"], correct: "Introduce non-linearity" },
+      { id: 22, question: "What is backpropagation?", options: ["Algorithm to train neural networks", "Backward propagation", "Error propagation", "Network training"], correct: "Algorithm to train neural networks" },
+      { id: 23, question: "What is the purpose of dropout in neural networks?", options: ["Prevent overfitting", "Drop neurons", "Remove connections", "Reduce size"], correct: "Prevent overfitting" },
+      { id: 24, question: "What is the purpose of batch normalization?", options: ["Normalize layer inputs", "Batch processing", "Data normalization", "Layer optimization"], correct: "Normalize layer inputs" },
+      { id: 25, question: "What is the difference between epoch and iteration?", options: ["Epoch is full pass, iteration is batch pass", "They are the same", "Epoch is smaller", "Iteration is faster"], correct: "Epoch is full pass, iteration is batch pass" },
+      { id: 26, question: "What is the purpose of learning rate?", options: ["Control weight update step size", "Rate of learning", "Speed of training", "Model velocity"], correct: "Control weight update step size" },
+      { id: 27, question: "What is the purpose of loss function?", options: ["Measure model error", "Calculate loss", "Find mistakes", "Evaluate performance"], correct: "Measure model error" },
+      { id: 28, question: "What is the purpose of optimizer?", options: ["Minimize loss function", "Optimize model", "Improve performance", "Adjust weights"], correct: "Minimize loss function" },
+      { id: 29, question: "What is gradient descent?", options: ["Optimization algorithm", "Gradient calculation", "Descent method", "Weight update"], correct: "Optimization algorithm" },
+      { id: 30, question: "What is stochastic gradient descent?", options: ["Gradient descent with random samples", "Random optimization", "Stochastic method", "Sample descent"], correct: "Gradient descent with random samples" },
+      { id: 31, question: "What is the purpose of Adam optimizer?", options: ["Adaptive learning rate optimization", "Advanced optimizer", "Modern method", "Adaptive momentum"], correct: "Adaptive learning rate optimization" },
+      { id: 32, question: "What is the purpose of ReLU activation?", options: ["Introduce non-linearity efficiently", "Rectify values", "Linear unit", "Activate neurons"], correct: "Introduce non-linearity efficiently" },
+      { id: 33, question: "What is the purpose of Sigmoid activation?", options: ["Output values between 0 and 1", "S-shaped function", "Smooth activation", "Binary output"], correct: "Output values between 0 and 1" },
+      { id: 34, question: "What is the purpose of Softmax activation?", options: ["Convert to probability distribution", "Soft maximum", "Multi-class output", "Normalize output"], correct: "Convert to probability distribution" },
+      { id: 35, question: "What is precision in classification?", options: ["True positives / (True positives + False positives)", "Accuracy measure", "Precise prediction", "Correct ratio"], correct: "True positives / (True positives + False positives)" },
+      { id: 36, question: "What is recall in classification?", options: ["True positives / (True positives + False negatives)", "Memory measure", "Recall rate", "Detection rate"], correct: "True positives / (True positives + False negatives)" },
+      { id: 37, question: "What is F1-score?", options: ["Harmonic mean of precision and recall", "F-measure", "Combined metric", "Performance score"], correct: "Harmonic mean of precision and recall" },
+      { id: 38, question: "What is ROC curve?", options: ["Receiver Operating Characteristic curve", "Rate curve", "Operating curve", "Classification curve"], correct: "Receiver Operating Characteristic curve" },
+      { id: 39, question: "What is AUC in machine learning?", options: ["Area Under Curve", "Accuracy measure", "Average score", "Assessment metric"], correct: "Area Under Curve" },
+      { id: 40, question: "What is the purpose of GridSearchCV?", options: ["Find optimal hyperparameters", "Grid search", "Cross-validation", "Parameter tuning"], correct: "Find optimal hyperparameters" },
+      { id: 41, question: "What is the purpose of RandomizedSearchCV?", options: ["Random hyperparameter search", "Randomized search", "Parameter sampling", "Quick tuning"], correct: "Random hyperparameter search" },
+      { id: 42, question: "What is feature engineering?", options: ["Creating new features from existing data", "Engineering features", "Feature creation", "Data transformation"], correct: "Creating new features from existing data" },
+      { id: 43, question: "What is feature selection?", options: ["Choosing relevant features", "Selecting data", "Feature picking", "Data filtering"], correct: "Choosing relevant features" },
+      { id: 44, question: "What is one-hot encoding?", options: ["Convert categories to binary vectors", "Hot encoding", "Binary transformation", "Category encoding"], correct: "Convert categories to binary vectors" },
+      { id: 45, question: "What is label encoding?", options: ["Convert categories to numbers", "Label transformation", "Number encoding", "Category numbering"], correct: "Convert categories to numbers" },
+      { id: 46, question: "What is the purpose of pandas DataFrame?", options: ["2D labeled data structure", "Data frame", "Table structure", "Data container"], correct: "2D labeled data structure" },
+      { id: 47, question: "What is the purpose of NumPy arrays?", options: ["Efficient numerical operations", "Array storage", "Number arrays", "Data arrays"], correct: "Efficient numerical operations" },
+      { id: 48, question: "What is the purpose of Matplotlib?", options: ["Data visualization", "Plotting library", "Graph creation", "Chart making"], correct: "Data visualization" },
+      { id: 49, question: "What is the purpose of Seaborn?", options: ["Statistical data visualization", "Advanced plotting", "Beautiful plots", "Statistical graphics"], correct: "Statistical data visualization" },
+      { id: 50, question: "What is the purpose of scikit-learn?", options: ["Machine learning library", "Science kit", "Learning tools", "ML algorithms"], correct: "Machine learning library" },
     ],
   };
 
@@ -73,8 +241,11 @@ const Notes = () => {
   const [error, setError] = useState(null);
   const [notification, setNotification] = useState({ show: false, message: "", type: "" });
   
-  // NEW: Track quiz attempts
-  const [quizAttempts, setQuizAttempts] = useState({});
+  // Track quiz attempts - load from localStorage initially
+  const [quizAttempts, setQuizAttempts] = useState(() => {
+    const saved = localStorage.getItem('quizAttempts');
+    return saved ? JSON.parse(saved) : {};
+  });
   const [hasAttemptedCurrentQuiz, setHasAttemptedCurrentQuiz] = useState(false);
 
   const questions = quizCategories[currentCategory];
@@ -86,6 +257,11 @@ const Notes = () => {
       setNotification({ show: false, message: "", type: "" });
     }, 3000);
   };
+
+  // Save quiz attempts to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('quizAttempts', JSON.stringify(quizAttempts));
+  }, [quizAttempts]);
 
   // Check if user has attempted the current quiz
   useEffect(() => {
@@ -120,10 +296,12 @@ const Notes = () => {
         setUserName(user?.name || "User");
         setUserCredit(user?.creditBalance ?? 0);
         
-        // Load quiz attempts from backend (assuming it's stored in user profile)
-        // If your backend doesn't support this yet, it will use memory storage
-        const attempts = user?.quizAttempts || {};
-        setQuizAttempts(attempts);
+        // Merge backend quiz attempts with local storage (local storage takes precedence)
+        const backendAttempts = user?.quizAttempts || {};
+        const localAttempts = JSON.parse(localStorage.getItem('quizAttempts') || '{}');
+        const mergedAttempts = { ...backendAttempts, ...localAttempts };
+        setQuizAttempts(mergedAttempts);
+        localStorage.setItem('quizAttempts', JSON.stringify(mergedAttempts));
         
         showNotification(`Welcome back, ${user?.name || "User"}! 👋`, "success");
       } catch (err) {
@@ -150,9 +328,16 @@ const Notes = () => {
     try {
       const token = localStorage.getItem("token");
       
+      // Always update localStorage first
+      setQuizAttempts(prev => {
+        const updated = { ...prev, [currentCategory]: true };
+        localStorage.setItem('quizAttempts', JSON.stringify(updated));
+        return updated;
+      });
+      setHasAttemptedCurrentQuiz(true);
+      
       if (!token) {
-        // For guests, store in memory only
-        setQuizAttempts(prev => ({ ...prev, [currentCategory]: true }));
+        // For guests, only store in localStorage
         return;
       }
 
@@ -167,16 +352,10 @@ const Notes = () => {
           },
         }
       );
-
-      // Update local state
-      setQuizAttempts(prev => ({ ...prev, [currentCategory]: true }));
-      setHasAttemptedCurrentQuiz(true);
       
     } catch (err) {
       console.error("Error marking quiz as attempted:", err);
-      // Still update local state even if backend fails
-      setQuizAttempts(prev => ({ ...prev, [currentCategory]: true }));
-      setHasAttemptedCurrentQuiz(true);
+      // LocalStorage is already updated, so quiz will remain locked
     }
   };
 

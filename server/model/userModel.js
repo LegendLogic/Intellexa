@@ -8,6 +8,7 @@ const userSchema = new mongoose.Schema(
     image: { type: String, required: false, default: "" },
     joinedDate: { type: Date, default: Date.now },
 
+
     // 🧠 Points earned from quizzes, rewards, etc.
     points: { type: Number, default: 0 },
 
@@ -29,6 +30,16 @@ const userSchema = new mongoose.Schema(
 
     // 📅 Profile & activity data
     joinedDate: { type: Date, default: Date.now },
+
+    
+    // 📝 Notes reference
+    notes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Note",
+      },
+    ],
+
 
     // 🔥 Daily streak tracking
     currentStreak: { type: Number, default: 0 },

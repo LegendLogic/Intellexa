@@ -118,7 +118,7 @@ const UserProfile = () => {
           {/* Avatar */}
           <div className="relative flex-shrink-0">
             <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-gradient-to-br from-orange-500 to-pink-500 p-1">
-              <div className="w-full h-full rounded-full bg-gray-800 flex items-center justify-center text-3xl font-bold overflow-hidden">
+              <div className="w-full h-full rounded-full bg-white/60 flex items-center justify-center text-3xl font-bold overflow-hidden">
                 {userProfile.image &&
                 userProfile.image !== "/uploads/default-avatar.png" ? (
                   <img
@@ -160,12 +160,13 @@ const UserProfile = () => {
         </div>
 
         {/* STATS GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        <div className="grid grid-cols-1  sm:grid-cols-2 lg:grid-cols-3  gap-4 mb-8">
           <StatCard
             icon={<Clock />}
             label="Total Hours"
             value={stats.totalHours}
             sub="Learning in progress 🚀"
+            
           />
           <StatCard
             icon={<Moon />}

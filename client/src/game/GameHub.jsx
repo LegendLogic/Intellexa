@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Code2, Bug, Brain, Cpu, Globe } from "lucide-react";
 import Notes from "../components/Notes";
 import Reward from "../components/Reward";
+import TakeNote from "../components/TakeNote";
 
 const games = [
   {
@@ -90,6 +91,7 @@ const Game = () => {
         ))}
       </div>
       <Reward/>
+      <TakeNote/>
       
     </div>
   );

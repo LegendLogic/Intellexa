@@ -478,89 +478,97 @@ const getUserProfileInDetails = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    // ✅ 1. Check if ID exists
-    if (!userId) {
-      return res.status(400).json({
-        success: false,
-        message: "User ID not provided",
-      });
+    // ✅ Validate user ID
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+      return res.status(400).json({ success: false, message: "Invalid user ID" });
     }
 
-    // ✅ 2. Validate ObjectId format
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid user ID format",
-      });
-    }
-
-    // ✅ 3. Fetch user data
     const user = await User.findById(userId).select("-password");
     if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
+      return res.status(404).json({ success: false, message: "User not found" });
     }
 
-    // ✅ 4. Initialize default values
-    let totalHours = 0;
-    let todayHours = 0;
-    let currentStreak = 0;
-    let longestStreak = 0;
-
-    // ✅ 5. Handle completed videos (Map → Object)
+    // ✅ Prepare completed videos
     const completedVideos = user.completedVideos || {};
     const allDates = Object.keys(completedVideos);
 
+    // ✅ Initialize default stats
+    let totalHours = 0;
+    let todayHours = 0;
+    let currentStreak = user.currentStreak || 0;
+    let longestStreak = user.longestStreak || 0;
+
+    // ✅ Get today and yesterday
+    const today = new Date().toISOString().split("T")[0];
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split("T")[0];
+
     if (allDates.length > 0) {
-      totalHours = Object.values(completedVideos).reduce((sum, value) => {
-        const num = parseFloat(value);
+      // ✅ Calculate total hours
+      totalHours = Object.values(completedVideos).reduce((sum, val) => {
+        const num = parseFloat(val);
         return sum + (isNaN(num) ? 0 : num);
       }, 0);
 
-      const today = new Date().toISOString().split("T")[0];
-      const todayValue = parseFloat(completedVideos[today]);
-      todayHours = isNaN(todayValue) ? 0 : todayValue;
+      // ✅ Sort dates ascending
+      const sortedDates = allDates
+        .map((d) => new Date(d.split("T")[0]))
+        .sort((a, b) => a - b);
 
-      const sortedDates = allDates.sort((a, b) => new Date(b) - new Date(a));
-
+      // ✅ Calculate base streak from past data
       let streak = 1;
       let longest = 1;
+
       for (let i = 1; i < sortedDates.length; i++) {
-        const prevDate = new Date(sortedDates[i - 1]);
-        const currDate = new Date(sortedDates[i]);
-        const diff = (prevDate - currDate) / (1000 * 60 * 60 * 24);
-        if (diff === 1) {
+        const prev = sortedDates[i - 1];
+        const curr = sortedDates[i];
+        const diffDays = Math.round((curr - prev) / (1000 * 60 * 60 * 24));
+        if (diffDays === 1) {
           streak++;
           longest = Math.max(longest, streak);
-        } else {
+        } else if (diffDays > 1) {
           streak = 1;
         }
       }
 
       currentStreak = streak;
       longestStreak = longest;
+      todayHours = parseFloat(completedVideos[today]) || 0;
     }
 
-    const safeTotalHours = Number(totalHours || 0).toFixed(1);
-    const safeTodayHours = Number(todayHours || 0).toFixed(1);
+    // ✅ Handle login streak logic
+    const lastLoginDate = user.lastLogin
+      ? new Date(user.lastLogin).toISOString().split("T")[0]
+      : null;
 
-    const completedVideoCount = user.completedVideos
-      ? Object.keys(user.completedVideos).length
-      : 0;
+    // If logged in next day → streak++
+    if (lastLoginDate && lastLoginDate === yesterday) {
+      currentStreak += 1;
+      longestStreak = Math.max(longestStreak, currentStreak);
+    }
+    // If missed a day → reset streak
+    else if (lastLoginDate && lastLoginDate !== today) {
+      const diffDays = Math.round(
+        (new Date(today) - new Date(lastLoginDate)) / (1000 * 60 * 60 * 24)
+      );
+      if (diffDays > 1) currentStreak = 1;
+    }
 
-    // ✅ Format joinedDate
-    const joinedDate = user.joinedDate || user.createdAt;
-    const formattedJoinedDate = joinedDate
-      ? new Date(joinedDate).toLocaleDateString("en-GB", {
+    // ✅ Update user record in DB
+    user.lastLogin = new Date();
+    user.currentStreak = currentStreak;
+    user.longestStreak = longestStreak;
+    await user.save();
+
+    // ✅ Format joined date
+    const formattedJoinedDate = user.joinedDate
+      ? new Date(user.joinedDate).toLocaleDateString("en-GB", {
           day: "2-digit",
           month: "long",
           year: "numeric",
         })
       : "Unknown";
 
-    // ✅ 6. Send structured response
+    // ✅ Response
     res.status(200).json({
       success: true,
       message: "User profile fetched successfully",
@@ -571,12 +579,13 @@ const getUserProfileInDetails = async (req, res) => {
         profileImage: user.profileImage,
         points: user.points,
         creditBalance: user.creditBalance,
-        totalHours: safeTotalHours,
-        todayHours: safeTodayHours,
+        totalHours: Number(totalHours || 0).toFixed(1),
+        todayHours: Number(todayHours || 0).toFixed(1),
         currentStreak,
         longestStreak,
-        completedVideos: completedVideoCount,
-        joinedDate: formattedJoinedDate, // ✅ formatted (e.g., "29 October 2025")
+        completedVideos: Object.keys(completedVideos).length,
+        joinedDate: formattedJoinedDate,
+        lastLogin: user.lastLogin,
         createdAt: user.createdAt,
         updatedAt: user.updatedAt,
       },
@@ -590,6 +599,8 @@ const getUserProfileInDetails = async (req, res) => {
     });
   }
 };
+
+
 
 
 
